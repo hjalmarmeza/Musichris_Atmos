@@ -1,0 +1,50 @@
+name: 🚀 MusiChris Atmos Production
+
+on:
+  repository_dispatch:
+    types: [launch_atmos]
+  workflow_dispatch:
+    inputs:
+      duration:
+        description: 'Duración en segundos'
+        required: true
+        default: '3600'
+      theme:
+        description: 'Tema Ministerial'
+        required: true
+        default: 'Confianza'
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Clonar Repositorio
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 🛠️ Instalar Dependencias
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          pip install Pillow google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+      - name: 🎬 Renderizar Video Atmos
+        env:
+          DURATION: ${{ github.event.client_payload.duration || github.event.inputs.duration }}
+          THEME: ${{ github.event.client_payload.theme || github.event.inputs.theme }}
+        run: |
+          mkdir -p renders
+          python3 scripts/atmos_engine.py $DURATION "$THEME"
+
+      - name: ☁️ Subir a YouTube
+        env:
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: |
+          # Aquí llamaremos al uploader una vez que estemos seguros de las credenciales
+          echo "Video listo para subir: renders/*.mp4"
+          # python3 scripts/youtube_uploader.py

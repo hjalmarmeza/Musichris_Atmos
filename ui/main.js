@@ -1,228 +1,147 @@
-// ATMOS CONTROL CENTER - CORE LOGIC v6.5 (Skill Flow Edition)
+// CONFIGURACIÓN MAESTRA
+const API_BASE = "http://161.153.206.126:5000";
+
+// ELEMENTOS UI
+const btnLaunch = document.getElementById('btn-launch');
+const playlistSelector = document.getElementById('playlist-selector');
+const durationSelector = document.getElementById('duration-selector');
+const styleSelector = document.getElementById('style-selector');
+const videoPotential = document.getElementById('video-potential');
+const catalogList = document.getElementById('catalog-list');
+const historyList = document.getElementById('history-list');
+const videoElement = document.querySelector('.video-bg video');
+
+// AUTOMATIC VIDEO PLAYBACK SHIELD
+function ensureVideoPlay() {
+    if (videoElement) {
+        videoElement.play().catch(err => {
+            console.log("Autoplay blocked or failed. Trying silent recovery...");
+            videoElement.muted = true;
+            videoElement.play();
+        });
+    }
+}
+
+// INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', () => {
-    initNavigation();
-    initVideoAutoplay();
-    fetchStats(); // Stats son ligeras, se quedan al inicio
-    loadRenders();
-    // loadCatalog(); <-- ELIMINADO del inicio. Ahora se carga al entrar a la pestaña.
+    loadStats();
+    loadCatalog();
+    loadHistory();
+    ensureVideoPlay();
+    
+    // Check for Mixed Content issues
+    if (window.location.protocol === 'https:' && API_BASE.startsWith('http:')) {
+        console.error("⚠️ CRITICAL: Protocol Mismatch. Browsers block HTTPS -> HTTP calls. Dashboard won't work unless Oracle has SSL or you use a proxy.");
+        alert("ALERTA DE SEGURIDAD: Tu servidor en Oracle necesita SSL (HTTPS) para funcionar desde esta web segura.");
+    }
+    
+    if (btnLaunch) btnLaunch.addEventListener('click', launchProduction);
+    if (playlistSelector) playlistSelector.addEventListener('change', loadStats);
 });
 
-let categoryStats = {};
-
-// GHOST TRIGGER: Activa video al primer toque del usuario (Evita bloqueos de Safari/iOS)
-function initVideoAutoplay() {
-    const video = document.getElementById('bg-video');
-    const startVideo = () => {
-        video.play().catch(e => console.log("Autoplay block:", e));
-        document.removeEventListener('touchstart', startVideo);
-        document.removeEventListener('click', startVideo);
-    };
-    document.addEventListener('touchstart', startVideo);
-    document.addEventListener('click', startVideo);
-}
-
-async function fetchStats() {
-    // Intentar cargar desde cache primero para velocidad instantánea
-    const cachedStats = localStorage.getItem('categoryStats');
-    const cachedReady = localStorage.getItem('categoryReady');
-    if (cachedStats) {
-        categoryStats = JSON.parse(cachedStats);
-        categoryReady = cachedReady ? JSON.parse(cachedReady) : {};
-        updateDashboardInfo();
-    }
-
+async function loadStats() {
     try {
-        const res = await fetch('/stats');
+        const res = await fetch(`${API_BASE}/stats`);
         const data = await res.json();
-        categoryStats = data.stats;
-        categoryReady = data.ready;
-        localStorage.setItem('categoryStats', JSON.stringify(categoryStats));
-        localStorage.setItem('categoryReady', JSON.stringify(categoryReady));
-        updateDashboardInfo();
-    } catch (e) {
-        console.warn("Usando datos de respaldo...");
-        categoryStats = { "Paz Interior": 84, "Victoria & Gozo": 45, "Guerra Espiritual": 22 };
-        categoryReady = { "Paz Interior": true, "Victoria & Gozo": false, "Guerra Espiritual": false };
-        updateDashboardInfo();
-    }
-}
-
-function updateDashboardInfo() {
-    const selector = document.getElementById('playlist-selector');
-    const songCountDisplay = document.getElementById('song-count-display');
-    const videoPotential = document.getElementById('video-potential');
-    const currentTitle = document.getElementById('current-title');
-    
-    // Si el selector está vacío, poblarlo dinámicamente con Moments + Themes
-    if (selector.options.length <= 1) {
-        const sortedCats = Object.keys(categoryStats).sort();
-        selector.innerHTML = sortedCats.map(cat => 
-            `<option value="${cat}" ${cat === "Confianza" ? "selected" : ""}>${cat}</option>`
-        ).join('');
-    }
-
-    const theme = selector.value;
-    const count = categoryStats[theme] || 0;
-    const isReady = categoryReady[theme] || false;
-    
-    songCountDisplay.textContent = Math.floor(count) + " Canciones";
-    
-    if (isReady) {
-        videoPotential.textContent = "LISTO (Playlist Variada)";
-        videoPotential.style.color = "var(--success-color)";
-    } else {
-        videoPotential.textContent = "NECESITA RELLENO FAMILIAR";
-        videoPotential.style.color = "#ffcc00";
-    }
-    
-    currentTitle.textContent = "Producción: " + theme;
-}
-
-function initNavigation() {
-    const navButtons = document.querySelectorAll('.btn-nav');
-    const views = document.querySelectorAll('.view');
-    const btnLaunch = document.getElementById('btn-launch');
-    const playlistSelector = document.getElementById('playlist-selector');
-
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const viewId = btn.getAttribute('data-view');
-            
-            // Carga bajo demanda (Lazy Load)
-            if (viewId === 'catalog') loadCatalog();
-            if (viewId === 'renders') loadRenders();
-            
-            // Forzar actualización de UI ignorando caché si el servidor dice que está libre
-            fetch('/check_status').then(res => res.json()).then(data => {
-                if (data.is_rendering) {
-                    localStorage.setItem('is_rendering', 'true');
-                    btnLaunch.innerHTML = 'EN COLA DE NUBE...';
-                    btnLaunch.classList.add('disabled');
-                } else {
-                    localStorage.removeItem('is_rendering');
-                    btnLaunch.innerHTML = 'GENERAR PRODUCCIÓN';
-                    btnLaunch.classList.remove('disabled');
-                }
-            });
-            
-            navButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            views.forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-        });
-    });
-
-    playlistSelector.addEventListener('change', updateDashboardInfo);
-
-    if (btnLaunch) {
-        btnLaunch.addEventListener('click', launchProduction);
-    }
-}
-
-async function launchProduction() {
-    const btn = document.getElementById('btn-launch');
-    const statusBadge = document.getElementById('system-status-badge');
-    const activeProgress = document.getElementById('active-progress');
-    const progressFill = document.querySelector('.progress-fill');
-    const progressText = document.querySelector('.progress-text');
-    const theme = document.getElementById('playlist-selector').value;
-
-    btn.disabled = true;
-    btn.textContent = "EN COLA DE NUBE...";
-    statusBadge.textContent = "PROCESANDO";
-    statusBadge.classList.add('pulse-glow');
-
-    try {
-        const response = await fetch('/run_atmos', { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ theme: theme, duration: 3600 })
-        });
+        const theme = playlistSelector.value;
+        const isReady = data.ready[theme] || false;
         
-        if (response.ok) {
-            statusBadge.textContent = "RENDERIZANDO";
-            activeProgress.style.display = "block";
-            simulateProgress(progressFill, progressText);
+        if (isReady) {
+            videoPotential.textContent = "LISTO (Playlist Variada)";
+            videoPotential.style.color = "#00ff7f";
         } else {
-            throw new Error();
+            videoPotential.textContent = "NECESITA MÁS TEMAS";
+            videoPotential.style.color = "#ffcc00";
         }
-    } catch (err) {
-        alert("⚠️ Error de conexión con Oracle.");
-        btn.disabled = false;
-        btn.textContent = "REINTENTAR";
+    } catch (e) {
+        console.warn("Error stats");
     }
-}
-
-function simulateProgress(fill, text) {
-    let p = 0;
-    const interval = setInterval(() => {
-        p += Math.random() * 2;
-        if (p > 99) {
-            p = 99;
-            clearInterval(interval);
-            text.textContent = "Finalizando renderizado...";
-        }
-        fill.style.width = p + "%";
-        text.textContent = `Progreso: ${Math.floor(p)}%`;
-    }, 2000);
-}
-
-function loadRenders() {
-    const container = document.getElementById('renders-container');
-    const mockRenders = [
-        { title: "ATMOS_PAZ_INTERIOR_60MIN_8271", date: "Hoy", status: "Listo" },
-        { title: "PRODUCCION_OFICIAL_1HORA", date: "Ayer", status: "Listo" }
-    ];
-    
-    container.innerHTML = mockRenders.map(r => `
-        <div class="stat-card" style="grid-column: span 2">
-            <span class="label">${r.date}</span>
-            <span class="value" style="font-size:0.8rem; word-break: break-all;">${r.title}</span>
-            <div class="status-badge" style="margin-top:10px; font-size:0.5rem">${r.status}</div>
-        </div>
-    `).join('');
 }
 
 async function loadCatalog() {
-    const container = document.getElementById('catalog-container');
-    container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>Cargando biblioteca MusiChris Studio...</p>";
-    
     try {
-        const res = await fetch('/catalog');
-        if (!res.ok) throw new Error();
+        console.log("Solicitando catálogo a:", `${API_BASE}/catalog`);
+        const res = await fetch(`${API_BASE}/catalog`);
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const catalog = await res.json();
         
-        container.innerHTML = `
-            <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
-                ${catalog.slice(0, 100).map(song => `
-                    <div class="stat-card" style="display:flex; justify-content:space-between; align-items:center; opacity: ${song.disabled ? '0.5' : '1'}">
-                        <div style="flex:1">
-                            <span class="label">${song.album}</span>
-                            <span class="value" style="font-size:0.9rem">${song.title}</span>
-                            <div style="font-size:0.6rem; opacity:0.6;">${song.theme || song.moments.join(', ')}</div>
-                        </div>
-                        <div class="toggle-container">
-                            <input type="checkbox" id="toggle-${song.title}" ${song.disabled ? '' : 'checked'} onchange="toggleSong('${song.title.replace(/'/g, "\\'")}', !this.checked)">
-                        </div>
-                    </div>
-                `).join('')}
-                <p style="text-align:center; font-size:0.7rem; opacity:0.3; padding:10px;">Mostrando temas destacados...</p>
-            </div>
-        `;
-    } catch (e) {
-        container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>⚠️ Error al cargar el catálogo.</p>";
+        catalogList.innerHTML = catalog.length ? "" : '<p class="empty-msg">No hay canciones disponibles.</p>';
+        
+        catalog.forEach(song => {
+            const item = document.createElement('div');
+            item.className = 'catalog-item';
+            item.innerHTML = `
+                <div class="song-info">
+                    <span class="tiny-label">${song.album || 'SIN ÁLBUM'} | ${song.bpm || '??'} BPM</span>
+                    <p style="font-weight:700;">${song.title}</p>
+                    <span style="font-size:0.6rem; opacity:0.6; color:#f5f0e1;">TEMÁTICA: ${song.theme || 'General'}</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" ${song.disabled ? '' : 'checked'} onchange="toggleSong('${song.title}')">
+                    <span class="slider"></span>
+                </label>
+            `;
+            catalogList.appendChild(item);
+        });
+    } catch (err) {
+        console.error("Error cargando catálogo:", err);
+        catalogList.innerHTML = `<p class="error-msg">⚠️ ERROR DE CONEXIÓN: Verifica que el servidor en Oracle esté corriendo y que permita conexiones desde ${window.location.origin}</p>`;
     }
 }
 
-async function toggleSong(title, disabled) {
+async function toggleSong(title) {
     try {
-        await fetch('/toggle_song', {
+        await fetch(`${API_BASE}/toggle_song`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, disabled })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ title })
         });
-        fetchStats(); // Actualizar contadores en tiempo real
-    } catch (e) {
-        alert("No se pudo actualizar el estado de la canción.");
+        loadStats();
+    } catch (e) { 
+        console.error(e);
+        alert("Error al actualizar estado."); 
+    }
+}
+
+async function loadHistory() {
+    try {
+        const res = await fetch(`${API_BASE}/history`);
+        const history = await res.json();
+        historyList.innerHTML = history.length ? history.map(item => `
+            <div class="item-card">
+                <span class="tiny-label">${item.timestamp}</span>
+                <p style="font-weight:700; font-size:0.8rem;">${item.theme}</p>
+                <div style="font-size:0.5rem; background:var(--accent-blue); padding:2px 8px; border-radius:10px; display:inline-block; margin-top:5px;">${item.status}</div>
+            </div>
+        `).join('') : "<p style='opacity:0.3; text-align:center;'>Sin historial.</p>";
+    } catch (e) { console.error("Error historial"); }
+}
+
+async function launchProduction() {
+    const url = document.getElementById('song-url-input').value;
+    const theme = playlistSelector.value;
+    const duration = durationSelector.value;
+    const style = styleSelector.value;
+    
+    if (!url) return alert("Por favor ingresa un link.");
+
+    btnLaunch.disabled = true;
+    btnLaunch.textContent = "EN COLA DE NUBE...";
+
+    try {
+        const response = await fetch(`${API_BASE}/process`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ song_url: url, theme: theme })
+        });
+        if (response.ok) {
+            alert("🚀 ¡Misión iniciada! Revisa el Historial.");
+            document.getElementById('song-url-input').value = "";
+        }
+    } catch (e) { alert("Error de conexión."); }
+    finally {
+        btn.disabled = false;
+        btn.textContent = "INICIAR PRODUCCIÓN";
+        loadProductionHistory();
     }
 }

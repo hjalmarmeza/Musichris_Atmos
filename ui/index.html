@@ -2,107 +2,90 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MusiChris Atmos | Consola</title>
-    <link rel="apple-touch-icon" href="./assets/app_icon.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusiChris Studio | Atmos</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- BACKGROUND BLINDADO (Sin Botón Play) -->
     <div class="video-bg">
-        <video autoplay muted loop playsinline id="bg-video" poster="./assets/landscapes/default_poster.jpg">
-            <source src="./assets/fondo_humo_azul.mp4" type="video/mp4">
+        <video autoplay muted loop playsinline id="bg-video" poster="assets/landscapes/poster.jpg">
+            <source src="assets/landscapes/fondo humo azul.mp4" type="video/mp4">
         </video>
-        <div class="overlay"></div>
     </div>
 
-    <div id="app">
-        <header>
-            <div class="logo-area">
-                <img src="./assets/app_icon.png" alt="Logo" class="main-logo">
-                <h1>MUSICHRIS <span>ATMOS</span></h1>
+    <div class="master-container">
+        <!-- Logo de Cuadro -->
+        <img src="assets/logo_atmos.png" class="logo-img" alt="Atmos Logo">
+
+        <!-- Título Cinzel -->
+        <h1>MUSICHRIS <span>STUDIO</span></h1>
+
+        <!-- Pestañas Píldora -->
+        <nav class="nav-pill">
+            <button class="nav-btn active" data-view="dashboard">PANEL</button>
+            <button class="nav-btn" data-view="catalog">TEMAS</button>
+            <button class="nav-btn" data-view="renders">HISTORIAL</button>
+        </nav>
+
+        <!-- DASHBOARD (PANEL) -->
+        <main id="dashboard" class="view active">
+            <div class="status-info">
+                <p>Potencial: <span id="video-potential">CONSULTANDO NUBE...</span></p>
             </div>
-            <nav>
-                <button class="btn-nav active" data-view="dashboard">PANEL</button>
-                <button class="btn-nav" data-view="catalog">TEMAS</button>
-                <button class="btn-nav" data-view="renders">HISTORIAL</button>
-            </nav>
-        </header>
 
-        <main>
-            <!-- Dashboard View -->
-            <section id="dashboard" class="view active">
-                <div class="setup-card">
-                    <div class="input-group">
-                        <label>Momento Ministerial</label>
-                        <select id="playlist-selector">
-                            <option value="">Cargando momentos...</option>
-                        </select>
-                    </div>
-
-                    <div class="estimation-box">
-                        <div class="est-item">
-                            <span class="est-label">Canciones:</span>
-                            <span class="est-value" id="song-count-display">--</span>
-                        </div>
-                        <div class="est-item">
-                            <span class="est-label">Potencial:</span>
-                            <span class="est-value" id="video-potential">--</span>
-                        </div>
-                    </div>
-
-                    <button class="btn-primary" id="btn-launch">INICIAR PRODUCCIÓN</button>
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 25px; width: 100%;">
+                
+                <!-- Atmósfera -->
+                <div class="input-wrapper">
+                    <label class="input-label">ATMÓSFERA MINISTERIAL</label>
+                    <select id="playlist-selector" class="input-box">
+                        <option value="Confianza">Confianza & Fe</option>
+                        <option value="Paz">Paz Interior</option>
+                        <option value="Victoria">Victoria & Gozo</option>
+                        <option value="Guerra">Guerra Espiritual</option>
+                    </select>
                 </div>
 
-                <div class="hero-card">
-                    <div class="status-badge pulse-glow" id="system-status-badge">SISTEMA LISTO</div>
-                    <h2 id="current-title">Selecciona un Momento</h2>
-                    <p class="inspirational-quote" id="category-quote">"Donde las palabras fallan, la música habla."</p>
-                    
-                    <div class="progress-container" style="display:none;" id="active-progress">
-                        <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
-                        <p class="progress-text">Iniciando motor de renderizado...</p>
-                    </div>
+                <!-- Duración -->
+                <div class="input-wrapper">
+                    <label class="input-label">DURACIÓN DE PRODUCCIÓN</label>
+                    <select id="duration-selector" class="input-box">
+                        <option value="1800">30 MINUTOS (Standard)</option>
+                        <option value="3600" selected>1 HORA (Premium)</option>
+                        <option value="7200">2 HORAS (Majestic)</option>
+                    </select>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="label">STATUS CLOUD</span>
-                        <span class="value online">ONLINE</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="label">MOTOR FFmpeg</span>
-                        <span class="value">v8.0.1</span>
-                    </div>
+                <!-- Estilo Visual -->
+                <div class="input-wrapper">
+                    <label class="input-label">ESTILO CINEMATOGRÁFICO</label>
+                    <select id="style-selector" class="input-box">
+                        <option value="humo">Humo Azul (Atmos Core)</option>
+                        <option value="paisaje">Paisajes Épicos</option>
+                        <option value="abstracto">Partículas Abstractas</option>
+                    </select>
                 </div>
-            </section>
 
-            <!-- Catalog View -->
-            <section id="catalog" class="view">
-                <div class="hero-card">
-                    <h2>Catálogo Maestro</h2>
-                    <p>Explora tu biblioteca ministerial</p>
-                </div>
-                <div id="catalog-container"></div>
-            </section>
-
-            <!-- Renders View -->
-            <section id="renders" class="view">
-                <div class="hero-card">
-                    <h2>Historial Atmos</h2>
-                    <p>Producciones finalizadas en la nube</p>
-                </div>
-                <div id="renders-container" class="renders-grid"></div>
-            </section>
+                <button id="btn-launch" class="btn-main">
+                    INICIAR PRODUCCIÓN V6.2
+                </button>
+                
+                <p id="current-title" style="text-align:center; margin-top:10px; font-size:0.7rem; opacity:0.4; letter-spacing:2px;">Sincronizado con Motor Oracle</p>
+            </div>
         </main>
 
-        <footer>
-            MusiChris Atmos v8.12 • © 2026
-        </footer>
+        <!-- TEMAS -->
+        <section id="catalog" class="view">
+            <div id="catalog-container" class="list-container"></div>
+        </section>
+
+        <!-- HISTORIAL -->
+        <section id="renders" class="view">
+            <div id="renders-container" class="list-container"></div>
+        </section>
     </div>
 
-    <script src="./main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
