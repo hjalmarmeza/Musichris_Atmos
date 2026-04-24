@@ -4,10 +4,14 @@ import random
 import subprocess
 from PIL import Image, ImageDraw, ImageFont
 
+# Rutas Absolutas para ejecución en servidor
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 def clean_assets():
-    for f in os.listdir('assets'):
+    assets_dir = os.path.join(BASE_DIR, 'assets')
+    for f in os.listdir(assets_dir):
         if f.endswith('.png') and ('master' in f or 'ref' in f or 'overlay' in f or 'song' in f):
-            try: os.remove(os.path.join('assets', f))
+            try: os.remove(os.path.join(assets_dir, f))
             except: pass
 
 def create_reflection_overlay(text, output_path):
@@ -41,21 +45,22 @@ def create_master_overlays(main_title, output_prefix):
     except: f_foot = ImageFont.load_default()
     draw.text((1920/2, 940), "Suscríbete para más momentos de paz", font=f_foot, fill=(255,255,255,220), anchor="mm")
     draw.text((1920/2, 1010), "MusiChris Studio | Música para tu alma", font=f_foot, fill=(255,255,255,100), anchor="mm")
-    img.save(f"{output_prefix}_footer.png")
+    img.save(os.path.join(BASE_DIR, f"{output_prefix}_footer.png"))
 
 def generate_atmos_video(duration_secs, theme, output_name):
     print(f"🎬 [ATMOS ENGINE FINAL] Iniciando Producción Maestra...")
     clean_assets()
     
-    with open('data/musichris_master_catalog.json', 'r') as f:
+    with open(os.path.join(BASE_DIR, 'data/musichris_master_catalog.json'), 'r') as f:
         catalog = json.load(f)
-    with open('data/soul_reflections.json', 'r') as f:
+    with open(os.path.join(BASE_DIR, 'data/soul_reflections.json'), 'r') as f:
         reflections = json.load(f)
     
     # Cargar canciones desactivadas
     disabled_songs = []
-    if os.path.exists('data/disabled_songs.json'):
-        with open('data/disabled_songs.json', 'r') as f:
+    disabled_path = os.path.join(BASE_DIR, 'data/disabled_songs.json')
+    if os.path.exists(disabled_path):
+        with open(disabled_path, 'r') as f:
             disabled_songs = json.load(f)
     
     # Familias de Atmósferas (Herencia)
@@ -129,14 +134,14 @@ def generate_atmos_video(duration_secs, theme, output_name):
         # Mezclamos para la siguiente vuelta si el loop continúa
         random.shuffle(eligible_songs)
     
-    create_master_overlays(theme.upper(), "assets/master")
+    create_master_overlays(theme.upper(), os.path.join(BASE_DIR, "assets/master"))
     
     # Reflexiones distribuidas
     num_refs = max(2, int(duration_secs / 600)) # 1 cada 10 min
     reflection_overlays = []
     for i in range(num_refs):
         ref_text = random.choice(reflections)
-        path = f"assets/ref_{i}.png"
+        path = os.path.join(BASE_DIR, f"assets/ref_{i}.png")
         create_reflection_overlay(ref_text, path)
         start_t = (duration_secs / (num_refs+1)) * (i+1)
         reflection_overlays.append((path, start_t, start_t + 12))
@@ -145,7 +150,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
     final_duration = current_audio_time + 12
 
     # Seleccionar PAISAJE ALEATORIO
-    landscapes_dir = 'assets/landscapes'
+    landscapes_dir = os.path.join(BASE_DIR, 'assets/landscapes')
     landscapes = [f for f in os.listdir(landscapes_dir) if f.endswith('.mp4')]
     selected_landscape = os.path.join(landscapes_dir, random.choice(landscapes) if landscapes else 'landscape_test.mp4')
     print(f"🌍 Paisaje seleccionado: {selected_landscape}")
@@ -154,11 +159,11 @@ def generate_atmos_video(duration_secs, theme, output_name):
     cmd = [
         "nice", "-n", "19", "/opt/homebrew/bin/ffmpeg", "-y",
         "-stream_loop", "-1", "-i", selected_landscape,
-        "-i", "assets/master_intro.png",
-        "-i", "assets/master_footer.png",
-        "-i", "assets/watermark_layer.png",
-        "-stream_loop", "-1", "-i", "assets/logo_animado.mp4",
-        "-i", "assets/outro_layer_premium.png"
+        "-i", os.path.join(BASE_DIR, "assets/master_intro.png"),
+        "-i", os.path.join(BASE_DIR, "assets/master_footer.png"),
+        "-i", os.path.join(BASE_DIR, "assets/watermark_layer.png"),
+        "-stream_loop", "-1", "-i", os.path.join(BASE_DIR, "assets/logo_animado.mp4"),
+        "-i", os.path.join(BASE_DIR, "assets/outro_layer_premium.png")
     ]
     
     # Añadir overlays de reflexiones
@@ -191,12 +196,13 @@ def generate_atmos_video(duration_secs, theme, output_name):
     a_filters = "".join([f"[{audio_start_idx+i}:a]" for i in range(len(selected_songs))])
     a_filters += f"concat=n={len(selected_songs)}:v=0:a=1[a_final]"
 
+    output_path = os.path.join(BASE_DIR, f"renders/{output_name}")
     cmd += [
         "-filter_complex", f"{v_filters};{a_filters}",
         "-map", "[v_final]", "-map", "[a_final]",
         "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-b:a", "192k",
         "-t", str(final_duration), # Usamos la duración real calculada
-        f"renders/{output_name}"
+        output_path
     ]
     
     subprocess.run(cmd)
@@ -207,8 +213,8 @@ def generate_atmos_video(duration_secs, theme, output_name):
 
 def generate_thumbnail(theme, output_name, video_path):
     print(f"🖼️ Capturando fotograma de impacto desde {video_path}...")
-    temp_frame = f"renders/{output_name.replace('.mp4', '')}_FRAME.jpg"
-    thumb_path = f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg"
+    temp_frame = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_FRAME.jpg")
+    thumb_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg")
     
     # 1. Capturar fotograma al segundo 5 (para asegurar que haya imagen)
     cap_cmd = [
@@ -242,7 +248,7 @@ def generate_thumbnail(theme, output_name, video_path):
 
 def generate_metadata(theme, output_name):
     print(f"📝 Generando Metadatos SEO Potentes...")
-    meta_path = f"renders/{output_name.replace('.mp4', '')}_METADATA.json"
+    meta_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_METADATA.json")
     
     metadata = {
         "title": f"1 HORA DE {theme.upper()} | Música para Orar en Intimidad y Paz | MusiChris Studio",
