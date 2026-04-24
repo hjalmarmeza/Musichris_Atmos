@@ -189,15 +189,47 @@ def generate_atmos_video(duration_secs, theme, output_name):
     ]
     
     subprocess.run(cmd)
+    
+    # NUEVO: Generar Miniatura y Metadatos post-renderizado
+    generate_thumbnail(theme, output_name, selected_landscape)
+    generate_metadata(theme, output_name)
+
+def generate_thumbnail(theme, output_name, landscape_path):
+    print(f"🖼️ Generando miniatura premium para {theme}...")
+    thumb_path = f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg"
+    
+    # Comando FFmpeg para overlay de texto elegante
+    # Nota: Usamos drawtext con filtros para que se vea legible sobre cualquier fondo
+    cmd = [
+        "ffmpeg", "-y", "-i", landscape_path,
+        "-vf", f"drawtext=text='{theme.upper()}':fontcolor=white:fontsize=120:x=(w-tw)/2:y=(h-th)/2-50:shadowcolor=black:shadowx=5:shadowy=5,drawtext=text='MUSICHRIS STUDIO':fontcolor=white:fontsize=40:x=(w-tw)/2:y=(h-th)/2+100:letter_spacing=10",
+        "-frames:v", "1", thumb_path
+    ]
+    subprocess.run(cmd, capture_output=True)
+    print(f"✅ Miniatura generada: {thumb_path}")
+
+def generate_metadata(theme, output_name):
+    print(f"📝 Generando metadatos SEO para MusiChris Studio...")
+    meta_path = f"renders/{output_name.replace('.mp4', '')}_METADATA.json"
+    
+    metadata = {
+        "title": f"1 HORA DE {theme.upper()} | Música para Orar e Intimidad | MusiChris Studio",
+        "description": f"Bienvenido a MusiChris Studio. \n\nDisfruta de esta selección de {theme} diseñada para acompañar tus momentos de oración, reflexión e intimidad con el Padre. \n\nEn este video encontrarás una atmósfera de paz y serenidad para tu tiempo a solas con Dios. \n\n🕊️ SUSCRÍBETE para más contenido ministerial.\n\n#MusiChrisStudio #Oracion #Meditacion #Instrumental #Paz #Cristianos #{theme.replace(' ', '')}",
+        "tags": ["musichris studio", theme.lower(), "oracion", "meditacion cristiana", "instrumentales cristianos", "musica para orar", "paz interior", "descanso"]
+    }
+    
+    with open(meta_path, 'w', encoding='utf-8') as f:
+        json.dump(metadata, f, indent=4, ensure_ascii=False)
+    print(f"✅ Metadatos SEO listos: {meta_path}")
 
 if __name__ == "__main__":
     import sys
-    # Valores por defecto: 1 hora, Paz Interior, Nombre automático
+    # Valores por defecto: 1 hora, Confianza, Nombre automático
     duration = int(sys.argv[1]) if len(sys.argv) > 1 else 3600
-    theme = sys.argv[2] if len(sys.argv) > 2 else "Paz Interior"
+    theme = sys.argv[2] if len(sys.argv) > 2 else "Confianza"
     
     # Nombre de salida dinámico basado en tema y tiempo
     timestamp = random.randint(1000, 9999)
-    output_name = f"ATMOS_{theme.replace(' ', '_').upper()}_{duration//60}MIN_{timestamp}.mp4"
+    output_name = f"STUDIO_{theme.replace(' ', '_').upper()}_{duration//60}MIN_{timestamp}.mp4"
     
     generate_atmos_video(duration, theme, output_name)

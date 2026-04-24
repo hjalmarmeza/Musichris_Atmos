@@ -151,7 +151,7 @@ function loadRenders() {
 
 async function loadCatalog() {
     const container = document.getElementById('catalog-container');
-    container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>Cargando biblioteca ministerial...</p>";
+    container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>Cargando biblioteca MusiChris Studio...</p>";
     
     try {
         const res = await fetch('/catalog');
