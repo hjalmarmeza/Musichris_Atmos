@@ -27,7 +27,7 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                 families = {
                     "Protección": ["Refugio", "Confianza", "Descanso", "Noche", "Fortaleza"],
                     "Batalla": ["Guerra Espiritual", "Poder", "Victoria Final", "Fortaleza"],
-                    "Presencia": ["Adoración Celestial", "Selah", "Santidad", "Intimidad"],
+                    "Presencia": ["Adoración Celestial", "Santidad", "Intimidad"],
                     "Triunfo": ["Victoria", "Gozo", "Celebración", "Gratitud"],
                     "Renovación": ["Avivamiento", "Restauración", "Renovación", "Redención"]
                 }
@@ -37,7 +37,7 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                     "Refugio": ["refugio", "amparo", "abrigo"], "Confianza": ["confianza", "creer", "fe"], "Descanso": ["descanso", "reposo", "quietud"],
                     "Noche": ["noche", "medianoche", "madrugada"], "Guerra Espiritual": ["guerra", "batalla", "ejército"], "Poder": ["poder", "autoridad", "fuerza"],
                     "Fortaleza": ["fortaleza", "roca", "castillo"], "Victoria Final": ["victoria final", "triunfo eterno"], "Adoración Celestial": ["adoración", "celestial", "trono"],
-                    "Selah": ["selah", "meditación", "reflexión"], "Santidad": ["santidad", "santo", "puro"], "Intimidad": ["intimidad", "secreto", "presencia"],
+                    "Santidad": ["santidad", "santo", "puro"], "Intimidad": ["intimidad", "secreto", "presencia", "selah", "meditación"],
                     "Victoria": ["victoria", "vencer", "triunfo"], "Gozo": ["gozo", "alegría", "deleite"], "Celebración": ["celebración", "fiesta", "exaltación"],
                     "Gratitud": ["gratitud", "gracias", "reconocimiento"], "Avivamiento": ["avivamiento", "despertar", "fuego"], "Restauración": ["restauración", "restitución", "sanidad"],
                     "Renovación": ["renovación", "nuevo", "transformación"], "Redención": ["redención", "rescate", "gracia"]
@@ -65,14 +65,17 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                                         # Solo sumamos si la categoría principal de la canción es compatible
                                         stats[member] += 0.5 # Peso menor para indicar que es "relleno"
                 
-                # Normalizar stats (redondear hacia arriba)
-                stats = {k: int(v + 0.9) for k, v in stats.items()}
+                # Enviar datos enriquecidos para la UI
+                response_data = {
+                    "stats": stats,
+                    "ready": {k: (v >= 12) for k, v in stats.items()}
+                }
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                self.wfile.write(json.dumps(stats).encode())
+                self.wfile.write(json.dumps(response_data).encode())
             except Exception as e:
                 self.send_error(500, str(e))
         elif self.path == '/catalog':

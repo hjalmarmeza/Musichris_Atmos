@@ -24,20 +24,25 @@ function initVideoAutoplay() {
 async function fetchStats() {
     // Intentar cargar desde cache primero para velocidad instantánea
     const cachedStats = localStorage.getItem('categoryStats');
+    const cachedReady = localStorage.getItem('categoryReady');
     if (cachedStats) {
         categoryStats = JSON.parse(cachedStats);
+        categoryReady = cachedReady ? JSON.parse(cachedReady) : {};
         updateDashboardInfo();
     }
 
     try {
         const res = await fetch('/stats');
-        if (!res.ok) throw new Error("Stats not available");
-        categoryStats = await res.json();
+        const data = await res.json();
+        categoryStats = data.stats;
+        categoryReady = data.ready;
         localStorage.setItem('categoryStats', JSON.stringify(categoryStats));
+        localStorage.setItem('categoryReady', JSON.stringify(categoryReady));
         updateDashboardInfo();
     } catch (e) {
         console.warn("Usando datos de respaldo...");
         categoryStats = { "Paz Interior": 84, "Victoria & Gozo": 45, "Guerra Espiritual": 22 };
+        categoryReady = { "Paz Interior": true, "Victoria & Gozo": false, "Guerra Espiritual": false };
         updateDashboardInfo();
     }
 }
@@ -58,16 +63,19 @@ function updateDashboardInfo() {
 
     const theme = selector.value;
     const count = categoryStats[theme] || 0;
+    const isReady = categoryReady[theme] || false;
     
-    songCountDisplay.textContent = count;
-    videoPotential.textContent = Math.floor(count / 12) + " Videos";
+    songCountDisplay.textContent = Math.floor(count) + " Canciones";
     
-    const titles = {
-        "Paz Interior": "Atmósfera No Temas",
-        "Victoria & Gozo": "Cánticos de Victoria",
-        "Guerra Espiritual": "Poder y Fortaleza"
-    };
-    currentTitle.textContent = titles[theme] || theme;
+    if (isReady) {
+        videoPotential.textContent = "LISTO (Playlist Variada)";
+        videoPotential.style.color = "var(--success-color)";
+    } else {
+        videoPotential.textContent = "NECESITA RELLENO FAMILIAR";
+        videoPotential.style.color = "#ffcc00";
+    }
+    
+    currentTitle.textContent = "Producción: " + theme;
 }
 
 function initNavigation() {
