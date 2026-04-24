@@ -72,17 +72,31 @@ function initNavigation() {
             quoteElement.textContent = quotes[playlistSelector.value];
         });
 
-        btnLaunch.addEventListener('click', () => {
+        btnLaunch.addEventListener('click', async () => {
             const playlist = playlistSelector.value;
             const data = categoryData[playlist];
-            // ... resto de la lógica de lanzamiento ...
+            
             btnLaunch.disabled = true;
             btnLaunch.textContent = "PRODUCCIÓN EN CURSO...";
             currentTitle.textContent = data.title;
-            statusBadge.textContent = "RENDERIZANDO";
+            statusBadge.textContent = "CONECTANDO...";
             statusBadge.style.background = "#fbbf24";
-            activeProgress.style.display = "block";
-            simulateProgress(progressFill, progressText);
+            
+            try {
+                const response = await fetch('/run_atmos', { method: 'POST' });
+                if (response.ok) {
+                    statusBadge.textContent = "RENDERIZANDO EN NUBE";
+                    activeProgress.style.display = "block";
+                    simulateProgress(progressFill, progressText);
+                } else {
+                    throw new Error('Error al iniciar');
+                }
+            } catch (err) {
+                alert('⚠️ Error: No se pudo conectar con el motor de Oracle.');
+                btnLaunch.disabled = false;
+                btnLaunch.textContent = "REINTENTAR";
+                statusBadge.textContent = "ERROR";
+            }
         });
     }
 }
