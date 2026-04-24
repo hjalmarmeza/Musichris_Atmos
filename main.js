@@ -167,7 +167,7 @@ async function launchProduction() {
         const response = await ghFetch('dispatches', {
             method: 'POST',
             body: JSON.stringify({
-                event_type: "atmos_trigger",
+                event_type: "launch_atmos",
                 client_payload: {
                     theme: theme,
                     duration: parseInt(duration),
