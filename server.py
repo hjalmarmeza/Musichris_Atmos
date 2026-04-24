@@ -8,7 +8,23 @@ PORT = 8080
 
 class AtmosHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/stats':
+        if self.path == '/check_status':
+            try:
+                # Verificar si FFmpeg está corriendo en el sistema
+                is_rendering = False
+                try:
+                    output = subprocess.check_output(['pgrep', 'ffmpeg'])
+                    if output: is_rendering = True
+                except: pass
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({'is_rendering': is_rendering}).encode())
+            except Exception as e:
+                self.send_error(500, str(e))
+        elif self.path == '/stats':
             try:
                 catalog_path = '../data/musichris_master_catalog.json'
                 disabled_path = '../data/disabled_songs.json'
