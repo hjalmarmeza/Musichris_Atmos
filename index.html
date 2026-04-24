@@ -31,26 +31,47 @@
         <!-- DASHBOARD (PANEL) -->
         <main id="dashboard" class="view active">
             <div class="status-info">
-                <p>Potencial: <span id="video-potential">LISTO (Playlist Variada)</span></p>
+                <p>Potencial: <span id="video-potential">CONSULTANDO NUBE...</span></p>
             </div>
 
-            <div class="form-group">
-                <input type="text" id="song-url-input" placeholder="Pegar link de canción aquí..." class="input-box">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 25px; width: 100%;">
                 
-                <div style="position:relative; width:100%;">
-                    <select id="playlist-selector" class="input-box" style="appearance: none; -webkit-appearance: none;">
+                <!-- Atmósfera -->
+                <div class="input-wrapper">
+                    <label class="input-label">ATMÓSFERA MINISTERIAL</label>
+                    <select id="playlist-selector" class="input-box">
                         <option value="Confianza">Confianza & Fe</option>
                         <option value="Paz">Paz Interior</option>
                         <option value="Victoria">Victoria & Gozo</option>
+                        <option value="Guerra">Guerra Espiritual</option>
+                    </select>
+                </div>
+
+                <!-- Duración -->
+                <div class="input-wrapper">
+                    <label class="input-label">DURACIÓN DE PRODUCCIÓN</label>
+                    <select id="duration-selector" class="input-box">
+                        <option value="1800">30 MINUTOS (Standard)</option>
+                        <option value="3600" selected>1 HORA (Premium)</option>
+                        <option value="7200">2 HORAS (Majestic)</option>
+                    </select>
+                </div>
+
+                <!-- Estilo Visual -->
+                <div class="input-wrapper">
+                    <label class="input-label">ESTILO CINEMATOGRÁFICO</label>
+                    <select id="style-selector" class="input-box">
+                        <option value="humo">Humo Azul (Atmos Core)</option>
+                        <option value="paisaje">Paisajes Épicos</option>
+                        <option value="abstracto">Partículas Abstractas</option>
                     </select>
                 </div>
 
                 <button id="btn-launch" class="btn-main">
-                    INICIAR PRODUCCIÓN
+                    INICIAR PRODUCCIÓN V6.2
                 </button>
                 
-                <!-- Título dinámico para el Panel -->
-                <p id="current-title" style="text-align:center; margin-top:10px; font-size:0.8rem; opacity:0.5;">Producción: Confianza</p>
+                <p id="current-title" style="text-align:center; margin-top:10px; font-size:0.7rem; opacity:0.4; letter-spacing:2px;">Sincronizado con Motor Oracle</p>
             </div>
         </main>
 

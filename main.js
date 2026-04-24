@@ -1,29 +1,57 @@
+// CONFIGURACIÓN MAESTRA
 const API_BASE = "http://161.153.206.126:5000";
 
+// ELEMENTOS UI
+const btnLaunch = document.getElementById('btn-launch');
+const playlistSelector = document.getElementById('playlist-selector');
+const durationSelector = document.getElementById('duration-selector');
+const styleSelector = document.getElementById('style-selector');
+const videoPotential = document.getElementById('video-potential');
+const catalogList = document.getElementById('catalog-list');
+const historyList = document.getElementById('history-list');
+const videoElement = document.querySelector('.video-bg video');
+
+// AUTOMATIC VIDEO PLAYBACK SHIELD
+function ensureVideoPlay() {
+    if (videoElement) {
+        videoElement.play().catch(err => {
+            console.log("Autoplay blocked or failed. Trying silent recovery...");
+            videoElement.muted = true;
+            videoElement.play();
+        });
+    }
+}
+
+// INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', () => {
-    initNavigation();
-    fetchStats();
-    loadProductionHistory();
+    loadStats();
+    loadCatalog();
+    loadHistory();
+    ensureVideoPlay();
     
-    // Autoplay blindado para iOS
-    const v = document.getElementById('bg-video');
-    if (v) v.play().catch(() => {});
+    // Check for Mixed Content issues
+    if (window.location.protocol === 'https:' && API_BASE.startsWith('http:')) {
+        console.error("⚠️ CRITICAL: Protocol Mismatch. Browsers block HTTPS -> HTTP calls. Dashboard won't work unless Oracle has SSL or you use a proxy.");
+        alert("ALERTA DE SEGURIDAD: Tu servidor en Oracle necesita SSL (HTTPS) para funcionar desde esta web segura.");
+    }
+    
+    if (btnLaunch) btnLaunch.addEventListener('click', launchProduction);
+    if (playlistSelector) playlistSelector.addEventListener('change', loadStats);
 });
 
-async function fetchStats() {
-    const potentialDisplay = document.getElementById('video-potential');
+async function loadStats() {
     try {
         const res = await fetch(`${API_BASE}/stats`);
         const data = await res.json();
-        const theme = document.getElementById('playlist-selector').value;
+        const theme = playlistSelector.value;
         const isReady = data.ready[theme] || false;
         
         if (isReady) {
-            potentialDisplay.textContent = "LISTO (Playlist Variada)";
-            potentialDisplay.style.color = "#00ff7f";
+            videoPotential.textContent = "LISTO (Playlist Variada)";
+            videoPotential.style.color = "#00ff7f";
         } else {
-            potentialDisplay.textContent = "NECESITA MÁS TEMAS";
-            potentialDisplay.style.color = "#ffcc00";
+            videoPotential.textContent = "NECESITA MÁS TEMAS";
+            videoPotential.style.color = "#ffcc00";
         }
     } catch (e) {
         console.warn("Error stats");
@@ -31,44 +59,55 @@ async function fetchStats() {
 }
 
 async function loadCatalog() {
-    const container = document.getElementById('catalog-container');
-    container.innerHTML = "<p style='text-align:center; opacity:0.5;'>Conectando con biblioteca Oracle...</p>";
-    
     try {
+        console.log("Solicitando catálogo a:", `${API_BASE}/catalog`);
         const res = await fetch(`${API_BASE}/catalog`);
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const catalog = await res.json();
         
-        container.innerHTML = catalog.map(song => `
-            <div class="item-card" style="display:flex; justify-content:space-between; align-items:center; opacity: ${song.disabled ? '0.4' : '1'}">
-                <div>
-                    <span class="tiny-label">${song.album}</span>
-                    <p style="font-weight:700; font-size:0.8rem;">${song.title}</p>
+        catalogList.innerHTML = catalog.length ? "" : '<p class="empty-msg">No hay canciones disponibles.</p>';
+        
+        catalog.forEach(song => {
+            const item = document.createElement('div');
+            item.className = 'catalog-item';
+            item.innerHTML = `
+                <div class="song-info">
+                    <span class="tiny-label">${song.album || 'SIN ÁLBUM'} | ${song.bpm || '??'} BPM</span>
+                    <p style="font-weight:700;">${song.title}</p>
+                    <span style="font-size:0.6rem; opacity:0.6; color:#f5f0e1;">TEMÁTICA: ${song.theme || 'General'}</span>
                 </div>
-                <input type="checkbox" ${song.disabled ? '' : 'checked'} onchange="toggleSong('${song.filename}', !this.checked)">
-            </div>
-        `).join('');
-    } catch (e) {
-        container.innerHTML = "<p style='text-align:center; opacity:0.5;'>⚠️ Error de conexión.</p>";
+                <label class="switch">
+                    <input type="checkbox" ${song.disabled ? '' : 'checked'} onchange="toggleSong('${song.title}')">
+                    <span class="slider"></span>
+                </label>
+            `;
+            catalogList.appendChild(item);
+        });
+    } catch (err) {
+        console.error("Error cargando catálogo:", err);
+        catalogList.innerHTML = `<p class="error-msg">⚠️ ERROR DE CONEXIÓN: Verifica que el servidor en Oracle esté corriendo y que permita conexiones desde ${window.location.origin}</p>`;
     }
 }
 
-async function toggleSong(filename, disabled) {
+async function toggleSong(title) {
     try {
         await fetch(`${API_BASE}/toggle_song`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ filename, disabled })
+            body: JSON.stringify({ title })
         });
-        fetchStats(); // Recargar stats al cambiar canciones
-    } catch (e) { alert("Error al actualizar estado."); }
+        loadStats();
+    } catch (e) { 
+        console.error(e);
+        alert("Error al actualizar estado."); 
+    }
 }
 
-async function loadProductionHistory() {
-    const container = document.getElementById('renders-container');
+async function loadHistory() {
     try {
         const res = await fetch(`${API_BASE}/history`);
         const history = await res.json();
-        container.innerHTML = history.length ? history.map(item => `
+        historyList.innerHTML = history.length ? history.map(item => `
             <div class="item-card">
                 <span class="tiny-label">${item.timestamp}</span>
                 <p style="font-weight:700; font-size:0.8rem;">${item.theme}</p>
@@ -78,43 +117,16 @@ async function loadProductionHistory() {
     } catch (e) { console.error("Error historial"); }
 }
 
-function initNavigation() {
-    const navBtns = document.querySelectorAll('.nav-btn');
-    const views = document.querySelectorAll('.view');
-
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const viewId = btn.getAttribute('data-view');
-            navBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            views.forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            
-            if (viewId === 'catalog') loadCatalog();
-            if (viewId === 'renders') loadProductionHistory();
-        });
-    });
-
-    const selector = document.getElementById('playlist-selector');
-    if (selector) {
-        selector.addEventListener('change', () => {
-            document.getElementById('current-title').textContent = "Producción: " + selector.value;
-            fetchStats();
-        });
-    }
-
-    document.getElementById('btn-launch').addEventListener('click', launchProduction);
-}
-
 async function launchProduction() {
-    const btn = document.getElementById('btn-launch');
     const url = document.getElementById('song-url-input').value;
-    const theme = document.getElementById('playlist-selector').value;
+    const theme = playlistSelector.value;
+    const duration = durationSelector.value;
+    const style = styleSelector.value;
     
     if (!url) return alert("Por favor ingresa un link.");
 
-    btn.disabled = true;
-    btn.textContent = "EN COLA DE NUBE...";
+    btnLaunch.disabled = true;
+    btnLaunch.textContent = "EN COLA DE NUBE...";
 
     try {
         const response = await fetch(`${API_BASE}/process`, {
