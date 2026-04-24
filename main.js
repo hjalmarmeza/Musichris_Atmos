@@ -4,6 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     updateSystemStatus();
     loadProductionHistory();
+    
+    // Forzar autoplay si el navegador bloqueó
+    const video = document.getElementById('bg-video');
+    if (video) {
+        video.muted = true;
+        video.play().catch(e => console.log("Autoplay waiting for interaction"));
+    }
 });
 
 async function updateSystemStatus() {
@@ -13,12 +20,10 @@ async function updateSystemStatus() {
         const data = await res.json();
         if (data.status === "online") {
             badge.textContent = "CONECTADO";
-            badge.style.background = "rgba(0, 255, 127, 0.2)";
             badge.style.color = "#00ff7f";
         }
     } catch (e) {
         badge.textContent = "DESCONECTADO";
-        badge.style.background = "rgba(255, 50, 50, 0.2)";
         badge.style.color = "#ff3232";
     }
 }
@@ -37,71 +42,76 @@ async function loadProductionHistory() {
         }
 
         container.innerHTML = history.map(item => `
-            <div class="stat-card" style="grid-column: span 2; border-left: 3px solid var(--accent-color);">
-                <div style="display:flex; justify-content:space-between; align-items:start;">
-                    <span class="label">${item.timestamp}</span>
-                    <div class="status-badge" style="font-size:0.5rem; background: var(--accent-color);">${item.status}</div>
-                </div>
-                <span class="value" style="font-size:0.8rem; margin-top:5px; display:block;">Tema: ${item.theme}</span>
-                <span style="font-size:0.6rem; opacity:0.6; word-break: break-all;">Link: ${item.song_url}</span>
+            <div class="stat-card">
+                <span class="label">${item.timestamp}</span>
+                <span class="value" style="font-size:0.8rem; display:block;">${item.theme}</span>
+                <div class="status-badge" style="background:var(--accent-color); margin-top:5px;">${item.status}</div>
             </div>
         `).join('');
     } catch (e) {
-        console.error("Error cargando historial");
+        console.error("Error historial");
     }
+}
+
+async function loadCatalog() {
+    const container = document.getElementById('catalog-container');
+    if (!container) return;
+    
+    // Mock de catálogo ministerial
+    const catalog = [
+        { title: "Abre mis ojos", album: "Atmos v1", theme: "Confianza" },
+        { title: "Paz en la tormenta", album: "Atmos v1", theme: "Paz" },
+        { title: "Victoria total", album: "Atmos v2", theme: "Victoria" }
+    ];
+
+    container.innerHTML = catalog.map(song => `
+        <div class="stat-card">
+            <span class="label">${song.album}</span>
+            <span class="value" style="font-size:0.8rem">${song.title}</span>
+            <div style="font-size:0.6rem; opacity:0.5">${song.theme}</div>
+        </div>
+    `).join('');
 }
 
 async function launchProduction() {
     const btn = document.getElementById('btn-launch');
-    const songUrlInput = document.getElementById('song-url-input'); // Asegúrate de tener este ID
+    const songUrlInput = document.getElementById('song-url-input');
     const themeSelector = document.getElementById('playlist-selector');
     
-    const song_url = songUrlInput ? songUrlInput.value : "https://youtube.com/watch?v=direct";
+    const song_url = songUrlInput ? songUrlInput.value : "";
     const theme = themeSelector.value;
 
     if (!song_url) {
-        alert("Por favor ingresa un link de canción.");
+        alert("Por favor ingresa un link ministerial.");
         return;
     }
 
-    // Efecto visual de carga
     btn.disabled = true;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<span class="spinner"></span> ENVIANDO A LA NUBE...';
+    btn.innerHTML = '<span class="spinner"></span> PROCESANDO...';
 
     try {
         const response = await fetch(`${API_BASE}/process`, { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                song_url: song_url, 
-                theme: theme 
-            })
+            body: JSON.stringify({ song_url, theme })
         });
         
-        const result = await response.json();
-        
         if (response.ok) {
-            alert("🚀 ¡Misión iniciada! GitHub está renderizando tu video. El panel volverá a la normalidad.");
-            if (songUrlInput) songUrlInput.value = ""; // Limpiar input
-        } else {
-            alert("⚠️ Error de GitHub: " + result.message);
+            alert("🚀 ¡Misión iniciada en la nube!");
+            if (songUrlInput) songUrlInput.value = "";
         }
     } catch (err) {
-        alert("⚠️ El servidor de Oracle no responde. Verifica que esté encendido.");
+        alert("⚠️ Error de conexión.");
     } finally {
-        // RESET TOTAL: El botón vuelve a la normalidad pase lo que pase
         btn.disabled = false;
-        btn.innerHTML = originalText;
-        loadProductionHistory(); // Recargar la lista
+        btn.innerHTML = 'INICIAR PRODUCCIÓN EN NUBE';
+        loadProductionHistory();
     }
 }
 
 function initNavigation() {
     const navButtons = document.querySelectorAll('.btn-nav');
     const views = document.querySelectorAll('.view');
-    const btnLaunch = document.getElementById('btn-launch');
-    const playlistSelector = document.getElementById('playlist-selector');
 
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -111,18 +121,18 @@ function initNavigation() {
             views.forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             
+            if (viewId === 'catalog') loadCatalog();
             if (viewId === 'renders') loadProductionHistory();
         });
     });
 
-    if (btnLaunch) {
-        btnLaunch.addEventListener('click', launchProduction);
-    }
-    
-    if (playlistSelector) {
-        playlistSelector.addEventListener('change', () => {
-            const currentTitle = document.getElementById('current-title');
-            if (currentTitle) currentTitle.textContent = "Producción: " + playlistSelector.value;
+    const btnLaunch = document.getElementById('btn-launch');
+    if (btnLaunch) btnLaunch.addEventListener('click', launchProduction);
+
+    const selector = document.getElementById('playlist-selector');
+    if (selector) {
+        selector.addEventListener('change', () => {
+            document.getElementById('current-title').textContent = "Producción: " + selector.value;
         });
     }
 }
