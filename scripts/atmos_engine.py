@@ -205,6 +205,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
         output_path
     ]
     
+    print(f"🚀 EJECUTANDO COMANDO MAESTRO:\n{' '.join(cmd)}")
     subprocess.run(cmd)
     
     # NUEVO: Generar Miniatura y Metadatos post-renderizado
