@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- BACKGROUND -->
+    <!-- BACKGROUND BLINDADO (Sin Botón Play) -->
     <div class="video-bg">
-        <video autoplay muted loop playsinline id="bg-video">
-            <source src="assets/landscapes/fondo_humo_azul.mp4" type="video/mp4">
+        <video autoplay muted loop playsinline id="bg-video" poster="assets/landscapes/poster.jpg">
+            <source src="assets/landscapes/fondo humo azul.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -31,25 +31,30 @@
         <!-- DASHBOARD (PANEL) -->
         <main id="dashboard" class="view active">
             <div class="status-info">
-                <p>Potencial: <span>LISTO (Playlist Variada)</span></p>
+                <p>Potencial: <span id="video-potential">LISTO (Playlist Variada)</span></p>
             </div>
 
             <div class="form-group">
-                <input type="text" id="song-url-input" placeholder="Pegar link de canción aquí..." class="input-box" style="border:none; background: rgba(255,255,255,0.08);">
+                <input type="text" id="song-url-input" placeholder="Pegar link de canción aquí..." class="input-box">
                 
-                <select id="playlist-selector" class="input-box" style="border:none; background: rgba(255,255,255,0.08);">
-                    <option value="Confianza">Confianza & Fe</option>
-                    <option value="Paz">Paz Interior</option>
-                    <option value="Victoria">Victoria & Gozo</option>
-                </select>
+                <div style="position:relative; width:100%;">
+                    <select id="playlist-selector" class="input-box" style="appearance: none; -webkit-appearance: none;">
+                        <option value="Confianza">Confianza & Fe</option>
+                        <option value="Paz">Paz Interior</option>
+                        <option value="Victoria">Victoria & Gozo</option>
+                    </select>
+                </div>
 
                 <button id="btn-launch" class="btn-main">
                     INICIAR PRODUCCIÓN
                 </button>
+                
+                <!-- Título dinámico para el Panel -->
+                <p id="current-title" style="text-align:center; margin-top:10px; font-size:0.8rem; opacity:0.5;">Producción: Confianza</p>
             </div>
         </main>
 
-        <!-- TEMAS (CATALOGO) -->
+        <!-- TEMAS -->
         <section id="catalog" class="view">
             <div id="catalog-container" class="list-container"></div>
         </section>
