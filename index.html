@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusiChris Atmos | Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <div class="logo-orb">MC</div>
+                <div class="brand-text">
+                    <h1>MusiChris <span>Atmos</span></h1>
+                    <p>Soberanía Digital Ministerial</p>
+                </div>
+            </div>
+            <div id="system-status-badge" class="status-badge">CONECTANDO...</div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main id="dashboard" class="view active">
+            <div class="hero-stats">
+                <div class="stat-main">
+                    <span class="label">CONFIGURACIÓN ACTUAL</span>
+                    <h2 id="current-title">Producción: Confianza</h2>
+                </div>
+                <div class="stat-mini">
+                    <span class="label">LISTO PARA NUBE</span>
+                    <div id="video-potential" class="value">GHP CORE v3</div>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <div class="input-group">
+                    <label>Link de la Canción (YouTube/File)</label>
+                    <input type="text" id="song-url-input" placeholder="https://youtube.com/watch?v=..." class="modern-input">
+                </div>
+
+                <div class="input-group">
+                    <label>Tema Ministerial</label>
+                    <select id="playlist-selector" class="modern-select">
+                        <option value="Confianza">Confianza & Fe</option>
+                        <option value="Paz">Paz Interior</option>
+                        <option value="Victoria">Victoria & Gozo</option>
+                        <option value="Guerra">Guerra Espiritual</option>
+                        <option value="Adoracion">Adoración Profunda</option>
+                    </select>
+                </div>
+
+                <button id="btn-launch" class="btn-primary pulse-glow">
+                    INICIAR PRODUCCIÓN EN NUBE
+                </button>
+            </div>
+        </main>
+
+        <!-- History View -->
+        <section id="renders" class="view">
+            <h3 class="section-title">Historial de Producciones</h3>
+            <div id="renders-container" class="grid-container">
+                <!-- Se puebla desde main.js -->
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <button class="btn-nav active" data-view="dashboard">Panel</button>
+            <button class="btn-nav" data-view="renders">Historial</button>
+        </nav>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
