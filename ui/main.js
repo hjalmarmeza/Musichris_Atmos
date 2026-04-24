@@ -40,10 +40,10 @@ function updateDashboardInfo() {
     const videoPotential = document.getElementById('video-potential');
     const currentTitle = document.getElementById('current-title');
     
-    // Si el selector está vacío, poblarlo dinámicamente
+    // Si el selector está vacío, poblarlo dinámicamente con Moments + Themes
     if (selector.options.length <= 1) {
-        const currentVal = selector.value;
-        selector.innerHTML = Object.keys(categoryStats).map(cat => 
+        const sortedCats = Object.keys(categoryStats).sort();
+        selector.innerHTML = sortedCats.map(cat => 
             `<option value="${cat}" ${cat === "Paz Interior" ? "selected" : ""}>${cat}</option>`
         ).join('');
     }
@@ -154,26 +154,41 @@ async function loadCatalog() {
     container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>Cargando biblioteca ministerial...</p>";
     
     try {
-        // Buscamos el catálogo a través de la nueva ruta del servidor
         const res = await fetch('/catalog');
         if (!res.ok) throw new Error();
         const catalog = await res.json();
         
         container.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
-                ${catalog.slice(0, 50).map(song => `
-                    <div class="stat-card" style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
+                ${catalog.slice(0, 100).map(song => `
+                    <div class="stat-card" style="display:flex; justify-content:space-between; align-items:center; opacity: ${song.disabled ? '0.5' : '1'}">
+                        <div style="flex:1">
                             <span class="label">${song.album}</span>
                             <span class="value" style="font-size:0.9rem">${song.title}</span>
+                            <div style="font-size:0.6rem; opacity:0.6;">${song.theme || song.moments.join(', ')}</div>
                         </div>
-                        <span style="font-size:0.7rem; opacity:0.5;">${song.bpm} BPM</span>
+                        <div class="toggle-container">
+                            <input type="checkbox" id="toggle-${song.title}" ${song.disabled ? '' : 'checked'} onchange="toggleSong('${song.title.replace(/'/g, "\\'")}', !this.checked)">
+                        </div>
                     </div>
                 `).join('')}
-                <p style="text-align:center; font-size:0.7rem; opacity:0.3; padding:10px;">Mostrando primeros 50 temas...</p>
+                <p style="text-align:center; font-size:0.7rem; opacity:0.3; padding:10px;">Mostrando temas destacados...</p>
             </div>
         `;
     } catch (e) {
-        container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>⚠️ No se pudo cargar el catálogo. Verifica la conexión.</p>";
+        container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>⚠️ Error al cargar el catálogo.</p>";
+    }
+}
+
+async function toggleSong(title, disabled) {
+    try {
+        await fetch('/toggle_song', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, disabled })
+        });
+        fetchStats(); // Actualizar contadores en tiempo real
+    } catch (e) {
+        alert("No se pudo actualizar el estado de la canción.");
     }
 }

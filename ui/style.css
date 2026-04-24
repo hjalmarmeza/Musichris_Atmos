@@ -284,6 +284,36 @@ footer {
     letter-spacing: 1px;
 }
 
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+/* TOGGLE SWITCH */
+.toggle-container input[type="checkbox"] {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+    border: 1px solid var(--glass-border);
+}
+
+.toggle-container input[type="checkbox"]:checked {
+    background: var(--success-color);
+}
+
+.toggle-container input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.toggle-container input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
+    background: #000;
+}

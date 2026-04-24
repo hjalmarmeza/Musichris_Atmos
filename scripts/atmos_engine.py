@@ -52,7 +52,14 @@ def generate_atmos_video(duration_secs, theme, output_name):
     with open('data/soul_reflections.json', 'r') as f:
         reflections = json.load(f)
     
-    eligible_songs = [s for s in catalog if theme in s.get('moments', [])]
+    # Cargar canciones desactivadas
+    disabled_songs = []
+    if os.path.exists('data/disabled_songs.json'):
+        with open('data/disabled_songs.json', 'r') as f:
+            disabled_songs = json.load(f)
+    
+    # Filtrar por momentos o tema, y quitar las desactivadas
+    eligible_songs = [s for s in catalog if (theme in s.get('moments', []) or theme == s.get('theme')) and s['title'] not in disabled_songs]
     random.shuffle(eligible_songs)
     
     # Seleccionamos canciones y hacemos LOOP si es necesario para cubrir el tiempo
