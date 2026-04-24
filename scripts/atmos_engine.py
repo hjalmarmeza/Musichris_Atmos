@@ -58,26 +58,27 @@ def generate_atmos_video(duration_secs, theme, output_name):
         with open('data/disabled_songs.json', 'r') as f:
             disabled_songs = json.load(f)
     
-    # NUEVO: Definir Grupos Maestros en el Motor
+    # NUEVO: Grupos Maestros por palabras clave
     groups = {
-        "Paz & Reposo": ["Paz Interior", "Paz / Confianza (\"Raphah\")", "Paz / Meditación / Descanso", "Refugio / Seguridad", "Descanso / Hogar espiritual", "Quietud / Confianza Silenciosa", "Vigilancia divina / Descanso seguro", "Voz de Dios / Calma", "Seguridad y Paz en Dios", "Alivio / Refugio Inmersivo"],
-        "Guerra & Fortaleza": ["Guerra Espiritual", "Poder y Fortaleza", "Victoria Final", "Fortaleza y Agilidad Divina", "Valentía / Confianza en medio del peligro", "Protección / Poder", "Seguridad en la Defensa Divina", "Refugio activo / Protección en la guerra", "Inmunidad divina / Protección sobrenatural"],
-        "Adoración & Intimidad": ["Adoración celestial", "Adoración extravagante / Perdón", "Intimidad de madrugada / Sed del alma", "Santidad de Dios", "Selah", "Anhelo / Contemplación", "Prioridad / Presencia", "Omnipresencia / Intimidad Total", "La Paternidad de Dios"],
-        "Victoria & Gozo": ["Victoria & Gozo", "Victoria / Fe activa", "Celebración Colectiva", "Gratitud y Exaltación", "Joyful", "El Gozo como Regalo Divino", "Victoria y Gratitud", "La Victoria y el Desfile Divino"],
-        "Avivamiento & Gracia": ["Avivamiento / Restauración", "Restauración / Gracia", "Redención completa", "Sed espiritual / Renovación", "La respuesta natural al perdón es la adoración pública", "La confianza en que la bondad de Dios supera el error"]
+        "Paz & Reposo": ["paz", "reposo", "descanso", "quietud", "calma", "refugio", "confianza", "seguridad", "alivio", "misericordia", "no temas"],
+        "Guerra & Fortaleza": ["guerra", "poder", "fortaleza", "victoria final", "valentía", "inmunidad", "protección", "defensa", "triunfo", "poder"],
+        "Adoración & Intimidad": ["adoración", "intimidad", "selah", "santidad", "anhelo", "sed", "presencia", "majestad", "celestial"],
+        "Victoria & Gozo": ["victoria", "gozo", "celebración", "gratitud", "exaltación", "joyful", "victoria"],
+        "Avivamiento & Gracia": ["avivamiento", "gracia", "restauración", "redención", "renovación", "espíritu", "fuego", "despertar", "misericordia"]
     }
 
-    # Filtrar por momentos o tema, y quitar las desactivadas
+    # Filtrar por palabras clave si el tema es un grupo maestro
     eligible_songs = []
-    patterns = groups.get(theme, [theme]) # Si no es un grupo maestro, buscamos literal
+    keywords = groups.get(theme, [theme.lower()])
     
     for s in catalog:
         if s['title'] in disabled_songs: continue
-        song_tags = set(s.get('moments', []))
-        song_tags.add(s.get('theme', ''))
+        song_text = (",".join(s.get('moments', [])) + " " + s.get('theme', '')).lower()
         
-        if any(p in song_tags for p in patterns):
+        if any(k in song_text for k in keywords):
             eligible_songs.append(s)
+            
+    random.shuffle(eligible_songs)
             
     random.shuffle(eligible_songs)
     
