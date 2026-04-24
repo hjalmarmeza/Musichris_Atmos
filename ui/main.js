@@ -2,9 +2,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initVideoAutoplay();
-    fetchStats();
+    fetchStats(); // Stats son ligeras, se quedan al inicio
     loadRenders();
-    loadCatalog();
+    // loadCatalog(); <-- ELIMINADO del inicio. Ahora se carga al entrar a la pestaña.
 });
 
 let categoryStats = {};
@@ -22,10 +22,18 @@ function initVideoAutoplay() {
 }
 
 async function fetchStats() {
+    // Intentar cargar desde cache primero para velocidad instantánea
+    const cachedStats = localStorage.getItem('categoryStats');
+    if (cachedStats) {
+        categoryStats = JSON.parse(cachedStats);
+        updateDashboardInfo();
+    }
+
     try {
         const res = await fetch('/stats');
         if (!res.ok) throw new Error("Stats not available");
         categoryStats = await res.json();
+        localStorage.setItem('categoryStats', JSON.stringify(categoryStats));
         updateDashboardInfo();
     } catch (e) {
         console.warn("Usando datos de respaldo...");
@@ -71,6 +79,11 @@ function initNavigation() {
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const viewId = btn.getAttribute('data-view');
+            
+            // Carga bajo demanda (Lazy Load)
+            if (viewId === 'catalog') loadCatalog();
+            if (viewId === 'renders') loadRenders();
+            
             navButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             views.forEach(v => v.classList.remove('active'));
