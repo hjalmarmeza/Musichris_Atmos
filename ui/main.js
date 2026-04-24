@@ -1,5 +1,8 @@
-// CONFIGURACIÓN MAESTRA
-const API_BASE = "http://161.153.206.126:5000";
+// CONFIGURACIÓN SERVERLESS (V7.2)
+const GITHUB_REPO = "hjalmarmeza/Musichris_Atmos";
+const CATALOG_PATH = "data/musichris_master_catalog.json";
+const DISABLED_PATH = "data/disabled_songs.json";
+const HISTORY_PATH = "data/production_history.json";
 
 // ELEMENTOS UI
 const btnLaunch = document.getElementById('btn-launch');
@@ -10,104 +13,132 @@ const catalogList = document.getElementById('catalog-list');
 const historyList = document.getElementById('history-list');
 const videoElement = document.getElementById('bg-video');
 
-// AUTOMATIC VIDEO PLAYBACK SHIELD
-function ensureVideoPlay() {
-    if (videoElement) {
-        videoElement.muted = true;
-        videoElement.play().catch(err => {
-            console.log("Autoplay blocked. Adding fallback trigger...");
-            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
-            document.addEventListener('touchstart', () => videoElement.play(), { once: true });
-        });
+// MODAL SETTINGS
+const modalSettings = document.getElementById('modal-settings');
+const btnSettings = document.getElementById('btn-settings');
+const btnCloseModal = document.getElementById('btn-close-modal');
+const btnSaveToken = document.getElementById('btn-save-token');
+const inputToken = document.getElementById('github-token-input');
+
+let GITHUB_TOKEN = localStorage.getItem('gh_token') || "";
+
+// --- SISTEMA DE COMUNICACIÓN GITHUB ---
+
+async function ghFetch(path, options = {}) {
+    if (!GITHUB_TOKEN) {
+        modalSettings.classList.add('active');
+        throw new Error("Token requerido");
     }
+
+    const url = `https://api.github.com/repos/${GITHUB_REPO}/${path}`;
+    const defaultHeaders = {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json'
+    };
+
+    const response = await fetch(url, {
+        ...options,
+        headers: { ...defaultHeaders, ...options.headers }
+    });
+
+    if (response.status === 401) {
+        localStorage.removeItem('gh_token');
+        alert("⚠️ Token inválido. Por favor configúralo de nuevo.");
+        modalSettings.classList.add('active');
+    }
+
+    return response;
 }
 
-// INICIALIZACIÓN
-document.addEventListener('DOMContentLoaded', () => {
-    loadStats();
-    loadCatalog();
-    loadHistory();
-    ensureVideoPlay();
-    
-    // Check for Mixed Content issues
-    if (window.location.protocol === 'https:' && API_BASE.startsWith('http:')) {
-        console.error("⚠️ CRITICAL: Protocol Mismatch. Browsers block HTTPS -> HTTP calls. Dashboard won't work unless Oracle has SSL or you use a proxy.");
-        alert("ALERTA DE SEGURIDAD: Tu servidor en Oracle necesita SSL (HTTPS) para funcionar desde esta web segura.");
-    }
-    
-    if (btnLaunch) btnLaunch.addEventListener('click', launchProduction);
-    if (playlistSelector) playlistSelector.addEventListener('change', loadStats);
-});
+// --- LÓGICA DE DATOS ---
 
-async function loadStats() {
+async function loadData() {
     try {
-        const res = await fetch(`${API_BASE}/stats`);
-        const data = await res.json();
-        const theme = playlistSelector.value;
-        const isReady = data.ready[theme] || false;
-        
-        if (isReady) {
-            videoPotential.textContent = "LISTO (Playlist Variada)";
-            videoPotential.style.color = "#00ff7f";
-        } else {
-            videoPotential.textContent = "NECESITA MÁS TEMAS";
-            videoPotential.style.color = "#ffcc00";
-        }
-    } catch (e) {
-        console.warn("Error stats");
-    }
-}
+        // Cargar Catálogo (Estático)
+        const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}`);
+        const catalog = await resCat.json();
 
-async function loadCatalog() {
-    try {
-        console.log("Solicitando catálogo a:", `${API_BASE}/catalog`);
-        const res = await fetch(`${API_BASE}/catalog`);
-        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-        const catalog = await res.json();
-        
-        catalogList.innerHTML = catalog.length ? "" : '<p class="empty-msg">No hay canciones disponibles.</p>';
-        
-        catalog.forEach(song => {
-            const item = document.createElement('div');
-            item.className = 'catalog-item';
-            item.innerHTML = `
-                <div class="song-info">
-                    <span class="tiny-label">${song.album || 'SIN ÁLBUM'} | ${song.bpm || '??'} BPM</span>
-                    <p style="font-weight:700;">${song.title}</p>
-                    <span style="font-size:0.6rem; opacity:0.6; color:#f5f0e1;">TEMÁTICA: ${song.theme || 'General'}</span>
-                </div>
-                <label class="switch">
-                    <input type="checkbox" ${song.disabled ? '' : 'checked'} onchange="toggleSong('${song.title}')">
-                    <span class="slider"></span>
-                </label>
-            `;
-            catalogList.appendChild(item);
-        });
+        // Cargar Desactivadas (Dinámico vía API para evitar cache)
+        let disabled = [];
+        try {
+            const resDis = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${DISABLED_PATH}?t=${Date.now()}`);
+            disabled = await resDis.json();
+        } catch(e) { console.warn("Usando lista vacía."); }
+
+        renderCatalog(catalog, disabled);
+        updatePotential(catalog, disabled);
+        loadHistory();
     } catch (err) {
-        console.error("Error cargando catálogo:", err);
-        catalogList.innerHTML = `<p class="error-msg">⚠️ ERROR DE CONEXIÓN: Verifica que el servidor en Oracle esté corriendo y que permita conexiones desde ${window.location.origin}</p>`;
+        console.error("Error cargando datos:", err);
+        catalogList.innerHTML = `<p class='error-msg'>⚠️ ERROR: No se pudo cargar el catálogo. Verifica tu conexión.</p>`;
     }
+}
+
+function renderCatalog(catalog, disabled) {
+    catalogList.innerHTML = "";
+    catalog.forEach(song => {
+        const isDisabled = disabled.includes(song.title);
+        const item = document.createElement('div');
+        item.className = `item-card ${isDisabled ? 'disabled' : ''}`;
+        item.style.display = "flex";
+        item.style.justifyContent = "space-between";
+        item.style.alignItems = "center";
+        item.style.opacity = isDisabled ? "0.4" : "1";
+
+        item.innerHTML = `
+            <div>
+                <p style="font-weight:700; font-size:0.9rem;">${song.title}</p>
+                <p style="font-size:0.6rem; opacity:0.6;">${song.artist} | ${song.duration}</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" ${isDisabled ? '' : 'checked'} onchange="toggleSong('${song.title}')">
+                <span class="slider"></span>
+            </label>
+        `;
+        catalogList.appendChild(item);
+    });
 }
 
 async function toggleSong(title) {
+    if (!GITHUB_TOKEN) return modalSettings.classList.add('active');
+
     try {
-        await fetch(`${API_BASE}/toggle_song`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ title })
+        // 1. Obtener archivo actual y su SHA
+        const res = await ghFetch(`contents/${DISABLED_PATH}`);
+        const fileData = await res.json();
+        const currentList = JSON.parse(atob(fileData.content));
+        const sha = fileData.sha;
+
+        // 2. Modificar lista
+        let newList;
+        if (currentList.includes(title)) {
+            newList = currentList.filter(t => t !== title);
+        } else {
+            newList = [...currentList, title];
+        }
+
+        // 3. Subir a GitHub
+        await ghFetch(`contents/${DISABLED_PATH}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                message: `Update disabled songs: ${title}`,
+                content: btoa(JSON.stringify(newList, null, 2)),
+                sha: sha
+            })
         });
-        loadStats();
-    } catch (e) { 
+
+        loadData();
+    } catch (e) {
         console.error(e);
-        alert("Error al actualizar estado."); 
+        alert("Error al actualizar estado en la nube.");
     }
 }
 
 async function loadHistory() {
     try {
-        const res = await fetch(`${API_BASE}/history`);
+        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${HISTORY_PATH}?t=${Date.now()}`);
         const history = await res.json();
-        historyList.innerHTML = history.length ? history.map(item => `
+        historyList.innerHTML = history.length ? history.reverse().slice(0, 10).map(item => `
             <div class="item-card">
                 <span class="tiny-label">${item.timestamp}</span>
                 <p style="font-weight:700; font-size:0.8rem;">${item.theme}</p>
@@ -117,34 +148,86 @@ async function loadHistory() {
     } catch (e) { console.error("Error historial"); }
 }
 
+function updatePotential(catalog, disabled) {
+    const active = catalog.filter(s => !disabled.includes(s.title)).length;
+    videoPotential.textContent = `${active} VIDEOS LISTOS`;
+    videoPotential.style.color = active > 50 ? "#00ff7f" : "#ffcc00";
+}
+
 async function launchProduction() {
+    if (!GITHUB_TOKEN) return modalSettings.classList.add('active');
+
     const theme = playlistSelector.value;
     const duration = durationSelector.value;
 
     btnLaunch.disabled = true;
-    btnLaunch.textContent = "EN COLA DE NUBE...";
+    btnLaunch.textContent = "DISPARANDO NUBE...";
 
     try {
-        const response = await fetch(`${API_BASE}/process`, {
+        const response = await ghFetch('dispatches', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                theme: theme, 
-                duration: parseInt(duration),
-                version: "6.2"
+            body: JSON.stringify({
+                event_type: "atmos_trigger",
+                client_payload: {
+                    theme: theme,
+                    duration: parseInt(duration),
+                    version: "7.0 Serverless"
+                }
             })
         });
-        
-        if (response.ok) {
-            alert("✨ SEÑAL ENVIADA: Producción Atmos iniciada.");
-            loadHistory();
+
+        if (response.status === 204) {
+            alert("🚀 ¡MISIÓN LANZADA! La producción ha comenzado en los servidores de GitHub.");
+            // Opcional: Registrar en historial local antes de que el bot lo haga oficial
         } else {
-            alert("❌ Error en el servidor Oracle.");
+            alert("❌ GitHub rechazó la orden. Revisa el Token.");
         }
     } catch (err) {
-        alert("⚠️ Error de conexión con Oracle.");
+        console.error(err);
     } finally {
         btnLaunch.disabled = false;
-        btnLaunch.textContent = "INICIAR PRODUCCIÓN V6.2";
+        btnLaunch.textContent = "INICIAR PRODUCCIÓN V7.0";
     }
 }
+
+// --- EVENTOS Y UI ---
+
+btnSettings.onclick = () => modalSettings.classList.add('active');
+btnCloseModal.onclick = () => modalSettings.classList.remove('active');
+btnSaveToken.onclick = () => {
+    const val = inputToken.value.trim();
+    if (val) {
+        localStorage.setItem('gh_token', val);
+        GITHUB_TOKEN = val;
+        modalSettings.classList.remove('active');
+        alert("🔑 Token guardado localmente.");
+        loadData();
+    }
+};
+
+// Navegación
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.onclick = () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`view-${btn.dataset.view}`).classList.add('active');
+    };
+});
+
+// Autoplay Shield
+function ensureVideoPlay() {
+    if (videoElement) {
+        videoElement.muted = true;
+        videoElement.play().catch(() => {
+            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
+        });
+    }
+}
+
+// INIT
+window.onload = () => {
+    ensureVideoPlay();
+    loadData();
+    if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;
+};

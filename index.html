@@ -26,6 +26,7 @@
             <button class="nav-btn active" data-view="dashboard">PANEL</button>
             <button class="nav-btn" data-view="catalog">TEMAS</button>
             <button class="nav-btn" data-view="renders">HISTORIAL</button>
+            <button id="btn-settings" class="nav-btn-icon">⚙️</button>
         </nav>
 
         <!-- DASHBOARD (PANEL) -->
@@ -74,6 +75,19 @@
         <section id="renders" class="view">
             <div id="renders-container" class="list-container"></div>
         </section>
+    </div>
+
+    <!-- MODAL DE CONFIGURACIÓN (TOKEN) -->
+    <div id="modal-settings" class="modal">
+        <div class="modal-content glass">
+            <h3>Configuración Maestro</h3>
+            <p style="font-size:0.7rem; opacity:0.6; margin-bottom:15px;">Pega tu GitHub Token para habilitar el control remoto.</p>
+            <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx" class="input-box">
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button id="btn-save-token" class="btn-main" style="padding:10px;">GUARDAR</button>
+                <button id="btn-close-modal" class="btn-main" style="padding:10px; background:rgba(255,0,0,0.2);">CERRAR</button>
+            </div>
+        </div>
     </div>
 
     <script src="main.js"></script>
