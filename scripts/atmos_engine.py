@@ -25,36 +25,36 @@ def clean_assets():
                 except: pass
 
 def create_reflection_overlay(text, output_path):
-    img = Image.new('RGBA', (1920, 1080), (0, 0, 0, 0))
+    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     try: font = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 65)
     except: font = ImageFont.load_default()
     tw, th = draw.textbbox((0, 0), text, font=font)[2:4]
-    draw.rounded_rectangle([(1920-tw)/2-40, 450, (1920+tw)/2+40, 450+th+40], radius=20, fill=(0,0,0,130))
-    draw.text((1920/2, 450+20), text, font=font, fill="white", anchor="mt")
+    draw.rounded_rectangle([(1280-tw)/2-40, 300, (1280+tw)/2+40, 300+th+40], radius=20, fill=(0,0,0,130))
+    draw.text((1280/2, 300+20), text, font=font, fill="white", anchor="mt")
     img.save(output_path)
 
 def create_master_overlays(main_title, output_prefix):
     # Intro
-    img = Image.new('RGBA', (1920, 1080), (0, 0, 0, 0))
+    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     try: 
         f_main = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 85)
         f_sub = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 40)
     except: f_main = f_sub = ImageFont.load_default()
     tw, th = draw.textbbox((0, 0), main_title, font=f_main)[2:4]
-    draw.rounded_rectangle([(1920-tw)/2-50, 400, (1920+tw)/2+50, 400+th+120], radius=25, fill=(0,0,0,180))
-    draw.text((1920/2, 430), main_title, font=f_main, fill="white", anchor="mt")
-    draw.text((1920/2, 430+th+20), "¡CAMINEMOS JUNTOS EN FE!", font=f_sub, fill=(255,255,255,200), anchor="mt")
+    draw.rounded_rectangle([(1280-tw)/2-50, 250, (1280+tw)/2+50, 250+th+120], radius=25, fill=(0,0,0,180))
+    draw.text((1280/2, 280), main_title, font=f_main, fill="white", anchor="mt")
+    draw.text((1280/2, 280+th+20), "¡CAMINEMOS JUNTOS EN FE!", font=f_sub, fill=(255,255,255,200), anchor="mt")
     img.save(f"{output_prefix}_intro.png")
 
     # Footer
-    img = Image.new('RGBA', (1920, 1080), (0, 0, 0, 0))
+    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     try: f_foot = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 38)
     except: f_foot = ImageFont.load_default()
-    draw.text((1920/2, 940), "Suscríbete para más momentos de paz", font=f_foot, fill=(255,255,255,220), anchor="mm")
-    draw.text((1920/2, 1010), "MusiChris Studio | Música para tu alma", font=f_foot, fill=(255,255,255,100), anchor="mm")
+    draw.text((1280/2, 620), "Suscríbete para más momentos de paz", font=f_foot, fill=(255,255,255,220), anchor="mm")
+    draw.text((1280/2, 680), "MusiChris Studio | Música para tu alma", font=f_foot, fill=(255,255,255,100), anchor="mm")
     img.save(os.path.join(BASE_DIR, f"{output_prefix}_footer.png"))
 
 def generate_atmos_video(duration_secs, theme, output_name):
@@ -192,7 +192,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
         cmd += ["-i", s['audio_url']]
 
     # Filtros
-    v_filters = "[0:v]scale=1920:1080[v_bg];"
+    v_filters = "[0:v]scale=1280:720[v_bg];"
     v_filters += "[v_bg][1:v]overlay=0:0:enable='between(t,2,15)'[v_intro];"
     v_filters += f"[v_intro][2:v]overlay=0:0:enable='lt(t,{duration_secs-10})'[v_footer];"
     v_filters += "[v_footer][3:v]overlay=0:0[v_wm];"
@@ -217,7 +217,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
     cmd += [
         "-filter_complex", f"{v_filters};{a_filters}",
         "-map", "[v_final]", "-map", "[a_final]",
-        "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-b:a", "192k",
+        "-c:v", "libx264", "-preset", "ultrafast", "-b:v", "2500k", "-maxrate", "2500k", "-bufsize", "5000k", "-c:a", "aac", "-b:a", "128k",
         "-t", str(final_duration), # Usamos la duración real calculada
         output_path
     ]
