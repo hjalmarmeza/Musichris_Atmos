@@ -3,15 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MusiChris Atmos | Command Center</title>
+    <title>MusiChris Atmos | Master Command</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- MASTER VIDEO BACKGROUND -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="assets/landscapes/fondo_humo_azul.mp4" type="video/mp4">
+        </video>
+    </div>
+
     <div class="glass-container">
-        <!-- Header -->
+        <!-- Header Seamless -->
         <header>
             <div class="brand">
                 <div class="logo-orb">MC</div>
@@ -23,33 +30,31 @@
             <div id="system-status-badge" class="status-badge">CONECTANDO...</div>
         </header>
 
-        <!-- Main Dashboard -->
+        <!-- Main View -->
         <main id="dashboard" class="view active">
             <div class="hero-stats">
-                <div class="stat-main">
-                    <span class="label">CONFIGURACIÓN ACTUAL</span>
-                    <h2 id="current-title">Producción: Confianza</h2>
-                </div>
+                <span class="label">CONFIGURACIÓN ACTUAL</span>
+                <h2 id="current-title">Producción: Confianza</h2>
+                
                 <div class="stat-mini">
-                    <span class="label">LISTO PARA NUBE</span>
-                    <div id="video-potential" class="value">GHP CORE v3</div>
+                    <span class="label">ESTADO DE NUBE</span>
+                    <div id="video-potential" class="value">GHP CORE v3.7</div>
                 </div>
             </div>
 
             <div class="control-panel">
                 <div class="input-group">
-                    <label>Link de la Canción (YouTube/File)</label>
+                    <label>Link de la Canción (YouTube/Directo)</label>
                     <input type="text" id="song-url-input" placeholder="https://youtube.com/watch?v=..." class="modern-input">
                 </div>
 
                 <div class="input-group">
-                    <label>Tema Ministerial</label>
+                    <label>Atmósfera Ministerial</label>
                     <select id="playlist-selector" class="modern-select">
                         <option value="Confianza">Confianza & Fe</option>
                         <option value="Paz">Paz Interior</option>
                         <option value="Victoria">Victoria & Gozo</option>
                         <option value="Guerra">Guerra Espiritual</option>
-                        <option value="Adoracion">Adoración Profunda</option>
                     </select>
                 </div>
 
@@ -61,16 +66,16 @@
 
         <!-- History View -->
         <section id="renders" class="view">
-            <h3 class="section-title">Historial de Producciones</h3>
+            <h3 class="section-title">Historial Ministerial</h3>
             <div id="renders-container" class="grid-container">
                 <!-- Se puebla desde main.js -->
             </div>
         </section>
 
-        <!-- Navigation -->
+        <!-- Navigation Seamless -->
         <nav class="bottom-nav">
-            <button class="btn-nav active" data-view="dashboard">Panel</button>
-            <button class="btn-nav" data-view="renders">Historial</button>
+            <button class="btn-nav active" data-view="dashboard">PANEL</button>
+            <button class="btn-nav" data-view="renders">HISTORIAL</button>
         </nav>
     </div>
 
