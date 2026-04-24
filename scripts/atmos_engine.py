@@ -166,16 +166,22 @@ def generate_atmos_video(duration_secs, theme, output_name):
     # Definimos la duración real orgánica + 12 segundos para el cierre maestro
     final_duration = current_audio_time + 12
 
-    # Seleccionar PAISAJE ALEATORIO
+    # Seleccionar PAISAJE y extraer FOTOGRAMA para velocidad
     landscapes_dir = os.path.join(BASE_DIR, 'assets/landscapes')
     landscapes = [f for f in os.listdir(landscapes_dir) if f.endswith('.mp4')]
     selected_landscape = os.path.join(landscapes_dir, random.choice(landscapes) if landscapes else 'landscape_test.mp4')
-    print(f"🌍 Paisaje seleccionado: {selected_landscape}")
+    master_bg_image = os.path.join(BASE_DIR, "assets/master_bg_frame.jpg")
+    
+    print(f"🌍 Capturando fotograma maestro de: {selected_landscape}")
+    subprocess.run([
+        "ffmpeg", "-y", "-ss", "00:00:05", "-i", selected_landscape,
+        "-frames:v", "1", master_bg_image
+    ], capture_output=True)
 
     # Componer Comando FFmpeg
     cmd = [
         "nice", "-n", "19", "ffmpeg", "-y",
-        "-stream_loop", "-1", "-i", selected_landscape,
+        "-loop", "1", "-i", master_bg_image,
         "-i", os.path.join(BASE_DIR, "assets/master_intro.png"),
         "-i", os.path.join(BASE_DIR, "assets/master_footer.png"),
         "-i", os.path.join(BASE_DIR, "assets/watermark_layer.png"),
@@ -192,7 +198,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
         cmd += ["-i", s['audio_url']]
 
     # Filtros
-    v_filters = "[0:v]scale=1280:720[v_bg];"
+    v_filters = "[0:v]scale=1280:720,format=yuv420p[v_bg];"
     v_filters += "[v_bg][1:v]overlay=0:0:enable='between(t,2,15)'[v_intro];"
     v_filters += f"[v_intro][2:v]overlay=0:0:enable='lt(t,{duration_secs-10})'[v_footer];"
     v_filters += "[v_footer][3:v]overlay=0:0[v_wm];"
