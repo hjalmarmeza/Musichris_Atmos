@@ -205,11 +205,19 @@ def generate_atmos_video(duration_secs, theme, output_name):
     generate_thumbnail(theme, output_name, selected_landscape)
     generate_metadata(theme, output_name)
 
-def generate_thumbnail(theme, output_name, landscape_path):
-    print(f"🖼️ Generando miniatura de ALTO IMPACTO para {theme}...")
+def generate_thumbnail(theme, output_name, video_path):
+    print(f"🖼️ Capturando fotograma de impacto desde {video_path}...")
+    temp_frame = f"renders/{output_name.replace('.mp4', '')}_FRAME.jpg"
     thumb_path = f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg"
     
-    # Ganchos (Hooks) potentes en español según el tema
+    # 1. Capturar fotograma al segundo 5 (para asegurar que haya imagen)
+    cap_cmd = [
+        "ffmpeg", "-y", "-ss", "00:00:05", "-i", video_path,
+        "-frames:v", "1", temp_frame
+    ]
+    subprocess.run(cap_cmd, capture_output=True)
+    
+    # 2. Aplicar diseño ministerial sobre el fotograma capturado
     hooks = {
         "Refugio": "TU LUGAR SEGURO", "Confianza": "CREE SIN DUDAR", "Descanso": "PAZ PARA TU ALMA",
         "Noche": "DUERME EN SU PAZ", "Guerra Espiritual": "PODER Y VICTORIA", "Poder": "FUERZA DIVINA",
@@ -221,14 +229,16 @@ def generate_thumbnail(theme, output_name, landscape_path):
     }
     hook = hooks.get(theme, "MÚSICA PARA ORAR")
 
-    # Comando FFmpeg con diseño premium: Sombra, Título grande y Hook elegante
-    cmd = [
-        "ffmpeg", "-y", "-i", landscape_path,
+    design_cmd = [
+        "ffmpeg", "-y", "-i", temp_frame,
         "-vf", f"drawtext=text='{theme.upper()}':fontcolor=white:fontsize=130:x=(w-tw)/2:y=(h-th)/2-100:shadowcolor=black:shadowx=6:shadowy=6,drawtext=text='{hook}':fontcolor=white:fontsize=60:x=(w-tw)/2:y=(h-th)/2+40:shadowcolor=black:shadowx=4:shadowy=4,drawtext=text='MUSICHRIS STUDIO':fontcolor=#ffcc00:fontsize=35:x=(w-tw)/2:y=h-80:letter_spacing=15",
         "-frames:v", "1", thumb_path
     ]
-    subprocess.run(cmd, capture_output=True)
-    print(f"✅ Miniatura explosiva lista: {thumb_path}")
+    subprocess.run(design_cmd, capture_output=True)
+    
+    # Limpiar temporal
+    if os.path.exists(temp_frame): os.remove(temp_frame)
+    print(f"✅ Miniatura capturada y diseñada: {thumb_path}")
 
 def generate_metadata(theme, output_name):
     print(f"📝 Generando Metadatos SEO Potentes...")
