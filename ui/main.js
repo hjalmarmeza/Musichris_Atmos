@@ -290,19 +290,38 @@ style.textContent = `
 
     /* Estilos para Móviles */
     @media (max-width: 768px) {
-        body { padding: 10px; }
-        .dashboard-container { padding: 10px; margin-top: 10px; }
-        header { flex-direction: column; text-align: center; gap: 1rem; margin-bottom: 1rem; }
-        .logo-section h1 { font-size: 1.8rem; }
-        .nav-center { width: 100%; display: flex; overflow-x: auto; gap: 0.5rem; padding: 10px 0; }
-        .btn-nav { padding: 0.6rem 1.2rem; font-size: 0.75rem; white-space: nowrap; }
-        .launch-card { padding: 1rem; }
-        .btn-launch { font-size: 1rem; padding: 1rem; width: 100%; }
-        .renders-grid { grid-template-columns: 1fr; }
-        .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-        .stat-item h4 { font-size: 0.6rem; }
-        .stat-item p { font-size: 0.9rem; }
-        .config-section { flex-direction: column; }
+        body { padding: 5px; }
+        .dashboard-container { padding: 15px; margin-top: 5px; }
+        header { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 1.5rem; 
+            padding: 20px 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .logo-area { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .logo-section h1 { font-size: 1.6rem; letter-spacing: 4px; }
+        .nav-center, nav { 
+            width: 90%; 
+            display: flex; 
+            justify-content: center; 
+            gap: 0.5rem; 
+            padding: 0;
+        }
+        .btn-nav { 
+            padding: 0.6rem 1rem; 
+            font-size: 0.7rem; 
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+        .hero-card h2 { font-size: 1.8rem; line-height: 1.2; margin: 1.5rem 0; }
+        .launch-card { padding: 1.2rem; border-radius: 24px; }
+        .btn-launch { font-size: 0.9rem; letter-spacing: 1px; padding: 1.2rem; }
+        .stats-grid { gap: 10px; }
+        .stat-card { padding: 1rem; }
     }
 `;
 document.head.appendChild(style);
