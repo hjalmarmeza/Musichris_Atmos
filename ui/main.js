@@ -92,6 +92,19 @@ function initNavigation() {
             if (viewId === 'catalog') loadCatalog();
             if (viewId === 'renders') loadRenders();
             
+            // Forzar actualización de UI ignorando caché si el servidor dice que está libre
+            fetch('/check_status').then(res => res.json()).then(data => {
+                if (data.is_rendering) {
+                    localStorage.setItem('is_rendering', 'true');
+                    btnLaunch.innerHTML = 'EN COLA DE NUBE...';
+                    btnLaunch.classList.add('disabled');
+                } else {
+                    localStorage.removeItem('is_rendering');
+                    btnLaunch.innerHTML = 'GENERAR PRODUCCIÓN';
+                    btnLaunch.classList.remove('disabled');
+                }
+            });
+            
             navButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             views.forEach(v => v.classList.remove('active'));
