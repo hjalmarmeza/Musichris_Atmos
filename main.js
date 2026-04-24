@@ -5,19 +5,19 @@ const API_BASE = "http://161.153.206.126:5000";
 const btnLaunch = document.getElementById('btn-launch');
 const playlistSelector = document.getElementById('playlist-selector');
 const durationSelector = document.getElementById('duration-selector');
-const styleSelector = document.getElementById('style-selector');
 const videoPotential = document.getElementById('video-potential');
 const catalogList = document.getElementById('catalog-list');
 const historyList = document.getElementById('history-list');
-const videoElement = document.querySelector('.video-bg video');
+const videoElement = document.getElementById('bg-video');
 
 // AUTOMATIC VIDEO PLAYBACK SHIELD
 function ensureVideoPlay() {
     if (videoElement) {
+        videoElement.muted = true;
         videoElement.play().catch(err => {
-            console.log("Autoplay blocked or failed. Trying silent recovery...");
-            videoElement.muted = true;
-            videoElement.play();
+            console.log("Autoplay blocked. Adding fallback trigger...");
+            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
+            document.addEventListener('touchstart', () => videoElement.play(), { once: true });
         });
     }
 }
@@ -118,12 +118,8 @@ async function loadHistory() {
 }
 
 async function launchProduction() {
-    const url = document.getElementById('song-url-input').value;
     const theme = playlistSelector.value;
     const duration = durationSelector.value;
-    const style = styleSelector.value;
-    
-    if (!url) return alert("Por favor ingresa un link.");
 
     btnLaunch.disabled = true;
     btnLaunch.textContent = "EN COLA DE NUBE...";
@@ -131,17 +127,24 @@ async function launchProduction() {
     try {
         const response = await fetch(`${API_BASE}/process`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ song_url: url, theme: theme })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                theme: theme, 
+                duration: parseInt(duration),
+                version: "6.2"
+            })
         });
+        
         if (response.ok) {
-            alert("🚀 ¡Misión iniciada! Revisa el Historial.");
-            document.getElementById('song-url-input').value = "";
+            alert("✨ SEÑAL ENVIADA: Producción Atmos iniciada.");
+            loadHistory();
+        } else {
+            alert("❌ Error en el servidor Oracle.");
         }
-    } catch (e) { alert("Error de conexión."); }
-    finally {
-        btn.disabled = false;
-        btn.textContent = "INICIAR PRODUCCIÓN";
-        loadProductionHistory();
+    } catch (err) {
+        alert("⚠️ Error de conexión con Oracle.");
+    } finally {
+        btnLaunch.disabled = false;
+        btnLaunch.textContent = "INICIAR PRODUCCIÓN V6.2";
     }
 }
