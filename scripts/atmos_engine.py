@@ -206,32 +206,43 @@ def generate_atmos_video(duration_secs, theme, output_name):
     generate_metadata(theme, output_name)
 
 def generate_thumbnail(theme, output_name, landscape_path):
-    print(f"🖼️ Generando miniatura premium para {theme}...")
+    print(f"🖼️ Generando miniatura de ALTO IMPACTO para {theme}...")
     thumb_path = f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg"
     
-    # Comando FFmpeg para overlay de texto elegante
-    # Nota: Usamos drawtext con filtros para que se vea legible sobre cualquier fondo
+    # Ganchos (Hooks) potentes en español según el tema
+    hooks = {
+        "Refugio": "TU LUGAR SEGURO", "Confianza": "CREE SIN DUDAR", "Descanso": "PAZ PARA TU ALMA",
+        "Noche": "DUERME EN SU PAZ", "Guerra Espiritual": "PODER Y VICTORIA", "Poder": "FUERZA DIVINA",
+        "Fortaleza": "TU ROCA ETERNA", "Victoria Final": "EL TRIUNFO DE LA FE", "Adoración Celestial": "PRESENCIA DIVINA",
+        "Santidad": "PURO ANTE EL PADRE", "Intimidad": "EN EL LUGAR SECRETO", "Victoria": "VENCIENDO EL MIEDO",
+        "Gozo": "ALEGRÍA INAGOTABLE", "Celebración": "FIESTA EN EL CIELO", "Gratitud": "GRACIAS SEÑOR",
+        "Avivamiento": "FUEGO EN TU INTERIOR", "Restauración": "DIOS TE SANA HOY", "Renovación": "TODO NUEVO",
+        "Redención": "POR SU GRACIA"
+    }
+    hook = hooks.get(theme, "MÚSICA PARA ORAR")
+
+    # Comando FFmpeg con diseño premium: Sombra, Título grande y Hook elegante
     cmd = [
         "ffmpeg", "-y", "-i", landscape_path,
-        "-vf", f"drawtext=text='{theme.upper()}':fontcolor=white:fontsize=120:x=(w-tw)/2:y=(h-th)/2-50:shadowcolor=black:shadowx=5:shadowy=5,drawtext=text='MUSICHRIS STUDIO':fontcolor=white:fontsize=40:x=(w-tw)/2:y=(h-th)/2+100:letter_spacing=10",
+        "-vf", f"drawtext=text='{theme.upper()}':fontcolor=white:fontsize=130:x=(w-tw)/2:y=(h-th)/2-100:shadowcolor=black:shadowx=6:shadowy=6,drawtext=text='{hook}':fontcolor=white:fontsize=60:x=(w-tw)/2:y=(h-th)/2+40:shadowcolor=black:shadowx=4:shadowy=4,drawtext=text='MUSICHRIS STUDIO':fontcolor=#ffcc00:fontsize=35:x=(w-tw)/2:y=h-80:letter_spacing=15",
         "-frames:v", "1", thumb_path
     ]
     subprocess.run(cmd, capture_output=True)
-    print(f"✅ Miniatura generada: {thumb_path}")
+    print(f"✅ Miniatura explosiva lista: {thumb_path}")
 
 def generate_metadata(theme, output_name):
-    print(f"📝 Generando metadatos SEO para MusiChris Studio...")
+    print(f"📝 Generando Metadatos SEO Potentes...")
     meta_path = f"renders/{output_name.replace('.mp4', '')}_METADATA.json"
     
     metadata = {
-        "title": f"1 HORA DE {theme.upper()} | Música para Orar e Intimidad | MusiChris Studio",
-        "description": f"Bienvenido a MusiChris Studio. \n\nDisfruta de esta selección de {theme} diseñada para acompañar tus momentos de oración, reflexión e intimidad con el Padre. \n\nEn este video encontrarás una atmósfera de paz y serenidad para tu tiempo a solas con Dios. \n\n🕊️ SUSCRÍBETE para más contenido ministerial.\n\n#MusiChrisStudio #Oracion #Meditacion #Instrumental #Paz #Cristianos #{theme.replace(' ', '')}",
-        "tags": ["musichris studio", theme.lower(), "oracion", "meditacion cristiana", "instrumentales cristianos", "musica para orar", "paz interior", "descanso"]
+        "title": f"1 HORA DE {theme.upper()} | Música para Orar en Intimidad y Paz | MusiChris Studio",
+        "description": f"Bienvenido a MusiChris Studio. \n\n¿Buscas {theme.lower()}? Esta selección ha sido creada para transformar tu ambiente y llevarte a un nivel profundo de comunión con Dios. \n\n✨ Lo que sentirás en esta hora: \n- Paz profunda para tu alma.\n- Renovación espiritual.\n- Conexión real con el Padre.\n\nIdeal para momentos de oración, lectura bíblica o simplemente para descansar en Su presencia. \n\n🕊️ SUSCRÍBETE AHORA y activa la campana para no perderte ninguna atmósfera ministerial.\n\n#MusiChrisStudio #MusicaParaOrar #InstrumentalCristiano #OracionMatutina #PazInterior #MusicaCristiana #{theme.replace(' ', '')}",
+        "tags": ["musichris studio", "musica para orar", "musica cristiana instrumental", "instrumental para orar", theme.lower(), "paz de dios", "meditacion espiritual", "musica de adoracion", "adoracion instrumental"]
     }
     
     with open(meta_path, 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=4, ensure_ascii=False)
-    print(f"✅ Metadatos SEO listos: {meta_path}")
+    print(f"✅ Metadatos de alto impacto listos: {meta_path}")
 
 if __name__ == "__main__":
     import sys
