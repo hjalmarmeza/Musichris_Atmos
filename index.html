@@ -3,53 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MusiChris Atmos | Master Station</title>
+    <title>MusiChris Atmos | Elite Control</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- VIDEO FONDO AUTOMÁTICO (iOS SHIELD) -->
-    <div class="video-background">
+    <!-- BACKGROUND -->
+    <div class="video-bg">
         <video autoplay muted loop playsinline id="bg-video">
             <source src="assets/landscapes/fondo_humo_azul.mp4" type="video/mp4">
         </video>
     </div>
+    <div class="overlay"></div>
 
-    <div class="glass-container">
-        <!-- Header con Logo Restaurado -->
+    <!-- MASTER PANEL -->
+    <div class="master-card">
+        <div id="system-status-badge" class="status-tag">STANDBY</div>
+        
         <header>
-            <div class="brand">
-                <div class="logo-orb">MC</div>
-                <div class="brand-text">
-                    <h1>MusiChris <span>Atmos</span></h1>
-                    <p>Soberanía Digital Ministerial</p>
-                </div>
-            </div>
-            <div id="system-status-badge" class="status-badge">CONECTADO</div>
+            <div class="logo-orb">MC</div>
+            <h1>MusiChris <span>Atmos</span></h1>
+            <p class="subtitle">Soberanía Digital Ministerial</p>
         </header>
 
-        <!-- VISTA: PANEL (MOMENTO MINISTERIAL) -->
+        <!-- VIEW: PANEL -->
         <main id="dashboard" class="view active">
-            <div class="hero-stats">
-                <span class="label">MOMENTO MINISTERIAL</span>
-                <h2 id="current-title">Producción: Confianza</h2>
-                <div class="stat-mini">
-                    <span class="label">ESTADO DE NUBE</span>
-                    <div id="video-potential" class="value">GHP CORE v3.7</div>
-                </div>
+            <div class="section-box">
+                <span class="tiny-label">MOMENTO MINISTERIAL</span>
+                <h2 id="current-title" class="main-title">Confianza & Fe</h2>
             </div>
 
-            <div class="control-panel">
-                <div class="input-group">
-                    <label>Link de la Canción (YouTube/Directo)</label>
-                    <input type="text" id="song-url-input" placeholder="Pegar link ministerial..." class="modern-input">
+            <div class="form-group">
+                <div class="field">
+                    <span class="tiny-label">LINK DE LA CANCIÓN</span>
+                    <input type="text" id="song-url-input" placeholder="Pegar URL de YouTube...">
                 </div>
 
-                <div class="input-group">
-                    <label>Atmósfera Ministerial</label>
-                    <select id="playlist-selector" class="modern-select">
+                <div class="field">
+                    <span class="tiny-label">ATMÓSFERA</span>
+                    <select id="playlist-selector">
                         <option value="Confianza">Confianza & Fe</option>
                         <option value="Paz">Paz Interior</option>
                         <option value="Victoria">Victoria & Gozo</option>
@@ -57,33 +51,29 @@
                     </select>
                 </div>
 
-                <button id="btn-launch" class="btn-primary pulse-glow">
-                    INICIAR PRODUCCIÓN EN NUBE
+                <button id="btn-launch" class="btn-launch">
+                    INICIAR PRODUCCIÓN
                 </button>
             </div>
         </main>
 
-        <!-- VISTA: CATÁLOGO -->
+        <!-- VIEW: CATALOGO -->
         <section id="catalog" class="view">
-            <h3 class="section-title">Biblioteca MusiChris</h3>
-            <div id="catalog-container" class="grid-container">
-                <p style="opacity:0.5; text-align:center; padding:20px;">Cargando catálogo...</p>
-            </div>
+            <span class="tiny-label">BIBLIOTECA MUSICAL</span>
+            <div id="catalog-container" class="list-container" style="margin-top:15px;"></div>
         </section>
 
-        <!-- VISTA: HISTORIAL -->
+        <!-- VIEW: HISTORIAL -->
         <section id="renders" class="view">
-            <h3 class="section-title">Historial de Producción</h3>
-            <div id="renders-container" class="grid-container">
-                <p style="opacity:0.5; text-align:center; padding:20px;">No hay envíos recientes.</p>
-            </div>
+            <span class="tiny-label">HISTORIAL DE NUBE</span>
+            <div id="renders-container" class="list-container" style="margin-top:15px;"></div>
         </section>
 
-        <!-- Navegación Restaurada -->
-        <nav class="bottom-nav">
-            <button class="btn-nav active" data-view="dashboard">PANEL</button>
-            <button class="btn-nav" data-view="catalog">CATÁLOGO</button>
-            <button class="btn-nav" data-view="renders">HISTORIAL</button>
+        <!-- NAVIGATION -->
+        <nav class="nav-bar">
+            <button class="nav-btn active" data-view="dashboard">PANEL</button>
+            <button class="nav-btn" data-view="catalog">CATÁLOGO</button>
+            <button class="nav-btn" data-view="renders">HISTORIAL</button>
         </nav>
     </div>
 
