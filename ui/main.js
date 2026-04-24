@@ -40,6 +40,14 @@ function updateDashboardInfo() {
     const videoPotential = document.getElementById('video-potential');
     const currentTitle = document.getElementById('current-title');
     
+    // Si el selector está vacío, poblarlo dinámicamente
+    if (selector.options.length <= 1) {
+        const currentVal = selector.value;
+        selector.innerHTML = Object.keys(categoryStats).map(cat => 
+            `<option value="${cat}" ${cat === "Paz Interior" ? "selected" : ""}>${cat}</option>`
+        ).join('');
+    }
+
     const theme = selector.value;
     const count = categoryStats[theme] || 0;
     
@@ -146,8 +154,8 @@ async function loadCatalog() {
     container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>Cargando biblioteca ministerial...</p>";
     
     try {
-        // Buscamos el catálogo real
-        const res = await fetch('./data/musichris_master_catalog.json');
+        // Buscamos el catálogo a través de la nueva ruta del servidor
+        const res = await fetch('/catalog');
         if (!res.ok) throw new Error();
         const catalog = await res.json();
         

@@ -28,6 +28,19 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps(stats).encode())
             except Exception as e:
                 self.send_error(500, str(e))
+        elif self.path == '/catalog':
+            try:
+                catalog_path = '../data/musichris_master_catalog.json'
+                if not os.path.exists(catalog_path): catalog_path = 'data/musichris_master_catalog.json'
+                with open(catalog_path, 'r') as f:
+                    data = f.read()
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(data.encode())
+            except Exception as e:
+                self.send_error(500, str(e))
         else:
             super().do_GET()
 
