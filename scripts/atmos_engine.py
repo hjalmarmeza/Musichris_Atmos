@@ -58,6 +58,13 @@ def create_master_overlays(main_title, output_prefix):
     img.save(os.path.join(BASE_DIR, f"{output_prefix}_footer.png"))
 
 def generate_atmos_video(duration_secs, theme, output_name):
+    print(f"🎬 [ATMOS ENGINE] Iniciando Protocolo de Turnos...")
+    
+    # 1. Suspender Radio para liberar RAM
+    print("🛰️ Deteniendo Radio 24/7 temporalmente...")
+    subprocess.run(['sudo', 'pkill', '-9', '-f', 'live_manager.py'], capture_output=True)
+    subprocess.run(['sudo', 'pkill', '-9', '-f', 'ffmpeg'], capture_output=True)
+    
     print(f"🎬 [ATMOS ENGINE FINAL] Iniciando Producción Maestra...")
     clean_assets()
     
@@ -221,6 +228,20 @@ def generate_atmos_video(duration_secs, theme, output_name):
     # NUEVO: Generar Miniatura y Metadatos post-renderizado
     generate_thumbnail(theme, output_name, selected_landscape)
     generate_metadata(theme, output_name)
+
+    # 2. Reiniciar Radio Automáticamente
+    print("🛰️ Producción Terminada. Resucitando Radio 24/7...")
+    try:
+        # Volvemos a la carpeta home para lanzar la radio
+        home_dir = os.path.expanduser("~")
+        subprocess.Popen(['python3', os.path.join(home_dir, 'live_manager.py')], 
+                         cwd=home_dir,
+                         stdout=open(os.path.join(home_dir, 'live_manager.log'), 'a'),
+                         stderr=subprocess.STDOUT,
+                         start_new_session=True)
+        print("✅ Radio 24/7 reactivada con éxito.")
+    except Exception as e:
+        print(f"⚠️ Error al reactivar la radio: {e}")
 
 def generate_thumbnail(theme, output_name, video_path):
     print(f"🖼️ Capturando fotograma de impacto desde {video_path}...")
