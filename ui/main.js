@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initVideoAutoplay();
     fetchStats();
     loadRenders();
+    loadCatalog();
 });
 
 let categoryStats = {};
@@ -126,17 +127,45 @@ function simulateProgress(fill, text) {
 
 function loadRenders() {
     const container = document.getElementById('renders-container');
-    // Mock data for renders
     const mockRenders = [
-        { title: "ATMOS_PAZ_60MIN_8271", date: "Hoy", status: "Listo" },
+        { title: "ATMOS_PAZ_INTERIOR_60MIN_8271", date: "Hoy", status: "Listo" },
         { title: "PRODUCCION_OFICIAL_1HORA", date: "Ayer", status: "Listo" }
     ];
     
     container.innerHTML = mockRenders.map(r => `
-        <div class="stat-card">
+        <div class="stat-card" style="grid-column: span 2">
             <span class="label">${r.date}</span>
-            <span class="value" style="font-size:0.8rem">${r.title}</span>
-            <span class="status-badge" style="margin-top:10px; font-size:0.5rem">${r.status}</span>
+            <span class="value" style="font-size:0.8rem; word-break: break-all;">${r.title}</span>
+            <div class="status-badge" style="margin-top:10px; font-size:0.5rem">${r.status}</div>
         </div>
     `).join('');
+}
+
+async function loadCatalog() {
+    const container = document.getElementById('catalog-container');
+    container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>Cargando biblioteca ministerial...</p>";
+    
+    try {
+        // Buscamos el catálogo real
+        const res = await fetch('./data/musichris_master_catalog.json');
+        if (!res.ok) throw new Error();
+        const catalog = await res.json();
+        
+        container.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:1rem;">
+                ${catalog.slice(0, 50).map(song => `
+                    <div class="stat-card" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span class="label">${song.album}</span>
+                            <span class="value" style="font-size:0.9rem">${song.title}</span>
+                        </div>
+                        <span style="font-size:0.7rem; opacity:0.5;">${song.bpm} BPM</span>
+                    </div>
+                `).join('')}
+                <p style="text-align:center; font-size:0.7rem; opacity:0.3; padding:10px;">Mostrando primeros 50 temas...</p>
+            </div>
+        `;
+    } catch (e) {
+        container.innerHTML = "<p style='text-align:center; padding: 2rem; opacity:0.5;'>⚠️ No se pudo cargar el catálogo. Verifica la conexión.</p>";
+    }
 }
