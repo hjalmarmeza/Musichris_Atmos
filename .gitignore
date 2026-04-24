@@ -1,7 +1,9 @@
-# Videos y Renders (MUY PESADOS - NO SUBIR)
-**/*.mp4
-**/*.mov
-**/*.avi
+# Videos y Renders (MUY PESADOS - NO SUBIR TODO)
+# **/*.mp4
+# **/*.mov
+# **/*.avi
+!fondo_humo_azul.mp4
+!assets/fondo_humo_azul.mp4
 renders/
 
 # Entornos Virtuales y Dependencias
