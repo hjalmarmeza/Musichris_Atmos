@@ -23,40 +23,50 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                     with open(disabled_path, 'r') as f:
                         disabled_songs = json.load(f)
                 
-                # Definir 20 Categorías Granulares
-                groups = {
-                    "Refugio": ["refugio", "amparo", "abrigo"],
-                    "Confianza": ["confianza", "creer", "fe"],
-                    "Descanso": ["descanso", "reposo", "quietud", "calma"],
-                    "Noche": ["noche", "medianoche", "madrugada", "seguro"],
-                    "Guerra Espiritual": ["guerra", "batalla", "ejército"],
-                    "Poder": ["poder", "autoridad", "fuerza"],
-                    "Fortaleza": ["fortaleza", "roca", "castillo"],
-                    "Victoria Final": ["victoria final", "triunfo eterno"],
-                    "Adoración Celestial": ["adoración", "celestial", "trono"],
-                    "Selah": ["selah", "meditación", "intimidad"],
-                    "Santidad": ["santidad", "santo", "puro"],
-                    "Intimidad": ["intimidad", "secreto", "presencia"],
-                    "Victoria": ["victoria", "vencer", "triunfo"],
-                    "Gozo": ["gozo", "alegría", "deleite"],
-                    "Celebración": ["celebración", "fiesta", "exaltación"],
-                    "Gratitud": ["gratitud", "gracias", "reconocimiento"],
-                    "Avivamiento": ["avivamiento", "despertar", "fuego"],
-                    "Restauración": ["restauración", "restitución", "sanidad"],
-                    "Renovación": ["renovación", "nuevo", "transformación"],
-                    "Redención": ["redención", "rescate", "gracia"]
+                # Familias de Atmósferas (Herencia)
+                families = {
+                    "Protección": ["Refugio", "Confianza", "Descanso", "Noche", "Fortaleza"],
+                    "Batalla": ["Guerra Espiritual", "Poder", "Victoria Final", "Fortaleza"],
+                    "Presencia": ["Adoración Celestial", "Selah", "Santidad", "Intimidad"],
+                    "Triunfo": ["Victoria", "Gozo", "Celebración", "Gratitud"],
+                    "Renovación": ["Avivamiento", "Restauración", "Renovación", "Redención"]
                 }
                 
-                stats = {k: 0 for k in groups.keys()}
+                # Palabras clave por categoría
+                category_keywords = {
+                    "Refugio": ["refugio", "amparo", "abrigo"], "Confianza": ["confianza", "creer", "fe"], "Descanso": ["descanso", "reposo", "quietud"],
+                    "Noche": ["noche", "medianoche", "madrugada"], "Guerra Espiritual": ["guerra", "batalla", "ejército"], "Poder": ["poder", "autoridad", "fuerza"],
+                    "Fortaleza": ["fortaleza", "roca", "castillo"], "Victoria Final": ["victoria final", "triunfo eterno"], "Adoración Celestial": ["adoración", "celestial", "trono"],
+                    "Selah": ["selah", "meditación", "reflexión"], "Santidad": ["santidad", "santo", "puro"], "Intimidad": ["intimidad", "secreto", "presencia"],
+                    "Victoria": ["victoria", "vencer", "triunfo"], "Gozo": ["gozo", "alegría", "deleite"], "Celebración": ["celebración", "fiesta", "exaltación"],
+                    "Gratitud": ["gratitud", "gracias", "reconocimiento"], "Avivamiento": ["avivamiento", "despertar", "fuego"], "Restauración": ["restauración", "restitución", "sanidad"],
+                    "Renovación": ["renovación", "nuevo", "transformación"], "Redención": ["redención", "rescate", "gracia"]
+                }
+
+                stats = {k: 0 for k in category_keywords.keys()}
                 for s in catalog:
                     if s['title'] in disabled_songs: continue
+                    song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
                     
-                    # Buscamos en TODOS los campos para máxima precisión
-                    song_text = f"{s.get('title','')} {s.get('album','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
-                    
-                    for group_name, keywords in groups.items():
+                    # Para cada canción, ver en qué categorías entra (incluyendo herencia)
+                    matched_categories = []
+                    for cat, keywords in category_keywords.items():
                         if any(k in song_text for k in keywords):
-                            stats[group_name] += 1
+                            matched_categories.append(cat)
+                    
+                    # Aplicar Herencia: si una canción es de "Refugio", también suma a su familia
+                    for cat in matched_categories:
+                        stats[cat] += 1
+                        # Si pertenece a una familia, las hermanas también pueden usarla como "backfill"
+                        for fam_name, members in families.items():
+                            if cat in members:
+                                for member in members:
+                                    if member != cat and member not in matched_categories:
+                                        # Solo sumamos si la categoría principal de la canción es compatible
+                                        stats[member] += 0.5 # Peso menor para indicar que es "relleno"
+                
+                # Normalizar stats (redondear hacia arriba)
+                stats = {k: int(v + 0.9) for k, v in stats.items()}
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')

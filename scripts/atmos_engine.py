@@ -58,41 +58,52 @@ def generate_atmos_video(duration_secs, theme, output_name):
         with open('data/disabled_songs.json', 'r') as f:
             disabled_songs = json.load(f)
     
-    # NUEVO: 20 Categorías Granulares
-    groups = {
-        "Refugio": ["refugio", "amparo", "abrigo"],
-        "Confianza": ["confianza", "creer", "fe"],
-        "Descanso": ["descanso", "reposo", "quietud", "calma"],
-        "Noche": ["noche", "medianoche", "madrugada", "seguro"],
-        "Guerra Espiritual": ["guerra", "batalla", "ejército"],
-        "Poder": ["poder", "autoridad", "fuerza"],
-        "Fortaleza": ["fortaleza", "roca", "castillo"],
-        "Victoria Final": ["victoria final", "triunfo eterno"],
-        "Adoración Celestial": ["adoración", "celestial", "trono"],
-        "Selah": ["selah", "meditación", "intimidad"],
-        "Santidad": ["santidad", "santo", "puro"],
-        "Intimidad": ["intimidad", "secreto", "presencia"],
-        "Victoria": ["victoria", "vencer", "triunfo"],
-        "Gozo": ["gozo", "alegría", "deleite"],
-        "Celebración": ["celebración", "fiesta", "exaltación"],
-        "Gratitud": ["gratitud", "gracias", "reconocimiento"],
-        "Avivamiento": ["avivamiento", "despertar", "fuego"],
-        "Restauración": ["restauración", "restitución", "sanidad"],
-        "Renovación": ["renovación", "nuevo", "transformación"],
-        "Redención": ["redención", "rescate", "gracia"]
+    # Familias de Atmósferas (Herencia)
+    families = {
+        "Protección": ["Refugio", "Confianza", "Descanso", "Noche", "Fortaleza"],
+        "Batalla": ["Guerra Espiritual", "Poder", "Victoria Final", "Fortaleza"],
+        "Presencia": ["Adoración Celestial", "Selah", "Santidad", "Intimidad"],
+        "Triunfo": ["Victoria", "Gozo", "Celebración", "Gratitud"],
+        "Renovación": ["Avivamiento", "Restauración", "Renovación", "Redención"]
+    }
+    
+    category_keywords = {
+        "Refugio": ["refugio", "amparo", "abrigo"], "Confianza": ["confianza", "creer", "fe"], "Descanso": ["descanso", "reposo", "quietud"],
+        "Noche": ["noche", "medianoche", "madrugada"], "Guerra Espiritual": ["guerra", "batalla", "ejército"], "Poder": ["poder", "autoridad", "fuerza"],
+        "Fortaleza": ["fortaleza", "roca", "castillo"], "Victoria Final": ["victoria final", "triunfo eterno"], "Adoración Celestial": ["adoración", "celestial", "trono"],
+        "Selah": ["selah", "meditación", "reflexión"], "Santidad": ["santidad", "santo", "puro"], "Intimidad": ["intimidad", "secreto", "presencia"],
+        "Victoria": ["victoria", "vencer", "triunfo"], "Gozo": ["gozo", "alegría", "deleite"], "Celebración": ["celebración", "fiesta", "exaltación"],
+        "Gratitud": ["gratitud", "gracias", "reconocimiento"], "Avivamiento": ["avivamiento", "despertar", "fuego"], "Restauración": ["restauración", "restitución", "sanidad"],
+        "Renovación": ["renovación", "nuevo", "transformación"], "Redención": ["redención", "rescate", "gracia"]
     }
 
-    # Filtrar por palabras clave profundas
+    # 1. Buscar canciones EXACTAS
     eligible_songs = []
-    keywords = groups.get(theme, [theme.lower()])
+    primary_keywords = category_keywords.get(theme, [theme.lower()])
     
     for s in catalog:
         if s['title'] in disabled_songs: continue
-        # Escaneo profundo de campos
         song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
-        
-        if any(k in song_text for k in keywords):
+        if any(k in song_text for k in primary_keywords):
             eligible_songs.append(s)
+            
+    # 2. Si no hay suficientes canciones (menos de 15), buscar en la FAMILIA
+    if len(eligible_songs) < 15:
+        print(f"⚠️ Poco contenido en {theme}. Buscando herencia familiar...")
+        family_members = []
+        for fam, members in families.items():
+            if theme in members:
+                family_members = members
+                break
+        
+        for member in family_members:
+            if member == theme: continue
+            member_keywords = category_keywords.get(member, [])
+            for s in catalog:
+                if s['title'] in disabled_songs or s in eligible_songs: continue
+                song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
+                if any(k in song_text for k in member_keywords):
+                    eligible_songs.append(s)
             
     random.shuffle(eligible_songs)
             
