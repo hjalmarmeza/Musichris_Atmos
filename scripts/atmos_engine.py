@@ -55,13 +55,25 @@ def generate_atmos_video(duration_secs, theme, output_name):
     eligible_songs = [s for s in catalog if theme in s.get('moments', [])]
     random.shuffle(eligible_songs)
     
-    # Seleccionamos canciones suficientes para el tiempo solicitado
+    # Seleccionamos canciones y hacemos LOOP si es necesario para cubrir el tiempo
     selected_songs = []
-    total_audio_time = 0
-    for s in eligible_songs:
-        if total_audio_time < duration_secs:
+    current_audio_time = 0
+    
+    if not eligible_songs:
+        print("❌ Error: No hay canciones para este tema.")
+        return
+
+    # Loop infinito hasta llenar el tiempo solicitado
+    while current_audio_time < duration_secs:
+        for s in eligible_songs:
+            if current_audio_time >= duration_secs:
+                break
             selected_songs.append(s)
-            total_audio_time += 250 # Promedio de 4:10 por tema
+            # Intentamos obtener duración real, si no usamos 250s como fallback
+            current_audio_time += s.get('duration_secs', 250)
+        
+        # Mezclamos para la siguiente vuelta si el loop continúa
+        random.shuffle(eligible_songs)
     
     create_master_overlays(theme.upper(), "assets/master")
     
@@ -75,10 +87,19 @@ def generate_atmos_video(duration_secs, theme, output_name):
         start_t = (duration_secs / (num_refs+1)) * (i+1)
         reflection_overlays.append((path, start_t, start_t + 12))
 
+    # Definimos la duración real orgánica + 12 segundos para el cierre maestro
+    final_duration = current_audio_time + 12
+
+    # Seleccionar PAISAJE ALEATORIO
+    landscapes_dir = 'assets/landscapes'
+    landscapes = [f for f in os.listdir(landscapes_dir) if f.endswith('.mp4')]
+    selected_landscape = os.path.join(landscapes_dir, random.choice(landscapes) if landscapes else 'landscape_test.mp4')
+    print(f"🌍 Paisaje seleccionado: {selected_landscape}")
+
     # Componer Comando FFmpeg
     cmd = [
         "nice", "-n", "19", "/opt/homebrew/bin/ffmpeg", "-y",
-        "-stream_loop", "-1", "-i", "assets/landscape_test.mp4",
+        "-stream_loop", "-1", "-i", selected_landscape,
         "-i", "assets/master_intro.png",
         "-i", "assets/master_footer.png",
         "-i", "assets/watermark_layer.png",
@@ -107,8 +128,10 @@ def generate_atmos_video(duration_secs, theme, output_name):
         last_v = next_v
 
     v_filters += f"[4:v]colorkey=0x000000:0.1:0.1,scale=-1:600,format=rgba[logo_clean];"
-    v_filters += f"[{last_v}][logo_clean]overlay=(W-w)/2:(H-h)/2-150:enable='between(t,{duration_secs-10},{duration_secs-2})'[v_logo];"
-    v_filters += f"[v_logo][5:v]overlay=0:0:enable='between(t,{duration_secs-10},{duration_secs})'[v_final]"
+    v_filters += f"[{last_v}][logo_clean]overlay=(W-w)/2:(H-h)/2-150:enable='between(t,{final_duration-12},{final_duration-2})'[v_logo];"
+    v_filters += f"[v_logo][5:v]overlay=0:0:enable='between(t,{final_duration-12},{final_duration})'[v_final]"
+
+    print(f"⏱️ Duración total de la producción: {final_duration/60:.2f} minutos")
 
     # Filtro de Audio (Concat)
     a_filters = "".join([f"[{audio_start_idx+i}:a]" for i in range(len(selected_songs))])
@@ -118,12 +141,20 @@ def generate_atmos_video(duration_secs, theme, output_name):
         "-filter_complex", f"{v_filters};{a_filters}",
         "-map", "[v_final]", "-map", "[a_final]",
         "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-b:a", "192k",
-        "-t", str(duration_secs),
+        "-t", str(final_duration), # Usamos la duración real calculada
         f"renders/{output_name}"
     ]
     
     subprocess.run(cmd)
 
 if __name__ == "__main__":
-    # PRODUCCIÓN OFICIAL DE 1 HORA - MUSICHRIS ATMOS
-    generate_atmos_video(3600, "Paz Interior", "PRODUCCION_OFICIAL_ATMOS_1HORA_V1.mp4")
+    import sys
+    # Valores por defecto: 1 hora, Paz Interior, Nombre automático
+    duration = int(sys.argv[1]) if len(sys.argv) > 1 else 3600
+    theme = sys.argv[2] if len(sys.argv) > 2 else "Paz Interior"
+    
+    # Nombre de salida dinámico basado en tema y tiempo
+    timestamp = random.randint(1000, 9999)
+    output_name = f"ATMOS_{theme.replace(' ', '_').upper()}_{duration//60}MIN_{timestamp}.mp4"
+    
+    generate_atmos_video(duration, theme, output_name)

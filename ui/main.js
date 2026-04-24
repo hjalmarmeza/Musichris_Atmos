@@ -2,10 +2,35 @@
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     loadDashboardData();
-    loadCatalog();
+    // loadCatalog(); // Ya no es necesario cargar todo el catálogo si usamos /stats
     loadRenders();
     initVideoAutoplay();
+    fetchStats();
 });
+
+let categoryStats = {};
+
+async function fetchStats() {
+    try {
+        const res = await fetch('/stats');
+        categoryStats = await res.json();
+        updateDashboardInfo();
+    } catch (e) {
+        console.error("Error cargando estadísticas:", e);
+    }
+}
+
+function updateDashboardInfo() {
+    const selector = document.getElementById('playlist-selector');
+    const songCountDisplay = document.getElementById('song-count-display');
+    const videoPotential = document.getElementById('video-potential');
+    
+    const theme = selector.value;
+    const count = categoryStats[theme] || 0;
+    
+    songCountDisplay.textContent = count;
+    videoPotential.textContent = Math.floor(count / 12) || 0; // Aproximadamente 12 canciones por hora
+}
 
 function initVideoAutoplay() {
     const video = document.getElementById('bg-video');
@@ -42,34 +67,14 @@ function initNavigation() {
         const songCountDisplay = document.getElementById('song-count-display');
         const videoPotential = document.getElementById('video-potential');
 
-        const categoryData = {
-            paz: { songs: 84, title: "No Temas: Yo estoy contigo en medio del valle", est: 3.2 },
-            fortaleza: { songs: 44, title: "Poder Infinito: Tu Victoria está en Dios", est: 2.8 },
-            reflexion: { songs: 11, title: "Selah: Momentos de Intimidad con el Padre", est: 1.5 }
-        };
 
         // Actualización dinámica al cambiar selección
         playlistSelector.addEventListener('change', () => {
-            const data = categoryData[playlistSelector.value];
+            updateDashboardInfo();
             const statusBadge = document.getElementById('system-status-badge');
-            const quoteElement = document.getElementById('category-quote');
-            
-            renderEst.textContent = `~ ${data.est} Horas`;
-            songCountDisplay.textContent = data.songs;
-            videoPotential.textContent = Math.floor(data.songs / 12);
-            currentTitle.textContent = data.title;
-
-            // Actualizar Badge y Cita
             statusBadge.textContent = `MODO ${playlistSelector.options[playlistSelector.selectedIndex].text.toUpperCase()} ACTIVADO`;
             statusBadge.style.background = "#f5f5dc";
             statusBadge.style.color = "#000";
-
-            const quotes = {
-                paz: '"En la quietud encontrarás tu fuerza."',
-                fortaleza: '"Dios es nuestro amparo y fortaleza."',
-                reflexion: '"Escucha la voz en el silencio."'
-            };
-            quoteElement.textContent = quotes[playlistSelector.value];
         });
 
         btnLaunch.addEventListener('click', async () => {
@@ -83,7 +88,14 @@ function initNavigation() {
             statusBadge.style.background = "#fbbf24";
             
             try {
-                const response = await fetch('/run_atmos', { method: 'POST' });
+                const response = await fetch('/run_atmos', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        theme: playlistSelector.value,
+                        duration: 3600 // Podemos hacerlo dinámico si añadimos un input de tiempo
+                    })
+                });
                 if (response.ok) {
                     statusBadge.textContent = "RENDERIZANDO EN NUBE";
                     activeProgress.style.display = "block";
