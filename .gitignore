@@ -1,0 +1,21 @@
+# Videos y Renders (MUY PESADOS - NO SUBIR)
+**/*.mp4
+**/*.mov
+**/*.avi
+renders/
+
+# Entornos Virtuales y Dependencias
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Archivos de Sistema
+.DS_Store
+Thumbs.db
+
+# Temporales de Assets (Se generan en ejecución)
+assets/ref_*.png
+assets/master_*.png
+assets/song_*.png
+assets/overlay_*.png
