@@ -2,26 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MusiChris Studio | Atmos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MusiChris Atmos | Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- BACKGROUND BLINDADO (Sin Botón Play) -->
+    <!-- FONDO ANIMADO BLINDADO -->
     <div class="video-bg">
-        <video autoplay muted loop playsinline id="bg-video">
+        <video id="bg-video" autoplay muted loop playsinline poster="assets/logo_atmos.png">
             <source src="assets/landscapes/fondo_humo_azul.mp4" type="video/mp4">
         </video>
     </div>
+    <div class="overlay"></div>
 
     <div class="master-container">
-        <!-- Logo de Cuadro -->
-        <img src="assets/logo_atmos.png" class="logo-img" alt="Atmos Logo">
+        <!-- HEADER MAESTRO -->
+        <header class="header-main">
+            <img src="assets/logo_atmos.png" class="logo-img" alt="Atmos Logo">
+            <h1>MUSICHRIS <span>ATMOS</span></h1>
+        </header>
 
-        <!-- Título Cinzel -->
-        <h1>MUSICHRIS <span>STUDIO</span></h1>
-
-        <!-- Pestañas Píldora -->
+        <!-- NAVEGACIÓN PÍLDORA -->
         <nav class="nav-pill">
             <button class="nav-btn active" data-view="dashboard">PANEL</button>
             <button class="nav-btn" data-view="catalog">TEMAS</button>
@@ -29,26 +30,33 @@
             <button id="btn-settings" class="nav-btn-icon">⚙️</button>
         </nav>
 
-        <!-- DASHBOARD (PANEL) -->
-        <main id="dashboard" class="view active">
-            <div class="status-info">
-                <p>Potencial: <span id="video-potential">CONSULTANDO NUBE...</span></p>
+        <!-- SECCIÓN: PANEL (DASHBOARD) -->
+        <section id="view-dashboard" class="view active">
+            <div class="card-hero glass">
+                <div class="badge-status">SISTEMA LISTO</div>
+                <h2 id="display-theme">Producción: Confianza</h2>
+                <p class="quote">"Donde las palabras fallan, la música habla."</p>
             </div>
 
-            <div class="form-group" style="display: flex; flex-direction: column; gap: 25px; width: 100%;">
-                
-                <!-- Atmósfera -->
+            <div class="form-group">
                 <div class="input-wrapper">
                     <label class="input-label">ATMÓSFERA MINISTERIAL</label>
                     <select id="playlist-selector" class="input-box">
-                        <option value="Confianza">Confianza & Fe</option>
-                        <option value="Paz">Paz Interior</option>
-                        <option value="Victoria">Victoria & Gozo</option>
-                        <option value="Guerra">Guerra Espiritual</option>
+                        <option value="Adoración Celestial">Adoración Celestial</option>
+                        <option value="Avivamiento">Avivamiento</option>
+                        <option value="Celebración">Celebración</option>
+                        <option value="Confianza" selected>Confianza</option>
+                        <option value="Descanso">Descanso</option>
+                        <option value="Fortaleza">Fortaleza</option>
+                        <option value="Gozo">Gozo</option>
+                        <option value="Gratitud">Gratitud</option>
+                        <option value="Guerra Espiritual">Guerra Espiritual</option>
+                        <option value="Intimidad">Intimidad</option>
+                        <option value="Paz Interior">Paz Interior</option>
+                        <option value="Victoria & Gozo">Victoria & Gozo</option>
                     </select>
                 </div>
 
-                <!-- Duración -->
                 <div class="input-wrapper">
                     <label class="input-label">DURACIÓN DE PRODUCCIÓN</label>
                     <select id="duration-selector" class="input-box">
@@ -58,23 +66,47 @@
                     </select>
                 </div>
 
-                <button id="btn-launch" class="btn-main">
-                    INICIAR PRODUCCIÓN V6.2
-                </button>
-                
-                <p id="current-title" style="text-align:center; margin-top:10px; font-size:0.7rem; opacity:0.4; letter-spacing:2px;">Sincronizado con Motor Oracle</p>
+                <button id="btn-launch" class="btn-main">INICIAR PRODUCCIÓN V7.0</button>
             </div>
-        </main>
 
-        <!-- TEMAS -->
-        <section id="catalog" class="view">
-            <div id="catalog-container" class="list-container"></div>
+            <!-- STATUS CARDS INFERIORES -->
+            <div class="status-grid">
+                <div class="status-card glass">
+                    <span class="status-label">STATUS CLOUD</span>
+                    <p class="status-value">ONLINE</p>
+                </div>
+                <div class="status-card glass">
+                    <span class="status-label">MOTOR FFmpeg</span>
+                    <p class="status-value">v8.0.1</p>
+                </div>
+            </div>
         </section>
 
-        <!-- HISTORIAL -->
-        <section id="renders" class="view">
-            <div id="renders-container" class="list-container"></div>
+        <!-- SECCIÓN: TEMAS (CATÁLOGO) -->
+        <section id="view-catalog" class="view">
+            <div class="card-hero glass">
+                <h2>Catálogo Maestro</h2>
+                <p>Explora tu biblioteca ministerial</p>
+            </div>
+            <div id="catalog-list" class="list-container">
+                <p class="loading-msg">Cargando biblioteca MusiChris Studio...</p>
+            </div>
         </section>
+
+        <!-- SECCIÓN: HISTORIAL (RENDERS) -->
+        <section id="view-renders" class="view">
+            <div class="card-hero glass">
+                <h2>Historial Atmos</h2>
+                <p>Producciones finalizadas en la nube</p>
+            </div>
+            <div id="history-list" class="list-container">
+                <p class="loading-msg">Consultando nube...</p>
+            </div>
+        </section>
+
+        <footer class="footer-main">
+            MusiChris Atmos v8.12 • © 2026
+        </footer>
     </div>
 
     <!-- MODAL DE CONFIGURACIÓN (TOKEN) -->
@@ -84,8 +116,8 @@
             <p style="font-size:0.7rem; opacity:0.6; margin-bottom:15px;">Pega tu GitHub Token para habilitar el control remoto.</p>
             <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx" class="input-box">
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button id="btn-save-token" class="btn-main" style="padding:10px;">GUARDAR</button>
-                <button id="btn-close-modal" class="btn-main" style="padding:10px; background:rgba(255,0,0,0.2);">CERRAR</button>
+                <button id="btn-save-token" class="btn-main" style="padding:10px; font-size:0.8rem;">GUARDAR</button>
+                <button id="btn-close-modal" class="btn-main" style="padding:10px; font-size:0.8rem; background:rgba(255,0,0,0.2);">CERRAR</button>
             </div>
         </div>
     </div>
