@@ -288,5 +288,21 @@ style.textContent = `
         cursor: pointer; 
     }
 
+    /* Estilos para Móviles */
+    @media (max-width: 768px) {
+        body { padding: 10px; }
+        .dashboard-container { padding: 10px; margin-top: 10px; }
+        header { flex-direction: column; text-align: center; gap: 1rem; margin-bottom: 1rem; }
+        .logo-section h1 { font-size: 1.8rem; }
+        .nav-center { width: 100%; display: flex; overflow-x: auto; gap: 0.5rem; padding: 10px 0; }
+        .btn-nav { padding: 0.6rem 1.2rem; font-size: 0.75rem; white-space: nowrap; }
+        .launch-card { padding: 1rem; }
+        .btn-launch { font-size: 1rem; padding: 1rem; width: 100%; }
+        .renders-grid { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-item h4 { font-size: 0.6rem; }
+        .stat-item p { font-size: 0.9rem; }
+        .config-section { flex-direction: column; }
+    }
 `;
 document.head.appendChild(style);
