@@ -181,7 +181,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
     # Componer Comando FFmpeg
     cmd = [
         "ffmpeg", "-y",
-        "-loop", "1", "-i", master_bg_image,
+        "-loop", "1", "-framerate", "15", "-i", master_bg_image,
         "-i", os.path.join(BASE_DIR, "assets/master_intro.png"),
         "-i", os.path.join(BASE_DIR, "assets/master_footer.png"),
         "-i", os.path.join(BASE_DIR, "assets/watermark_layer.png"),
@@ -223,7 +223,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
     cmd += [
         "-filter_complex", f"{v_filters};{a_filters}",
         "-map", "[v_final]", "-map", "[a_final]",
-        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28", "-maxrate", "2500k", "-bufsize", "5000k", "-r", "15", "-c:a", "aac", "-b:a", "128k",
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "30", "-b:v", "2000k", "-maxrate", "2500k", "-bufsize", "4000k", "-r", "15", "-c:a", "aac", "-b:a", "128k",
         "-t", str(final_duration), # Usamos la duración real calculada
         output_path
     ]
