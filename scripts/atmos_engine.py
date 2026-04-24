@@ -9,10 +9,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def clean_assets():
     assets_dir = os.path.join(BASE_DIR, 'assets')
+    renders_dir = os.path.join(BASE_DIR, 'renders')
+    
+    # Limpiar assets temporales
     for f in os.listdir(assets_dir):
         if f.endswith('.png') and ('master' in f or 'ref' in f or 'overlay' in f or 'song' in f):
             try: os.remove(os.path.join(assets_dir, f))
             except: pass
+            
+    # Limpiar renders anteriores para ahorrar espacio
+    if os.path.exists(renders_dir):
+        for f in os.listdir(renders_dir):
+            if f.endswith(('.mp4', '.jpg', '.json')):
+                try: os.remove(os.path.join(renders_dir, f))
+                except: pass
 
 def create_reflection_overlay(text, output_path):
     img = Image.new('RGBA', (1920, 1080), (0, 0, 0, 0))
