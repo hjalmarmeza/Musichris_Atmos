@@ -231,7 +231,13 @@ function ensureVideoPlay() {
 
 // INIT
 window.onload = () => {
-    ensureVideoPlay();
+    if (videoElement) {
+        videoElement.play().catch(() => {
+            console.log("Esperando interacción para video...");
+            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
+            document.addEventListener('touchstart', () => videoElement.play(), { once: true });
+        });
+    }
     loadData();
     if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;
 };

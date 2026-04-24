@@ -1,4 +1,4 @@
-// CONFIGURACIÓN SERVERLESS (V7.2)
+// CONFIGURACIÓN SERVERLESS ATMOS v8.12
 const GITHUB_REPO = "hjalmarmeza/Musichris_Atmos";
 const CATALOG_PATH = "data/musichris_master_catalog.json";
 const DISABLED_PATH = "data/disabled_songs.json";
@@ -8,7 +8,7 @@ const HISTORY_PATH = "data/production_history.json";
 const btnLaunch = document.getElementById('btn-launch');
 const playlistSelector = document.getElementById('playlist-selector');
 const durationSelector = document.getElementById('duration-selector');
-const videoPotential = document.getElementById('video-potential');
+const displayTheme = document.getElementById('display-theme');
 const catalogList = document.getElementById('catalog-list');
 const historyList = document.getElementById('history-list');
 const videoElement = document.getElementById('bg-video');
@@ -25,25 +25,24 @@ let GITHUB_TOKEN = localStorage.getItem('gh_token') || "";
 // --- SISTEMA DE COMUNICACIÓN GITHUB ---
 
 async function ghFetch(path, options = {}) {
-    if (!GITHUB_TOKEN) {
+    if (!GITHUB_TOKEN && (options.method === 'POST' || options.method === 'PUT')) {
         modalSettings.classList.add('active');
-        throw new Error("Token requerido");
+        throw new Error("Token requerido para esta acción.");
     }
 
     const url = `https://api.github.com/repos/${GITHUB_REPO}/${path}`;
-    const defaultHeaders = {
-        'Authorization': `token ${GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json'
+    const headers = {
+        'Accept': 'application/vnd.github.v3+json',
+        ...(GITHUB_TOKEN ? { 'Authorization': `token ${GITHUB_TOKEN}` } : {})
     };
 
     const response = await fetch(url, {
         ...options,
-        headers: { ...defaultHeaders, ...options.headers }
+        headers: { ...headers, ...options.headers }
     });
 
     if (response.status === 401) {
         localStorage.removeItem('gh_token');
-        alert("⚠️ Token inválido. Por favor configúralo de nuevo.");
         modalSettings.classList.add('active');
     }
 
@@ -54,41 +53,45 @@ async function ghFetch(path, options = {}) {
 
 async function loadData() {
     try {
-        // Cargar Catálogo (Estático)
-        const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}`);
+        // Cargar Catálogo (Desde Raw para mayor velocidad en lectura)
+        const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}?t=${Date.now()}`);
         const catalog = await resCat.json();
 
-        // Cargar Desactivadas (Dinámico vía API para evitar cache)
+        // Cargar Desactivadas
         let disabled = [];
         try {
             const resDis = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${DISABLED_PATH}?t=${Date.now()}`);
-            disabled = await resDis.json();
+            if (resDis.ok) disabled = await resDis.json();
         } catch(e) { console.warn("Usando lista vacía."); }
 
         renderCatalog(catalog, disabled);
-        updatePotential(catalog, disabled);
         loadHistory();
     } catch (err) {
         console.error("Error cargando datos:", err);
-        catalogList.innerHTML = `<p class='error-msg'>⚠️ ERROR: No se pudo cargar el catálogo. Verifica tu conexión.</p>`;
+        catalogList.innerHTML = `<p class='error-msg'>⚠️ ERROR DE CONEXIÓN: No se pudo cargar la biblioteca.</p>`;
     }
 }
 
 function renderCatalog(catalog, disabled) {
+    if (!catalog.length) {
+        catalogList.innerHTML = "<p style='text-align:center; opacity:0.5;'>Biblioteca vacía.</p>";
+        return;
+    }
+
     catalogList.innerHTML = "";
     catalog.forEach(song => {
         const isDisabled = disabled.includes(song.title);
         const item = document.createElement('div');
-        item.className = `item-card ${isDisabled ? 'disabled' : ''}`;
+        item.className = 'item-card';
         item.style.display = "flex";
         item.style.justifyContent = "space-between";
         item.style.alignItems = "center";
-        item.style.opacity = isDisabled ? "0.4" : "1";
+        item.style.opacity = isDisabled ? "0.3" : "1";
 
         item.innerHTML = `
             <div>
                 <p style="font-weight:700; font-size:0.9rem;">${song.title}</p>
-                <p style="font-size:0.6rem; opacity:0.6;">${song.artist} | ${song.duration}</p>
+                <p style="font-size:0.6rem; opacity:0.6; margin-top:3px;">${song.artist || 'MusiChris Studio'}</p>
             </div>
             <label class="switch">
                 <input type="checkbox" ${isDisabled ? '' : 'checked'} onchange="toggleSong('${song.title}')">
@@ -103,55 +106,52 @@ async function toggleSong(title) {
     if (!GITHUB_TOKEN) return modalSettings.classList.add('active');
 
     try {
-        // 1. Obtener archivo actual y su SHA
         const res = await ghFetch(`contents/${DISABLED_PATH}`);
         const fileData = await res.json();
         const currentList = JSON.parse(atob(fileData.content));
         const sha = fileData.sha;
 
-        // 2. Modificar lista
-        let newList;
-        if (currentList.includes(title)) {
-            newList = currentList.filter(t => t !== title);
-        } else {
-            newList = [...currentList, title];
-        }
+        let newList = currentList.includes(title) 
+            ? currentList.filter(t => t !== title) 
+            : [...currentList, title];
 
-        // 3. Subir a GitHub
         await ghFetch(`contents/${DISABLED_PATH}`, {
             method: 'PUT',
             body: JSON.stringify({
-                message: `Update disabled songs: ${title}`,
+                message: `Admin: Toggle ${title}`,
                 content: btoa(JSON.stringify(newList, null, 2)),
                 sha: sha
             })
         });
 
         loadData();
-    } catch (e) {
-        console.error(e);
-        alert("Error al actualizar estado en la nube.");
-    }
+    } catch (e) { alert("Error al sincronizar con GitHub."); }
 }
 
 async function loadHistory() {
     try {
         const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${HISTORY_PATH}?t=${Date.now()}`);
         const history = await res.json();
-        historyList.innerHTML = history.length ? history.reverse().slice(0, 10).map(item => `
-            <div class="item-card">
-                <span class="tiny-label">${item.timestamp}</span>
-                <p style="font-weight:700; font-size:0.8rem;">${item.theme}</p>
-                <div style="font-size:0.5rem; background:var(--accent-blue); padding:2px 8px; border-radius:10px; display:inline-block; margin-top:5px;">${item.status}</div>
-            </div>
-        `).join('') : "<p style='opacity:0.3; text-align:center;'>Sin historial.</p>";
+        
+        historyList.innerHTML = history.length ? history.reverse().slice(0, 15).map(item => {
+            const dateLabel = isToday(item.timestamp) ? "Hoy" : "Ayer";
+            return `
+                <div class="item-card">
+                    <p style="font-size:0.65rem; opacity:0.5; margin-bottom:5px;">${dateLabel} • ${item.timestamp.split(' ')[1] || ''}</p>
+                    <p style="font-weight:700; font-size:0.85rem; letter-spacing:0.5px;">${item.theme.toUpperCase()}</p>
+                    <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
+                        <span class="badge-ready">Listo</span>
+                        <span style="font-size:0.5rem; opacity:0.3;">#${item.id || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
+        }).join('') : "<p style='opacity:0.3; text-align:center;'>Sin producciones recientes.</p>";
     } catch (e) { console.error("Error historial"); }
 }
 
-function updatePotential(catalog, disabled) {
-    const active = catalog.filter(s => !disabled.includes(s.title)).length;
-    videoPotential.textContent = `${active} VIDEOS LISTOS`;
-    videoPotential.style.color = active > 50 ? "#00ff7f" : "#ffcc00";
+function isToday(timestamp) {
+    const today = new Date().toLocaleDateString();
+    return timestamp.includes(today);
 }
 
 async function launchProduction() {
@@ -161,6 +161,7 @@ async function launchProduction() {
     const duration = durationSelector.value;
 
     btnLaunch.disabled = true;
+    btnLaunch.style.opacity = "0.5";
     btnLaunch.textContent = "DISPARANDO NUBE...";
 
     try {
@@ -171,26 +172,30 @@ async function launchProduction() {
                 client_payload: {
                     theme: theme,
                     duration: parseInt(duration),
-                    version: "7.0 Serverless"
+                    version: "8.12 Serverless"
                 }
             })
         });
 
         if (response.status === 204) {
-            alert("🚀 ¡MISIÓN LANZADA! La producción ha comenzado en los servidores de GitHub.");
-            // Opcional: Registrar en historial local antes de que el bot lo haga oficial
+            alert("🚀 ¡MISIÓN LANZADA! Producción iniciada en GitHub.");
         } else {
             alert("❌ GitHub rechazó la orden. Revisa el Token.");
         }
     } catch (err) {
-        console.error(err);
+        alert("Error de red con GitHub.");
     } finally {
         btnLaunch.disabled = false;
+        btnLaunch.style.opacity = "1";
         btnLaunch.textContent = "INICIAR PRODUCCIÓN V7.0";
     }
 }
 
-// --- EVENTOS Y UI ---
+// --- EVENTOS ---
+
+playlistSelector.onchange = () => {
+    displayTheme.textContent = `Producción: ${playlistSelector.value}`;
+};
 
 btnSettings.onclick = () => modalSettings.classList.add('active');
 btnCloseModal.onclick = () => modalSettings.classList.remove('active');
@@ -200,7 +205,6 @@ btnSaveToken.onclick = () => {
         localStorage.setItem('gh_token', val);
         GITHUB_TOKEN = val;
         modalSettings.classList.remove('active');
-        alert("🔑 Token guardado localmente.");
         loadData();
     }
 };
@@ -227,7 +231,13 @@ function ensureVideoPlay() {
 
 // INIT
 window.onload = () => {
-    ensureVideoPlay();
+    if (videoElement) {
+        videoElement.play().catch(() => {
+            console.log("Esperando interacción para video...");
+            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
+            document.addEventListener('touchstart', () => videoElement.play(), { once: true });
+        });
+    }
     loadData();
     if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;
 };
