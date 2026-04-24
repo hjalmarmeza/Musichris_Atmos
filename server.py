@@ -23,17 +23,29 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                     with open(disabled_path, 'r') as f:
                         disabled_songs = json.load(f)
                 
-                stats = {}
+                # Definir Grupos Maestros
+                groups = {
+                    "Paz & Reposo": ["Paz Interior", "Paz / Confianza (\"Raphah\")", "Paz / Meditación / Descanso", "Refugio / Seguridad", "Descanso / Hogar espiritual", "Quietud / Confianza Silenciosa", "Vigilancia divina / Descanso seguro", "Voz de Dios / Calma", "Seguridad y Paz en Dios", "Alivio / Refugio Inmersivo"],
+                    "Guerra & Fortaleza": ["Guerra Espiritual", "Poder y Fortaleza", "Victoria Final", "Fortaleza y Agilidad Divina", "Valentía / Confianza en medio del peligro", "Protección / Poder", "Seguridad en la Defensa Divina", "Refugio activo / Protección en la guerra", "Inmunidad divina / Protección sobrenatural"],
+                    "Adoración & Intimidad": ["Adoración celestial", "Adoración extravagante / Perdón", "Intimidad de madrugada / Sed del alma", "Santidad de Dios", "Selah", "Anhelo / Contemplación", "Prioridad / Presencia", "Omnipresencia / Intimidad Total", "La Paternidad de Dios"],
+                    "Victoria & Gozo": ["Victoria & Gozo", "Victoria / Fe activa", "Celebración Colectiva", "Gratitud y Exaltación", "Joyful", "El Gozo como Regalo Divino", "Victoria y Gratitud", "La Victoria y el Desfile Divino"],
+                    "Avivamiento & Gracia": ["Avivamiento / Restauración", "Restauración / Gracia", "Redención completa", "Sed espiritual / Renovación", "La respuesta natural al perdón es la adoración pública", "La confianza en que la bondad de Dios supera el error"]
+                }
+                
+                stats = {k: 0 for k in groups.keys()}
                 for s in catalog:
                     if s['title'] in disabled_songs: continue
-                    # Combinar Moments y Theme para máxima variedad
-                    tags = set(s.get('moments', []))
-                    theme = s.get('theme', '')
-                    if theme and len(theme) > 2 and 'Guitarra' not in theme: # Filtro técnico
-                        tags.add(theme)
                     
-                    for t in tags:
-                        stats[t] = stats.get(t, 0) + 1
+                    # Buscar en qué grupo encaja la canción
+                    song_tags = set(s.get('moments', []))
+                    song_tags.add(s.get('theme', ''))
+                    
+                    for group_name, patterns in groups.items():
+                        if any(p in song_tags for p in patterns):
+                            stats[group_name] += 1
+                
+                # Eliminar grupos vacíos (opcional)
+                stats = {k: v for k, v in stats.items() if v > 0}
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')

@@ -58,8 +58,27 @@ def generate_atmos_video(duration_secs, theme, output_name):
         with open('data/disabled_songs.json', 'r') as f:
             disabled_songs = json.load(f)
     
+    # NUEVO: Definir Grupos Maestros en el Motor
+    groups = {
+        "Paz & Reposo": ["Paz Interior", "Paz / Confianza (\"Raphah\")", "Paz / Meditación / Descanso", "Refugio / Seguridad", "Descanso / Hogar espiritual", "Quietud / Confianza Silenciosa", "Vigilancia divina / Descanso seguro", "Voz de Dios / Calma", "Seguridad y Paz en Dios", "Alivio / Refugio Inmersivo"],
+        "Guerra & Fortaleza": ["Guerra Espiritual", "Poder y Fortaleza", "Victoria Final", "Fortaleza y Agilidad Divina", "Valentía / Confianza en medio del peligro", "Protección / Poder", "Seguridad en la Defensa Divina", "Refugio activo / Protección en la guerra", "Inmunidad divina / Protección sobrenatural"],
+        "Adoración & Intimidad": ["Adoración celestial", "Adoración extravagante / Perdón", "Intimidad de madrugada / Sed del alma", "Santidad de Dios", "Selah", "Anhelo / Contemplación", "Prioridad / Presencia", "Omnipresencia / Intimidad Total", "La Paternidad de Dios"],
+        "Victoria & Gozo": ["Victoria & Gozo", "Victoria / Fe activa", "Celebración Colectiva", "Gratitud y Exaltación", "Joyful", "El Gozo como Regalo Divino", "Victoria y Gratitud", "La Victoria y el Desfile Divino"],
+        "Avivamiento & Gracia": ["Avivamiento / Restauración", "Restauración / Gracia", "Redención completa", "Sed espiritual / Renovación", "La respuesta natural al perdón es la adoración pública", "La confianza en que la bondad de Dios supera el error"]
+    }
+
     # Filtrar por momentos o tema, y quitar las desactivadas
-    eligible_songs = [s for s in catalog if (theme in s.get('moments', []) or theme == s.get('theme')) and s['title'] not in disabled_songs]
+    eligible_songs = []
+    patterns = groups.get(theme, [theme]) # Si no es un grupo maestro, buscamos literal
+    
+    for s in catalog:
+        if s['title'] in disabled_songs: continue
+        song_tags = set(s.get('moments', []))
+        song_tags.add(s.get('theme', ''))
+        
+        if any(p in song_tags for p in patterns):
+            eligible_songs.append(s)
+            
     random.shuffle(eligible_songs)
     
     # Seleccionamos canciones y hacemos LOOP si es necesario para cubrir el tiempo
