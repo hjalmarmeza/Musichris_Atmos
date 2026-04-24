@@ -157,7 +157,7 @@ def generate_atmos_video(duration_secs, theme, output_name):
 
     # Componer Comando FFmpeg
     cmd = [
-        "nice", "-n", "19", "/opt/homebrew/bin/ffmpeg", "-y",
+        "nice", "-n", "19", "ffmpeg", "-y",
         "-stream_loop", "-1", "-i", selected_landscape,
         "-i", os.path.join(BASE_DIR, "assets/master_intro.png"),
         "-i", os.path.join(BASE_DIR, "assets/master_footer.png"),
