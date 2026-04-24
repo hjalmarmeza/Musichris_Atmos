@@ -44,7 +44,7 @@ function updateDashboardInfo() {
     if (selector.options.length <= 1) {
         const sortedCats = Object.keys(categoryStats).sort();
         selector.innerHTML = sortedCats.map(cat => 
-            `<option value="${cat}" ${cat === "Paz Interior" ? "selected" : ""}>${cat}</option>`
+            `<option value="${cat}" ${cat === "Confianza" ? "selected" : ""}>${cat}</option>`
         ).join('');
     }
 

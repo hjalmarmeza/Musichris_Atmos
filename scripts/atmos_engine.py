@@ -58,22 +58,38 @@ def generate_atmos_video(duration_secs, theme, output_name):
         with open('data/disabled_songs.json', 'r') as f:
             disabled_songs = json.load(f)
     
-    # NUEVO: Grupos Maestros por palabras clave
+    # NUEVO: 20 Categorías Granulares
     groups = {
-        "Paz & Reposo": ["paz", "reposo", "descanso", "quietud", "calma", "refugio", "confianza", "seguridad", "alivio", "misericordia", "no temas"],
-        "Guerra & Fortaleza": ["guerra", "poder", "fortaleza", "victoria final", "valentía", "inmunidad", "protección", "defensa", "triunfo", "poder"],
-        "Adoración & Intimidad": ["adoración", "intimidad", "selah", "santidad", "anhelo", "sed", "presencia", "majestad", "celestial"],
-        "Victoria & Gozo": ["victoria", "gozo", "celebración", "gratitud", "exaltación", "joyful", "victoria"],
-        "Avivamiento & Gracia": ["avivamiento", "gracia", "restauración", "redención", "renovación", "espíritu", "fuego", "despertar", "misericordia"]
+        "Refugio": ["refugio", "amparo", "abrigo"],
+        "Confianza": ["confianza", "creer", "fe"],
+        "Descanso": ["descanso", "reposo", "quietud", "calma"],
+        "Noche": ["noche", "medianoche", "madrugada", "seguro"],
+        "Guerra Espiritual": ["guerra", "batalla", "ejército"],
+        "Poder": ["poder", "autoridad", "fuerza"],
+        "Fortaleza": ["fortaleza", "roca", "castillo"],
+        "Victoria Final": ["victoria final", "triunfo eterno"],
+        "Adoración Celestial": ["adoración", "celestial", "trono"],
+        "Selah": ["selah", "meditación", "intimidad"],
+        "Santidad": ["santidad", "santo", "puro"],
+        "Intimidad": ["intimidad", "secreto", "presencia"],
+        "Victoria": ["victoria", "vencer", "triunfo"],
+        "Gozo": ["gozo", "alegría", "deleite"],
+        "Celebración": ["celebración", "fiesta", "exaltación"],
+        "Gratitud": ["gratitud", "gracias", "reconocimiento"],
+        "Avivamiento": ["avivamiento", "despertar", "fuego"],
+        "Restauración": ["restauración", "restitución", "sanidad"],
+        "Renovación": ["renovación", "nuevo", "transformación"],
+        "Redención": ["redención", "rescate", "gracia"]
     }
 
-    # Filtrar por palabras clave si el tema es un grupo maestro
+    # Filtrar por palabras clave profundas
     eligible_songs = []
     keywords = groups.get(theme, [theme.lower()])
     
     for s in catalog:
         if s['title'] in disabled_songs: continue
-        song_text = (",".join(s.get('moments', [])) + " " + s.get('theme', '')).lower()
+        # Escaneo profundo de campos
+        song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
         
         if any(k in song_text for k in keywords):
             eligible_songs.append(s)
