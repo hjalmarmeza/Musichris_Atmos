@@ -232,11 +232,27 @@ function ensureVideoPlay() {
 // INIT
 window.onload = () => {
     if (videoElement) {
-        videoElement.play().catch(() => {
-            console.log("Esperando interacción para video...");
-            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
-            document.addEventListener('touchstart', () => videoElement.play(), { once: true });
-        });
+        videoElement.muted = true;
+        videoElement.defaultMuted = true;
+        
+        const forcePlay = () => {
+            videoElement.play().then(() => {
+                console.log("🔥 Fondo iniciado con éxito.");
+                document.removeEventListener('click', forcePlay);
+                document.removeEventListener('touchstart', forcePlay);
+            }).catch(e => console.log("Reintentando fondo..."));
+        };
+
+        forcePlay();
+        // Escudo persistente
+        document.addEventListener('click', forcePlay);
+        document.addEventListener('touchstart', forcePlay);
+        
+        // Reintento en bucle por si el DOM no estaba listo
+        let retry = setInterval(() => {
+            if (!videoElement.paused) clearInterval(retry);
+            else forcePlay();
+        }, 2000);
     }
     loadData();
     if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;
