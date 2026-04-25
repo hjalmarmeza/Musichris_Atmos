@@ -17,6 +17,25 @@ CROSS_MAP = {
     "Gracia Renovadora": ["Restauración", "Poder"]
 }
 
+# FRASES SEO POTENTES (Algoritmo)
+SEO_PHRASES = {
+    "Refugio": "Música para buscar Refugio y Paz",
+    "Confianza": "Música para fortalecer tu Fe y Confianza",
+    "Descanso": "Música para un Descanso Profundo",
+    "Paz Interior": "Música para alcanzar Paz Interior",
+    "Intimidad": "Música para orar en Intimidad con Dios",
+    "Poder": "Música de Adoración y Poder Celestial",
+    "Restauración": "Música para Sanar y Restaurar tu Alma",
+    "Avivamiento": "Música para Despertar el Avivamiento",
+    "Guerra Espiritual": "Música para Vencer en la Batalla",
+    "Victoria & Gozo": "Música de Victoria y Gozo Eterno",
+    "Serenidad Profunda": "Música para una Serenidad Profunda",
+    "Roca de Salvación": "Música para tu Roca de Salvación",
+    "Presencia Sagrada": "Música para entrar en su Presencia Sagrada",
+    "Triunfo Espiritual": "Música para un Triunfo Espiritual",
+    "Gracia Renovadora": "Música de Gracia Renovadora"
+}
+
 def clean_assets():
     assets_dir = os.path.join(BASE_DIR, 'assets')
     for f in os.listdir(assets_dir):
@@ -49,26 +68,28 @@ def generate_thumbnail_intelligent(theme1, output_name, landscape_url, songs, th
     subprocess.run(["/opt/homebrew/bin/ffmpeg", "-y", "-ss", "00:00:05", "-i", landscape_url, "-frames:v", "1", temp_frame], capture_output=True)
     img = Image.open(temp_frame).convert('RGBA') if os.path.exists(temp_frame) else Image.new('RGB', (1280, 720), (20,20,20))
     draw = ImageDraw.Draw(img, 'RGBA')
-    title_text = f"MÚSICA PARA {theme1.upper()}"
-    if theme2 and theme2 != "none": title_text = f"{theme1.upper()} & {theme2.upper()}"
+    phrase = SEO_PHRASES.get(theme1, f"Música para {theme1}")
+    title_text = phrase.upper()
+    
     box_w = 900; box_h = 320; box_x = (1280 - box_w) / 2; box_y = (720 - box_h) / 2
     draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=40, fill=(0,0,0,180), outline=(197,160,89,255), width=6)
-    draw.text((640, 360 - 50), title_text, font=get_font(70), fill="#C5A059", anchor="mm")
-    draw.text((640, 360 + 40), "ADORACIÓN Y DESCANSO PROFUNDO", font=get_font(38), fill="#F5F5DC", anchor="mm")
-    draw.text((640, box_y + box_h - 50), "@MusiChris_Studio", font=get_font(28), fill="#C5A059", anchor="mm")
+    draw.text((640, 360 - 50), title_text, font=get_font(60), fill="#C5A059", anchor="mm")
+    draw.text((640, 360 + 50), "ADORACIÓN Y DESCANSO PROFUNDO", font=get_font(34), fill="#F5F5DC", anchor="mm")
+    draw.text((640, box_y + box_h - 40), "@MusiChris_Studio", font=get_font(28), fill="#C5A059", anchor="mm")
     img.convert('RGB').save(thumb_path, "JPEG", quality=95)
     if os.path.exists(temp_frame): os.remove(temp_frame)
 
 def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=None):
     meta_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_META.txt")
-    final_theme = f"{theme1.upper()} Y {theme2.upper()}" if theme2 and theme2 != "none" else theme1.upper()
+    phrase = SEO_PHRASES.get(theme1, theme1.upper())
     with open(meta_path, 'w') as f:
-        f.write(f"TITLE:\n💎 {final_theme}: ADORACIÓN Y DESCANSO | Sesión Atmos Completa\n\n")
+        f.write(f"TITLE:\n💎 {phrase}: ADORACIÓN Y DESCANSO | Sesión Atmos Completa\n\n")
         f.write(f"DESCRIPTION:\n✨ BIENVENIDO A MUSICHRIS STUDIO ✨\n\nCaminemos juntos en fe con esta sesión diseñada para tu alma.\n\n📍 CAPÍTULOS:\n")
         acc = 0
         for s in selected_songs:
             m = acc // 60; s_ = acc % 60
-            f.write(f"[{m:02d}:{s_:02d}] {s['title']} - {s.get('verse', 'Salmos 23')}\n")
+            v = s.get('context', {}).get('verse', 'Salmos 23')
+            f.write(f"[{m:02d}:{s_:02d}] {s['title']} - {v}\n")
             acc += get_song_duration(s)
         f.write(f"\n#MusiChris #Atmos #Worship #PazInterior #Fe #CaminemosJuntosEnFe\n")
 

@@ -18,21 +18,21 @@ let isLocalAvailable = false;
 
 // LISTA MAESTRA DE ATMÓSFERAS (10 Puras + 5 Cruces)
 const MASTER_ATMOSPHERES = [
-    { id: "Refugio", name: "🛡️ Refugio", type: "pura" },
-    { id: "Confianza", name: "⚓ Confianza", type: "pura" },
-    { id: "Descanso", name: "🌿 Descanso", type: "pura" },
-    { id: "Paz Interior", name: "🌙 Paz Interior", type: "pura" },
-    { id: "Intimidad", name: "🕊️ Intimidad", type: "pura" },
-    { id: "Poder", name: "👑 Poder", type: "pura" },
-    { id: "Restauración", name: "🩹 Restauración", type: "pura" },
-    { id: "Avivamiento", name: "🔥 Avivamiento", type: "pura" },
-    { id: "Guerra Espiritual", name: "⚔️ Guerra Espiritual", type: "pura" },
-    { id: "Victoria & Gozo", name: "🎉 Victoria & Gozo", type: "pura" },
-    { id: "Serenidad Profunda", name: "🌊 Serenidad Profunda (Paz + Descanso)", type: "cruce", parts: ["Paz Interior", "Descanso"] },
-    { id: "Roca de Salvación", name: "⚓ Roca de Salvación (Refugio + Confianza)", type: "cruce", parts: ["Refugio", "Confianza"] },
-    { id: "Presencia Sagrada", name: "✨ Presencia Sagrada (Intimidad + Avivamiento)", type: "cruce", parts: ["Intimidad", "Avivamiento"] },
-    { id: "Triunfo Espiritual", name: "🛡️ Triunfo Espiritual (Guerra + Victoria)", type: "cruce", parts: ["Guerra Espiritual", "Victoria & Gozo"] },
-    { id: "Gracia Renovadora", name: "💎 Gracia Renovadora (Restauración + Poder)", type: "cruce", parts: ["Restauración", "Poder"] }
+    { id: "Refugio", name: "🛡️ Refugio", type: "pura", phrase: "Música para buscar Refugio y Paz" },
+    { id: "Confianza", name: "⚓ Confianza", type: "pura", phrase: "Música para fortalecer tu Fe y Confianza" },
+    { id: "Descanso", name: "🌿 Descanso", type: "pura", phrase: "Música para un Descanso Profundo" },
+    { id: "Paz Interior", name: "🌙 Paz Interior", type: "pura", phrase: "Música para alcanzar Paz Interior" },
+    { id: "Intimidad", name: "🕊️ Intimidad", type: "pura", phrase: "Música para orar en Intimidad con Dios" },
+    { id: "Poder", name: "👑 Poder", type: "pura", phrase: "Música de Adoración y Poder Celestial" },
+    { id: "Restauración", name: "🩹 Restauración", type: "pura", phrase: "Música para Sanar y Restaurar tu Alma" },
+    { id: "Avivamiento", name: "🔥 Avivamiento", type: "pura", phrase: "Música para Despertar el Avivamiento" },
+    { id: "Guerra Espiritual", name: "⚔️ Guerra Espiritual", type: "pura", phrase: "Música para Vencer en la Batalla" },
+    { id: "Victoria & Gozo", name: "🎉 Victoria & Gozo", type: "pura", phrase: "Música de Victoria y Gozo Eterno" },
+    { id: "Serenidad Profunda", name: "🌊 Serenidad Profunda", type: "cruce", parts: ["Paz Interior", "Descanso"], phrase: "Música para una Serenidad Profunda" },
+    { id: "Roca de Salvación", name: "⚓ Roca de Salvación", type: "cruce", parts: ["Refugio", "Confianza"], phrase: "Música para tu Roca de Salvación" },
+    { id: "Presencia Sagrada", name: "✨ Presencia Sagrada", type: "cruce", parts: ["Intimidad", "Avivamiento"], phrase: "Música para entrar en su Presencia Sagrada" },
+    { id: "Triunfo Espiritual", name: "🛡️ Triunfo Espiritual", type: "cruce", parts: ["Guerra Espiritual", "Victoria & Gozo"], phrase: "Música para un Triunfo Espiritual" },
+    { id: "Gracia Renovadora", name: "💎 Gracia Renovadora", type: "cruce", parts: ["Restauración", "Poder"], phrase: "Música de Gracia Renovadora" }
 ];
 
 // --- INICIALIZACIÓN ---
@@ -212,7 +212,7 @@ function updatePreview() {
     const displayVerse = document.getElementById('preview-text-verse');
     const mainDisplay = document.getElementById('display-theme');
 
-    if (displayTitle) displayTitle.textContent = `MÚSICA PARA ${atm.id.toUpperCase()}`;
+    if (displayTitle) displayTitle.textContent = atm.phrase.toUpperCase();
     if (displayVerse) displayVerse.textContent = atm.type === 'pura' ? 'DIAMOND PURE SESSION' : 'DIAMOND CROSSOVER';
     if (mainDisplay) mainDisplay.textContent = `Atmos: ${atm.id}`;
 }
