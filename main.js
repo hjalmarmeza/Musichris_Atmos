@@ -95,13 +95,16 @@ async function setupAtmosphereSelectors(catalog) {
                 const rem = total - used;
                 label += ` (${rem} nuevas / ${total} total)`;
             } else if (atm.type === "cruce") {
-                // Para cruces, sumamos el pool disponible de ambas partes
-                const p1 = stats[atm.parts[0]]?.total || 0;
-                const p2 = stats[atm.parts[1]]?.total || 0;
-                label += ` (${p1 + p2} disponibles)`;
+                // Obtener pool único para el cruce
+                const pool = masterCatalog.filter(s => (s.moments || []).some(m => (atm.parts || []).includes(m)));
+                label += ` (${pool.length} disponibles)`;
             }
             return `<option value="${atm.id}">${label}</option>`;
         }).join('');
+
+        // Listener para actualizar Preview dinámico
+        prodTheme.addEventListener('change', updatePreview);
+        updatePreview(); // Inicial
     }
 
     if (catalogFilter) {
@@ -199,6 +202,25 @@ async function launchProduction() {
     btnLaunch.disabled = false;
     btnLaunch.textContent = "PRODUCIR ATMOS DIAMOND";
 }
+
+function updatePreview() {
+    const selectedId = prodTheme.value;
+    const atm = MASTER_ATMOSPHERES.find(a => a.id === selectedId);
+    if (!atm) return;
+
+    const displayTitle = document.getElementById('preview-text-title');
+    const displayVerse = document.getElementById('preview-text-verse');
+    const mainDisplay = document.getElementById('display-theme');
+
+    if (displayTitle) displayTitle.textContent = `MÚSICA PARA ${atm.id.toUpperCase()}`;
+    if (displayVerse) displayVerse.textContent = atm.type === 'pura' ? 'DIAMOND PURE SESSION' : 'DIAMOND CROSSOVER';
+    if (mainDisplay) mainDisplay.textContent = `Atmos: ${atm.id}`;
+}
+
+// Global para los botones de desactivar
+window.toggleSong = toggleSong;
+window.switchView = switchView;
+window.filterCatalog = filterCatalog;
 
 function switchView(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
