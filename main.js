@@ -90,8 +90,15 @@ async function setupAtmosphereSelectors(catalog) {
         prodTheme.innerHTML = MASTER_ATMOSPHERES.map(atm => {
             let label = atm.name;
             if (atm.type === "pura") {
-                const rem = (stats[atm.id]?.total || 0) - (stats[atm.id]?.used || 0);
-                label += ` (${rem} nuevas)`;
+                const total = stats[atm.id]?.total || 0;
+                const used = stats[atm.id]?.used || 0;
+                const rem = total - used;
+                label += ` (${rem} nuevas / ${total} total)`;
+            } else if (atm.type === "cruce") {
+                // Para cruces, sumamos el pool disponible de ambas partes
+                const p1 = stats[atm.parts[0]]?.total || 0;
+                const p2 = stats[atm.parts[1]]?.total || 0;
+                label += ` (${p1 + p2} disponibles)`;
             }
             return `<option value="${atm.id}">${label}</option>`;
         }).join('');
@@ -99,7 +106,7 @@ async function setupAtmosphereSelectors(catalog) {
 
     if (catalogFilter) {
         catalogFilter.innerHTML = `<option value="all">Ver Todas las Canciones</option>` + 
-            MASTER_ATMOSPHERES.filter(a => a.type === "pura").map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            MASTER_ATMOSPHERES.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
     }
 }
 
