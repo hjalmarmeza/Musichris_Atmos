@@ -98,17 +98,38 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     with open(os.path.join(BASE_DIR, 'data/soul_reflections.json'), 'r') as f:
         reflections_data = json.load(f)
     
+    # Cargar Historial de Uso
+    history_path = os.path.join(BASE_DIR, 'data/usage_history.json')
+    used_titles = []
+    if os.path.exists(history_path):
+        try:
+            with open(history_path, 'r') as f:
+                history_data = json.load(f)
+                used_titles = [item['title'] for item in history_data if item.get('atmosphere') == theme1]
+        except: pass
+
     target_themes_1 = ATMOSPHERE_MAP.get(theme1, [theme1])
     target_themes_2 = ATMOSPHERE_MAP.get(theme2, [theme2]) if theme2 and theme2 != "none" else []
 
+    # Filtrar canciones relevantes
     relevant_songs_1 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_1)]
     relevant_songs_2 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_2)] if target_themes_2 else []
     
+    # Aplicar filtro de USO solo para atmósfera PURA (si theme2 es none)
+    if not theme2 or theme2 == "none":
+        original_count = len(relevant_songs_1)
+        relevant_songs_1 = [s for s in relevant_songs_1 if s['title'] not in used_titles]
+        if not relevant_songs_1 and original_count > 0:
+            print(f"⚠️ [AVISO] Inventario agotado para '{theme1}'. Repitiendo catálogo.")
+            relevant_songs_1 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_1)]
+
     selected_songs = []
     current_audio_time = 0
     random.shuffle(relevant_songs_1)
+    
     if theme2 and theme2 != "none":
         random.shuffle(relevant_songs_2)
+        # En cruces, mezclamos ambas listas
         for s in relevant_songs_1:
             if current_audio_time >= duration_secs/2: break
             selected_songs.append(s); current_audio_time += get_song_duration(s)
@@ -119,6 +140,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         for s in relevant_songs_1:
             if current_audio_time >= duration_secs: break
             selected_songs.append(s); current_audio_time += get_song_duration(s)
+
 
     # FILTRAR CANCIONES VÁLIDAS
     selected_songs = [s for s in selected_songs if s.get('audio_url') and len(s['audio_url']) > 5]
@@ -233,8 +255,30 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     if not os.path.exists(output_path):
         print(f"❌ [ERROR] El video no se generó. Revisar logs de FFmpeg.")
         return
+    # 3. Registrar Uso en Historial
+    try:
+        history_path = os.path.join(BASE_DIR, 'data/usage_history.json')
+        history = []
+        if os.path.exists(history_path):
+            with open(history_path, 'r') as f: history = json.load(f)
+        
+        for s in selected_songs:
+            history.append({
+                "title": s['title'],
+                "atmosphere": theme1,
+                "date": str(subprocess.check_output(['date']).decode().strip()),
+                "render": output_name
+            })
+            
+        with open(history_path, 'w') as f:
+            json.dump(history, f, indent=4, ensure_ascii=False)
+        print(f"✅ [HISTORIAL] {len(selected_songs)} canciones marcadas como 'Usadas'.")
+    except Exception as e:
+        print(f"⚠️ Error al actualizar historial: {e}")
+
     generate_thumbnail_intelligent(theme1, output_name, selected_landscapes[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
+
     
     # 2. Intento de Subida Automática a YouTube
     try:

@@ -117,25 +117,67 @@ function renderCatalog(catalog, disabled = [], filter = 'all') {
     statFiltered.textContent = filtered.length;
 }
 
-function setupAtmosphereSelectors(catalog) {
+async function setupAtmosphereSelectors(catalog) {
+    // Cargar historial para estadísticas
+    let usageHistory = [];
+    try {
+        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/data/usage_history.json?t=${Date.now()}`);
+        if (res.ok) usageHistory = await res.json();
+    } catch(e) {}
+
     const stats = {};
     catalog.forEach(s => {
         s.moments.forEach(m => {
-            stats[m] = (stats[m] || 0) + 1;
+            if (!stats[m]) stats[m] = { total: 0, used: 0 };
+            stats[m].total++;
+            if (usageHistory.some(h => h.title === s.title && h.atmosphere === m)) {
+                stats[m].used++;
+            }
         });
     });
 
-    const activeThemes = Object.keys(stats).sort().filter(t => stats[t] > 0);
+    const activeThemes = Object.keys(stats).sort();
     
     // Select de Producción
-    const options = activeThemes.map(t => `<option value="${t}">${t} (${stats[t]} temas)</option>`).join('');
-    prodTheme.innerHTML = options;
-    prodTheme2.innerHTML = '<option value="none">Sin Cruce (Atmósfera Única)</option>' + options;
+    prodTheme.innerHTML = activeThemes.map(t => {
+        const remaining = stats[t].total - stats[t].used;
+        const statusIcon = remaining === 0 ? '⚠️' : '🟢';
+        return `<option value="${t}">${statusIcon} ${t} (${remaining} nuevas / ${stats[t].total} tot)</option>`;
+    }).join('');
+
+    prodTheme2.innerHTML = '<option value="none">Sin Cruce (Atmósfera Única)</option>' + 
+        activeThemes.map(t => `<option value="${t}">${t}</option>`).join('');
     
+    // Sugerencia Inteligente al cambiar
+    prodTheme.onchange = () => {
+        const theme = prodTheme.value;
+        const remaining = stats[theme].total - stats[theme].used;
+        if (remaining === 0) {
+            const suggestion = getSmartSuggestion(theme);
+            alert(`🛡️ [INVENTARIO AGOTADO] No quedan canciones nuevas en "${theme}".\n\n💡 SUGERENCIA DIAMOND: Prueba el cruce "${suggestion.name}" para reutilizar contenido con una nueva esencia.`);
+            prodTheme2.value = suggestion.partner;
+        }
+    };
+
     // Filtro de Catálogo
     catalogFilter.innerHTML = `<option value="all">Ver Todas (${catalog.length})</option>` + 
-        activeThemes.map(t => `<option value="${t}">${t} (${stats[t]})</option>`).join('');
+        activeThemes.map(t => `<option value="${t}">${t} (${stats[t].total})</option>`).join('');
 }
+
+function getSmartSuggestion(theme) {
+    const suggestions = {
+        "Refugio": { name: "Roca de Salvación", partner: "Confianza" },
+        "Confianza": { name: "Roca de Salvación", partner: "Refugio" },
+        "Descanso": { name: "Serenidad Profunda", partner: "Paz Interior" },
+        "Paz Interior": { name: "Serenidad Profunda", partner: "Descanso" },
+        "Intimidad": { name: "Presencia Sagrada", partner: "Avivamiento" },
+        "Avivamiento": { name: "Presencia Sagrada", partner: "Intimidad" },
+        "Guerra Espiritual": { name: "Triunfo Espiritual", partner: "Victoria & Gozo" },
+        "Victoria & Gozo": { name: "Triunfo Espiritual", partner: "Guerra Espiritual" }
+    };
+    return suggestions[theme] || { name: "Mezcla General", partner: "all" };
+}
+
 
 function filterCatalog() {
     renderCatalog(masterCatalog, [], catalogFilter.value);
