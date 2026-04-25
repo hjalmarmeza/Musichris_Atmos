@@ -8,18 +8,13 @@ from PIL import Image, ImageDraw, ImageFont
 # Rutas Absolutas
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# MAPEADO MAESTRO DE ATMÓSFERAS (Global)
-ATMOSPHERE_MAP = {
-    "Refugio": ["refugio", "seguridad", "alivio", "amparo", "abrigo", "protección", "identidad", "pertenencia", "esperanza"],
-    "Confianza": ["confianza", "ayuda", "fidelidad", "dirección", "soberanía", "creer", "fe", "estabilidad", "mano de dios"],
-    "Descanso": ["descanso", "paz", "quietud", "reposo", "meditación", "bienestar", "calma", "silencio"],
-    "Guerra Espiritual": ["guerra", "batalla", "ejército", "valentía", "defensa", "fortaleza", "poder", "victoria"],
-    "Poder": ["poder", "autoridad", "gloria", "majestad", "dominio", "grandeza", "soberanía", "hijo"],
-    "Victoria & Gozo": ["victoria", "gozo", "celebración", "triunfo", "alegría", "vencer", "reino"],
-    "Restauración": ["restauración", "gracia", "sanidad", "renovación", "perdón", "restitución", "redención", "bondad"],
-    "Avivamiento": ["avivamiento", "fuego", "espíritu", "santidad", "adoración", "intimidad", "anhelo", "presencia", "luz"],
-    "Paz Interior": ["paz", "descanso", "noche", "quietud", "dormir", "refugio", "seguro"],
-    "Intimidad": ["intimidad", "adoracion", "santidad", "presencia", "corazon", "amor"]
+# MAPEADO DE CRUCES
+CROSS_MAP = {
+    "Serenidad Profunda": ["Paz Interior", "Descanso"],
+    "Roca de Salvación": ["Refugio", "Confianza"],
+    "Presencia Sagrada": ["Intimidad", "Avivamiento"],
+    "Triunfo Espiritual": ["Guerra Espiritual", "Victoria & Gozo"],
+    "Gracia Renovadora": ["Restauración", "Poder"]
 }
 
 def clean_assets():
@@ -91,13 +86,26 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
                 used_titles = [item['title'] for item in history_data if item.get('atmosphere') == theme1]
         except: pass
 
-    target_themes_1 = ATMOSPHERE_MAP.get(theme1, [theme1])
-    target_themes_2 = ATMOSPHERE_MAP.get(theme2, [theme2]) if theme2 and theme2 != "none" else []
+    # Detectar si es un cruce
+    is_cross = theme1 in CROSS_MAP
+    if is_cross:
+        theme2 = CROSS_MAP[theme1][1]
+        theme1 = CROSS_MAP[theme1][0]
+        print(f"🔀 [CROSS] Detectado Cruce: {theme1} + {theme2}")
 
-    rel_1 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_1)]
-    rel_2 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_2)] if target_themes_2 else []
+    rel_1 = [s for s in catalog if theme1 in s.get('moments', [])]
+    rel_2 = [s for s in catalog if theme2 in s.get('moments', [])] if theme2 and theme2 != "none" else []
     
-    # Priorizar no usadas solo en Puras
+    combined_pool = rel_1 + rel_2
+    
+    # Filtrar usadas (solo para Puras, en Cruces se permiten repetidas según el usuario)
+    if not is_cross:
+        available_pool = [s for s in combined_pool if s['title'] not in used_titles]
+        if not available_pool: 
+            print("⚠️ [WARNING] No hay canciones nuevas, usando pool completo.")
+            available_pool = combined_pool
+    else:
+        available_pool = combined_pool
     if not theme2 or theme2 == "none":
         rel_1 = [s for s in rel_1 if s['title'] not in used_titles] or rel_1
 

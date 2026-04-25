@@ -4,7 +4,7 @@ import subprocess
 import os
 import json
 
-PORT = 8080
+PORT = 5001
 
 class AtmosHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -48,6 +48,15 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                     "Presencia": ["Adoración Celestial", "Santidad", "Intimidad"],
                     "Triunfo": ["Victoria", "Gozo", "Celebración", "Gratitud"],
                     "Renovación": ["Avivamiento", "Restauración", "Renovación", "Redención"]
+                }
+                
+                # MAPEADO DE CRUCES (Para el Motor)
+                CROSS_MAP = {
+                    "Serenidad Profunda": ["Paz Interior", "Descanso"],
+                    "Roca de Salvación": ["Refugio", "Confianza"],
+                    "Presencia Sagrada": ["Intimidad", "Avivamiento"],
+                    "Triunfo Espiritual": ["Guerra Espiritual", "Victoria & Gozo"],
+                    "Gracia Renovadora": ["Restauración", "Poder"]
                 }
                 
                 # Palabras clave por categoría
