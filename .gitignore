@@ -32,4 +32,6 @@ scripts/token.json
 # Datos Generados (Sincronización)
 data/*.json
 !data/landscapes_remote.json
+!data/usage_history.json
+!data/musichris_master_catalog.json
 
