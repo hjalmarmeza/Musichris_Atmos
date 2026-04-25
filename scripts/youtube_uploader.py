@@ -59,8 +59,11 @@ def get_authenticated_service():
     return build('youtube', 'v3', credentials=credentials)
 
 def upload_video(video_file, thumb_file, meta_file):
+    print(f"📡 [YOUTUBE] Iniciando proceso de autenticación...")
     youtube = get_authenticated_service()
-    if not youtube: return
+    if not youtube: 
+        print("❌ [YOUTUBE] No se pudo obtener el servicio de autenticación.")
+        return
 
     # Leer Metadatos
     with open(meta_file, 'r', encoding='utf-8') as f:
@@ -84,10 +87,16 @@ def upload_video(video_file, thumb_file, meta_file):
         }
     }
 
-    media = MediaFileUpload(video_file, chunksize=-1, resumable=True)
+    print(f"🚀 [YOUTUBE] Iniciando transferencia de medios (Resumable)...")
+    media = MediaFileUpload(video_file, chunksize=1024*1024, resumable=True)
     request = youtube.videos().insert(part=','.join(body.keys()), body=body, media_body=media)
     
-    response = request.execute()
+    response = None
+    while response is None:
+        status, response = request.next_chunk()
+        if status:
+            print(f"📊 [YOUTUBE] Progreso de subida: {int(status.progress() * 100)}%")
+            
     video_id = response.get('id')
     print(f"✅ [YOUTUBE] Video subido con ID: {video_id}")
 
