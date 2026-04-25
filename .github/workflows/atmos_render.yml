@@ -48,3 +48,12 @@ jobs:
           path: |
             renders/
             data/usage_history.json
+
+      - name: Persist History (Commit & Push)
+        if: success()
+        run: |
+          git config --global user.name "MusiChris Bot"
+          git config --global user.email "bot@musichris.com"
+          git add data/usage_history.json
+          git commit -m "💎 Sync: Atmos Production History Update [skip ci]" || echo "No changes to commit"
+          git push origin main
