@@ -22,7 +22,7 @@ def get_authenticated_service():
     
     # Soporte para CI (usar secreto si no hay pickle)
     if not credentials or not credentials.valid:
-        refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN")
+        refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN") or os.environ.get("YOUTUBE_TOKEN")
         if refresh_token:
             from google.oauth2.credentials import Credentials
             # Intentar cargar client_secrets si existe
