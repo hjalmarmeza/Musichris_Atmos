@@ -1,0 +1,25 @@
+{
+  "name": "musichris_atmos",
+  "version": "1.0.0",
+  "description": "**El corazón visual y espiritual de MusiChris Studio.**",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hjalmarmeza/Musichris_Atmos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hjalmarmeza/Musichris_Atmos/issues"
+  },
+  "homepage": "https://github.com/hjalmarmeza/Musichris_Atmos#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^7.19.0",
+    "googleapis": "^171.4.0"
+  }
+}

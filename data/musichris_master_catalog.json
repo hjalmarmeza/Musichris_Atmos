@@ -1357,5 +1357,20 @@
       "focus": "Épico e Inspirador",
       "bpm": 128
     }
+  },
+  {
+    "title": "Refugio Seguro",
+    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765972345/La_Torre_Mas_Alta_a5anau.mp3",
+    "moments": [
+      "Paz Interior",
+      "Restauración",
+      "Refugio"
+    ],
+    "context": {
+      "verse": "Salmo 62 / Salmo 18",
+      "theme": "Dios como Roca / Seguridad",
+      "focus": "Crear un espacio sonoro de seguridad (\"Safe place\"). La guitarra acústica representa esa sencillez de estar sentado en la entrada de una cueva, mirando la tormenta afuera, sabiendo que estás protegido.",
+      "bpm": 62
+    }
   }
 ]

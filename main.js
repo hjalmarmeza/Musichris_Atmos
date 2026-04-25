@@ -1,8 +1,8 @@
-// CONFIGURACIÓN SERVERLESS ATMOS v8.12
 const GITHUB_REPO = "hjalmarmeza/Musichris_Atmos";
 const CATALOG_PATH = "data/musichris_master_catalog.json";
 const DISABLED_PATH = "data/disabled_songs.json";
 const HISTORY_PATH = "data/production_history.json";
+const LANDSCAPES_PATH = "data/landscapes_remote.json";
 
 // ELEMENTOS UI
 const btnLaunch = document.getElementById('btn-launch');
@@ -51,11 +51,33 @@ async function ghFetch(path, options = {}) {
 
 // --- LÓGICA DE DATOS ---
 
+async function loadLandscapes() {
+    try {
+        const res = await fetch(`${LANDSCAPES_PATH}?t=${Date.now()}`);
+        const landscapes = await res.json();
+        const videoKeys = Object.keys(landscapes);
+        
+        if (videoKeys.length > 0) {
+            const randomVideo = videoKeys[Math.floor(Math.random() * videoKeys.length)];
+            const videoUrl = landscapes[randomVideo];
+            
+            console.log(`🎬 ATMOS: Cargando paisaje ${randomVideo}`);
+            videoElement.src = videoUrl;
+            videoElement.load();
+        }
+    } catch (e) {
+        console.warn("⚠️ Error cargando paisajes remotos, usando fallback.");
+    }
+}
+
 async function loadData() {
     try {
         // Cargar Catálogo (Desde Raw para mayor velocidad en lectura)
         const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}?t=${Date.now()}`);
         const catalog = await resCat.json();
+
+        // Cargar Paisajes de Google Drive
+        loadLandscapes();
 
         // Cargar Desactivadas
         let disabled = [];
@@ -235,6 +257,8 @@ function unlockExperience() {
     if (shield) {
         shield.classList.add('hidden');
         if (videoElement) {
+            // Re-pick a random landscape on enter for variety
+            loadLandscapes();
             videoElement.play().catch(e => console.log("Fallo final:", e));
         }
         // Small delay to ensure smooth transition

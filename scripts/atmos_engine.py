@@ -67,6 +67,33 @@ def create_reflection_overlay(text, output_path):
     draw.multiline_text((1280/2, 300 + padding), final_text, font=font, fill="white", anchor="mt", align="center", spacing=10)
     img.save(output_path)
 
+def create_song_info_overlay(title, verse, output_path):
+    # Overlay elegante para info de canción (esquina inferior derecha)
+    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    font_title = get_font(36)
+    font_verse = get_font(24)
+    
+    text_t = title.upper()
+    text_v = verse.upper()
+    
+    # Calcular dimensiones
+    tw_t = draw.textbbox((0, 0), text_t, font=font_title)[2]
+    tw_v = draw.textbbox((0, 0), text_v, font=font_verse)[2]
+    max_w = max(tw_t, tw_v)
+    
+    # Posición: Inferior Derecha
+    x_pos = 1280 - max_w - 80
+    y_pos = 720 - 150
+    
+    # Caja Glassmorphism pequeña
+    draw.rounded_rectangle([x_pos - 20, y_pos - 20, 1280 - 40, y_pos + 100], radius=20, fill=(0,0,0,180), outline=(197,160,89,100), width=2)
+    draw.text((x_pos, y_pos), text_t, font=font_title, fill="#C5A059") # Color Dorado Diamond
+    draw.text((x_pos, y_pos + 50), text_v, font=font_verse, fill="white")
+    
+    img.save(output_path)
+
 def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"🎬 [ATMOS ENGINE v9.0] Iniciando Producción Diamond...")
     clean_assets()
@@ -105,25 +132,44 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     for i, ref_text in enumerate(refs_list[:3]): # Máximo 3 por video
         path = os.path.join(BASE_DIR, f"assets/ref_{i}.png")
         create_reflection_overlay(ref_text, path)
-        start_t = (current_audio_time / 4) * (i+1)
-        reflection_overlays.append((path, start_t, start_t + 20)) # 20 segundos de duración para leer párrafos
+        # Distribuir reflexiones a lo largo del video
+        start_t = (duration_secs / 4) * (i+1)
+        reflection_overlays.append((path, start_t, start_t + 20)) 
 
-    # 2. Selección de Paisajes (Variación Dinámica)
-    paisajes_dir = os.path.join(BASE_DIR, 'ui/assets/Paisajes')
-    v_paisajes = [f for f in os.listdir(paisajes_dir) if f.endswith('.mp4')]
-    selected_landscapes = random.sample(v_paisajes, min(3, len(v_paisajes))) # Seleccionamos 3 paisajes diferentes
+    # 1.1 Crear Info de Canciones (Overlays Dinámicos)
+    song_overlays = []
+    accumulated_time = 0
+    for i, song in enumerate(selected_songs):
+        path = os.path.join(BASE_DIR, f"assets/song_{i}.png")
+        title = song.get('title', 'MusiChris')
+        verse = song.get('context', {}).get('verse', 'Salmos')
+        create_song_info_overlay(title, verse, path)
+        
+        # Mostrar info al inicio de cada canción por 12 segundos
+        song_overlays.append((path, accumulated_time + 2, accumulated_time + 14))
+        accumulated_time += song.get('duration_secs', 250)
+
+    # 2. Selección de Paisajes (Variación Dinámica desde la Nube)
+    with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f:
+        landscapes_map = json.load(f)
+    
+    video_keys = list(landscapes_map.keys())
+    selected_keys = random.sample(video_keys, min(3, len(video_keys)))
+    selected_landscapes = [landscapes_map[k] for k in selected_keys]
     
     # Comando FFmpeg Base
     cmd = ["ffmpeg", "-y"]
-    for lp in selected_landscapes: cmd += ["-stream_loop", "-1", "-i", os.path.join(paisajes_dir, lp)]
+    for l_url in selected_landscapes: 
+        cmd += ["-stream_loop", "-1", "-i", l_url]
     
     # Overlays fijos
     logo_path = os.path.join(BASE_DIR, "ui/assets/Logo Hjalmar Animado.mp4")
     cmd += ["-stream_loop", "-1", "-i", logo_path] # Logo [3] (si hay 3 paisajes) o [len(landscapes)]
     
     for r_ov in reflection_overlays: cmd += ["-i", r_ov[0]]
+    for s_ov in song_overlays: cmd += ["-i", s_ov[0]]
     
-    audio_idx = len(selected_landscapes) + 1 + len(reflection_overlays)
+    audio_idx = len(selected_landscapes) + 1 + len(reflection_overlays) + len(song_overlays)
     for s in selected_songs: cmd += ["-i", s['audio_url']]
 
     # Filtros de Video
@@ -145,9 +191,17 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     v_filters += f"[{last_v}][logo_clean]overlay=50:50[v_with_logo];"
     
     last_v = "v_with_logo"
+    # Overlays de Reflexión (Párrafos)
     for i, r_ov in enumerate(reflection_overlays):
         next_v = f"v_ref_{i}"
         v_filters += f"[{last_v}][{num_l+1+i}:v]overlay=0:0:enable='between(t,{r_ov[1]},{r_ov[2]})'[{next_v}];"
+        last_v = next_v
+
+    # Overlays de Canción (Título/Versículo)
+    start_idx_song = num_l + 1 + len(reflection_overlays)
+    for i, s_ov in enumerate(song_overlays):
+        next_v = f"v_song_{i}"
+        v_filters += f"[{last_v}][{start_idx_song+i}:v]overlay=0:0:enable='between(t,{s_ov[1]},{s_ov[2]})'[{next_v}];"
         last_v = next_v
 
     # Audio Concat
@@ -159,7 +213,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"🚀 Renderizando Video Híbrido con Variación de Paisajes...")
     subprocess.run(cmd)
     
-    generate_thumbnail_intelligent(theme1, output_name, os.path.join(paisajes_dir, selected_landscapes[0]), selected_songs, theme2)
+    # Usar el primer paisaje seleccionado para la miniatura
+    generate_thumbnail_intelligent(theme1, output_name, selected_landscapes[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
 
 def generate_thumbnail_intelligent(theme1, output_name, landscape_path, selected_songs, theme2=None):
