@@ -209,11 +209,9 @@ function updatePreview() {
     if (!atm) return;
 
     const displayTitle = document.getElementById('preview-text-title');
-    const displayVerse = document.getElementById('preview-text-verse');
     const mainDisplay = document.getElementById('display-theme');
 
     if (displayTitle) displayTitle.textContent = atm.phrase.toUpperCase();
-    if (displayVerse) displayVerse.textContent = atm.type === 'pura' ? 'DIAMOND PURE SESSION' : 'DIAMOND CROSSOVER';
     if (mainDisplay) mainDisplay.textContent = `Atmos: ${atm.id}`;
 }
 

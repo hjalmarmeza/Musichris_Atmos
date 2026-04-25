@@ -73,8 +73,7 @@ def generate_thumbnail_intelligent(theme1, output_name, landscape_url, songs, th
     
     box_w = 900; box_h = 320; box_x = (1280 - box_w) / 2; box_y = (720 - box_h) / 2
     draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=40, fill=(0,0,0,180), outline=(197,160,89,255), width=6)
-    draw.text((640, 360 - 50), title_text, font=get_font(60), fill="#C5A059", anchor="mm")
-    draw.text((640, 360 + 50), "ADORACIÓN Y DESCANSO PROFUNDO", font=get_font(34), fill="#F5F5DC", anchor="mm")
+    draw.text((640, 360), title_text, font=get_font(60), fill="#C5A059", anchor="mm")
     draw.text((640, box_y + box_h - 40), "@MusiChris_Studio", font=get_font(28), fill="#C5A059", anchor="mm")
     img.convert('RGB').save(thumb_path, "JPEG", quality=95)
     if os.path.exists(temp_frame): os.remove(temp_frame)
