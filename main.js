@@ -196,7 +196,39 @@ async function launchProduction() {
             else alert("❌ Error en el motor local.");
         } catch(e) { alert("⚠️ Error de conexión local."); }
     } else {
-        alert("☁️ Disparador Cloud (GitHub Actions) en desarrollo. Use el motor local por ahora.");
+        const ghToken = localStorage.getItem('GH_PAT') || prompt("Introduce tu GitHub Personal Access Token (PAT) para lanzar en la nube:");
+        if (!ghToken) return alert("Se requiere un Token para la producción Cloud.");
+        localStorage.setItem('GH_PAT', ghToken);
+
+        const repoOwner = "hjalmarmeza";
+        const repoName = "Musichris_Atmos";
+
+        try {
+            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/dispatches`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${ghToken}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    event_type: 'run-atmos',
+                    client_payload: {
+                        duration: parseInt(durationSelector.value),
+                        theme: prodTheme.value
+                    }
+                })
+            });
+
+            if (response.ok) {
+                alert(`🚀 ORDEN ENVIADA A GITHUB ACTIONS\nAtmósfera: ${prodTheme.value}\nDuración: ${durationSelector.value}s\n\nEl renderizado comenzará en unos segundos en la nube.`);
+            } else {
+                const err = await response.json();
+                alert(`❌ Error en el disparador Cloud: ${err.message}`);
+            }
+        } catch (error) {
+            alert("❌ Error de conexión con GitHub API.");
+        }
     }
     
     btnLaunch.disabled = false;

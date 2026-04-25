@@ -162,8 +162,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: landscapes = list(json.load(f).values())
     sel_lands = [random.choice(landscapes) for _ in range(3)]
     
-    # FFmpeg Command
-    cmd = ['/opt/homebrew/bin/ffmpeg', '-y', '-loop', '1', '-t', '5', '-i', intro_path]
+    # FFmpeg Command (Usar 'ffmpeg' genérico para CI/CD)
+    cmd = ['ffmpeg', '-y', '-loop', '1', '-t', '5', '-i', intro_path]
     for s in selected_songs: cmd += ['-i', s['audio_url']]
     for l in sel_lands: cmd += ['-stream_loop', '-1', '-i', l]
     cmd += ['-loop', '1', '-t', '5', '-i', outro_path]
@@ -208,5 +208,25 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     except: pass
     print(f"✅ Completado: {output_name}")
 
+import sys
+
 if __name__ == "__main__":
-    generate_atmos_video(600, "Paz Interior", "STUDIO_DIAMOND_FINAL")
+    # Argumentos: duration theme [output_name]
+    dur = int(sys.argv[1]) if len(sys.argv) > 1 else 600
+    thm = sys.argv[2] if len(sys.argv) > 2 else "Paz Interior"
+    
+    timestamp = time.strftime("%Y%m%d-%H%M")
+    out = f"ATMOS_{thm.replace(' ', '_')}_{timestamp}"
+    
+    generate_atmos_video(dur, thm, out)
+    
+    # Subir a YouTube (Opcional si estamos en local sin uploader listo)
+    try:
+        sys.path.append(os.path.join(BASE_DIR, 'scripts'))
+        import youtube_uploader
+        v_path = os.path.join(BASE_DIR, f"renders/{out}.mp4")
+        t_path = os.path.join(BASE_DIR, f"renders/{out}_THUMB.jpg")
+        m_path = os.path.join(BASE_DIR, f"renders/{out}_META.txt")
+        youtube_uploader.upload_video(v_path, t_path, m_path)
+    except Exception as e:
+        print(f"⚠️ Salto de subida automática: {e}")

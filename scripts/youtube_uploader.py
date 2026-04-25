@@ -20,8 +20,30 @@ def get_authenticated_service():
         with open(token_path, 'rb') as token:
             credentials = pickle.load(token)
     
+    # Soporte para CI (usar secreto si no hay pickle)
     if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
+        refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN")
+        if refresh_token:
+            from google.oauth2.credentials import Credentials
+            # Intentar cargar client_secrets si existe
+            client_id = os.environ.get("YOUTUBE_CLIENT_ID")
+            client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET")
+            
+            if not client_id and os.path.exists(secrets_path):
+                with open(secrets_path, 'r') as f:
+                    data = json.load(f)['installed']
+                    client_id = data['client_id']
+                    client_secret = data['client_secret']
+
+            credentials = Credentials(
+                None,
+                refresh_token=refresh_token,
+                token_uri="https://oauth2.googleapis.com/token",
+                client_id=client_id,
+                client_secret=client_secret,
+                scopes=SCOPES
+            )
+        elif credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
             if not os.path.exists(secrets_path):
@@ -30,8 +52,9 @@ def get_authenticated_service():
             flow = InstalledAppFlow.from_client_secrets_file(secrets_path, SCOPES)
             credentials = flow.run_local_server(port=0)
         
-        with open(token_path, 'wb') as token:
-            pickle.dump(credentials, token)
+        if credentials:
+            with open(token_path, 'wb') as token:
+                pickle.dump(credentials, token)
 
     return build('youtube', 'v3', credentials=credentials)
 
