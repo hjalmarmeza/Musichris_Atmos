@@ -35,8 +35,40 @@ const MASTER_ATMOSPHERES = [
     { id: "Gracia Renovadora", name: "💎 Gracia Renovadora", type: "cruce", parts: ["Restauración", "Poder"], phrase: "Música de Gracia Renovadora" }
 ];
 
-// --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', async () => {
+    // 🛡️ MODAL LOGIC (Integrity First)
+    const btnSettings = document.getElementById('btn-settings');
+    const modalSettings = document.getElementById('modal-settings');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    const btnSaveToken = document.getElementById('btn-save-token');
+    const tokenInput = document.getElementById('github-token-input');
+
+    if (btnSettings) {
+        btnSettings.addEventListener('click', () => {
+            modalSettings.classList.add('active');
+            tokenInput.value = localStorage.getItem('GH_PAT') || '';
+        });
+    }
+
+    if (btnCloseModal) {
+        btnCloseModal.addEventListener('click', () => {
+            modalSettings.classList.remove('active');
+        });
+    }
+
+    if (btnSaveToken) {
+        btnSaveToken.addEventListener('click', () => {
+            const token = tokenInput.value;
+            if (token) {
+                localStorage.setItem('GH_PAT', token);
+                alert("✅ GitHub Token guardado correctamente.");
+                modalSettings.classList.remove('active');
+            } else {
+                alert("❌ Por favor, ingresa un token válido.");
+            }
+        });
+    }
+
     await checkLocalServer();
     await loadCatalog();
     await loadHistory();
@@ -267,23 +299,3 @@ function unlockExperience() {
     if (bgVideo) bgVideo.play().catch(e => console.log("Autoplay blocked:", e));
 }
 
-// SETTINGS MODAL LOGIC
-document.getElementById('btn-settings').addEventListener('click', () => {
-    document.getElementById('modal-settings').classList.add('active');
-    document.getElementById('github-token-input').value = localStorage.getItem('GH_PAT') || '';
-});
-
-document.getElementById('btn-close-modal').addEventListener('click', () => {
-    document.getElementById('modal-settings').classList.remove('active');
-});
-
-document.getElementById('btn-save-token').addEventListener('click', () => {
-    const token = document.getElementById('github-token-input').value;
-    if (token) {
-        localStorage.setItem('GH_PAT', token);
-        alert("✅ GitHub Token guardado correctamente.");
-        document.getElementById('modal-settings').classList.remove('active');
-    } else {
-        alert("❌ Por favor, ingresa un token válido.");
-    }
-});
