@@ -19,6 +19,7 @@
 body {
     background: var(--bg-dark);
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     color: white;
     display: flex;
     justify-content: center;
@@ -51,7 +52,7 @@ body {
 .master-container {
     width: 100%;
     max-width: 480px;
-    padding: 40px 25px;
+    padding: calc(40px + env(safe-area-inset-top)) 25px calc(20px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     min-height: 100vh;
