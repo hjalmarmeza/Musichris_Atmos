@@ -9,11 +9,17 @@
 <body>
     <!-- FONDO ANIMADO BLINDADO -->
     <div class="video-bg">
-        <video id="bg-video" src="fondo_humo_azul.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto">
-            <source src="fondo_humo_azul.mp4" type="video/mp4">
-        </video>
+        <video id="bg-video" src="fondo_humo_azul.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
     </div>
     <div class="overlay"></div>
+
+    <!-- ESCUDO DE INTERACCION PARA AUTOPLAY -->
+    <div id="landing-shield" onclick="unlockExperience()">
+        <div class="shield-content">
+            <img src="assets/logo_atmos.png" alt="MusiChris Logo" class="shield-logo">
+            <p>Toca para Entrar a la Atmósfera</p>
+        </div>
+    </div>
 
     <div class="master-container">
         <!-- HEADER MAESTRO -->
@@ -24,9 +30,9 @@
 
         <!-- NAVEGACIÓN PÍLDORA -->
         <nav class="nav-pill">
-            <button class="nav-btn active" data-view="dashboard">PANEL</button>
-            <button class="nav-btn" data-view="catalog">TEMAS</button>
-            <button class="nav-btn" data-view="renders">HISTORIAL</button>
+                <div class="nav-btn active" onclick="switchView('home')">Producción</div>
+                <div class="nav-btn" onclick="switchView('catalog')">Catálogo <span id="total-songs-badge" class="badge-mini">0</span></div>
+                <div class="nav-btn" onclick="switchView('history')">Historial</div>
             <button id="btn-settings" class="nav-btn-icon">⚙️</button>
         </nav>
 
@@ -36,24 +42,29 @@
                 <div class="badge-status">SISTEMA LISTO</div>
                 <h2 id="display-theme">Producción: Confianza</h2>
                 <p class="quote">"Donde las palabras fallan, la música habla."</p>
+                
+                <!-- PREVISUALIZACIÓN DE MINIATURA (USER REQUEST) -->
+                <div class="preview-miniature glass">
+                    <img id="preview-landscape" src="assets/Paisajes/atardecer_sereno.jpg" alt="Preview Landscape" class="preview-img">
+                    <div class="preview-text-overlay">
+                        <span id="preview-text-title">TITULO DEL TEMA</span>
+                        <span id="preview-text-verse">Verso Bíblico del día</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <div class="input-wrapper">
-                    <label class="input-label">ATMÓSFERA MINISTERIAL</label>
-                    <select id="playlist-selector" class="input-box">
-                        <option value="Adoración Celestial">Adoración Celestial</option>
-                        <option value="Avivamiento">Avivamiento</option>
-                        <option value="Celebración">Celebración</option>
-                        <option value="Confianza" selected>Confianza</option>
-                        <option value="Descanso">Descanso</option>
-                        <option value="Fortaleza">Fortaleza</option>
-                        <option value="Gozo">Gozo</option>
-                        <option value="Gratitud">Gratitud</option>
-                        <option value="Guerra Espiritual">Guerra Espiritual</option>
-                        <option value="Intimidad">Intimidad</option>
-                        <option value="Paz Interior">Paz Interior</option>
-                        <option value="Victoria & Gozo">Victoria & Gozo</option>
+                    <label class="input-label">SELECCIONAR ATMÓSFERA</label>
+                    <select id="prod-theme" class="input-box">
+                        <!-- Opciones dinámicas -->
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">CRUCE CON (OPCIONAL)</label>
+                    <select id="prod-theme-2" class="input-box">
+                        <option value="none">Sin Cruce (Atmósfera Única)</option>
+                        <!-- Opciones dinámicas -->
                     </select>
                 </div>
 
@@ -82,16 +93,34 @@
             </div>
         </section>
 
-        <!-- SECCIÓN: TEMAS (CATÁLOGO) -->
-        <section id="view-catalog" class="view">
-            <div class="card-hero glass">
-                <h2>Catálogo Maestro</h2>
-                <p>Explora tu biblioteca ministerial</p>
+        <!-- VIEW: CATALOG -->
+        <div id="view-catalog" class="view">
+            <div class="status-grid">
+                <div class="status-card glass">
+                    <span class="status-label">TOTAL DISPONIBLES</span>
+                    <span id="stat-total" class="status-value">0</span>
+                </div>
+                <div class="status-card glass">
+                    <span class="status-label">POR ATMÓSFERA</span>
+                    <span id="stat-filtered" class="status-value">0</span>
+                </div>
             </div>
+            
+            <div class="input-wrapper">
+                <select id="catalog-filter" class="input-box" onchange="filterCatalog()">
+                    <option value="all">Ver Todas las Canciones</option>
+                    <option value="Paz Interior">Paz Interior</option>
+                    <option value="Guerra Espiritual">Guerra Espiritual</option>
+                    <option value="Intimidad">Intimidad</option>
+                    <option value="Victoria & Gozo">Victoria & Gozo</option>
+                    <option value="Restauración">Restauración</option>
+                </select>
+            </div>
+
             <div id="catalog-list" class="list-container">
-                <p class="loading-msg">Cargando biblioteca MusiChris Studio...</p>
+                <!-- Canciones dinámicas -->
             </div>
-        </section>
+        </div>
 
         <!-- SECCIÓN: HISTORIAL (RENDERS) -->
         <section id="view-renders" class="view">

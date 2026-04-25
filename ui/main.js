@@ -11,9 +11,14 @@ const durationSelector = document.getElementById('duration-selector');
 const displayTheme = document.getElementById('display-theme');
 const catalogList = document.getElementById('catalog-list');
 const historyList = document.getElementById('history-list');
-const videoElement = document.getElementById('bg-video');
+const prodTheme = document.getElementById('prod-theme');
+const prodTheme2 = document.getElementById('prod-theme-2');
+const catalogFilter = document.getElementById('catalog-filter');
+const totalSongsBadge = document.getElementById('total-songs-badge');
+const statTotal = document.getElementById('stat-total');
+const statFiltered = document.getElementById('stat-filtered');
 
-// MODAL SETTINGS
+let masterCatalog = [];
 const modalSettings = document.getElementById('modal-settings');
 const btnSettings = document.getElementById('btn-settings');
 const btnCloseModal = document.getElementById('btn-close-modal');
@@ -56,6 +61,7 @@ async function loadData() {
         // Cargar Catálogo (Desde Raw para mayor velocidad en lectura)
         const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}?t=${Date.now()}`);
         const catalog = await resCat.json();
+        masterCatalog = catalog;
 
         // Cargar Desactivadas
         let disabled = [];
@@ -65,6 +71,8 @@ async function loadData() {
         } catch(e) { console.warn("Usando lista vacía."); }
 
         renderCatalog(catalog, disabled);
+        updatePreview(catalog);
+        setupAtmosphereSelectors(catalog);
         loadHistory();
     } catch (err) {
         console.error("Error cargando datos:", err);
@@ -100,6 +108,66 @@ function renderCatalog(catalog, disabled) {
         `;
         catalogList.appendChild(item);
     });
+    
+    // Update stats
+    totalSongsBadge.textContent = masterCatalog.length;
+    statTotal.textContent = masterCatalog.length;
+    statFiltered.textContent = filtered.length;
+}
+
+function setupAtmosphereSelectors(catalog) {
+    const stats = {};
+    catalog.forEach(s => {
+        s.moments.forEach(m => {
+            stats[m] = (stats[m] || 0) + 1;
+        });
+    });
+
+    // Filtramos atmósferas con 0 canciones
+    const activeThemes = Object.keys(stats).filter(t => stats[t] > 0);
+    
+    // Actualizar Select de Producción
+    const options = activeThemes.map(t => `<option value="${t}">${t} (${stats[t]} temas)</option>`).join('');
+    prodTheme.innerHTML = options;
+    prodTheme2.innerHTML = '<option value="none">Sin Cruce (Atmósfera Única)</option>' + options;
+    
+    // Actualizar Filtro de Catálogo
+    catalogFilter.innerHTML = `<option value="all">Ver Todas (${catalog.length})</option>` + 
+        activeThemes.map(t => `<option value="${t}">${t} (${stats[t]})</option>`).join('');
+}
+
+function filterCatalog() {
+    const val = catalogFilter.value;
+    renderCatalog(masterCatalog, [], val);
+}
+
+function updatePreview(catalog) {
+    if (!catalog.length) return;
+    
+    // Paisajes disponibles (Hardcoded based on the assets folder)
+    const landscapes = [
+        "atardecer_sereno.jpg",
+        "bosque_niebla.jpg",
+        "montana_glacial.jpg",
+        "oceano_profundo.jpg",
+        "pradera_oro.jpg",
+        "valle_estrellado.jpg"
+    ];
+
+    let currentIndex = 0;
+    
+    function cycle() {
+        const song = catalog[Math.floor(Math.random() * catalog.length)];
+        const landscape = landscapes[Math.floor(Math.random() * landscapes.length)];
+        
+        previewLandscape.src = `assets/Paisajes/${landscape}`;
+        previewTitle.textContent = song.title;
+        previewVerse.textContent = song.verse || "MusiChris Studio";
+        
+        setTimeout(cycle, 5000);
+    }
+    
+    cycle();
 }
 
 async function toggleSong(title) {
@@ -229,30 +297,27 @@ function ensureVideoPlay() {
     }
 }
 
+// UNLOCK EXPERIENCE (FOR AUTOPLAY)
+function unlockExperience() {
+    const shield = document.getElementById('landing-shield');
+    if (shield) {
+        shield.classList.add('hidden');
+        if (videoElement) {
+            videoElement.play().catch(e => console.log("Fallo final:", e));
+        }
+        // Small delay to ensure smooth transition
+        setTimeout(() => shield.style.display = 'none', 1000);
+    }
+}
+
 // INIT
 window.onload = () => {
+    // Initial attempt (some browsers might allow it)
     if (videoElement) {
         videoElement.muted = true;
-        videoElement.defaultMuted = true;
-        
-        const forcePlay = () => {
-            videoElement.play().then(() => {
-                console.log("🔥 Fondo iniciado con éxito.");
-                document.removeEventListener('click', forcePlay);
-                document.removeEventListener('touchstart', forcePlay);
-            }).catch(e => console.log("Reintentando fondo..."));
-        };
-
-        forcePlay();
-        // Escudo persistente
-        document.addEventListener('click', forcePlay);
-        document.addEventListener('touchstart', forcePlay);
-        
-        // Reintento en bucle por si el DOM no estaba listo
-        let retry = setInterval(() => {
-            if (!videoElement.paused) clearInterval(retry);
-            else forcePlay();
-        }, 2000);
+        videoElement.play().catch(() => {
+            console.log("🛡️ Escudo de interacción activo.");
+        });
     }
     loadData();
     if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;

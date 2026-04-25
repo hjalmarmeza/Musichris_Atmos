@@ -9,11 +9,17 @@
 <body>
     <!-- FONDO ANIMADO BLINDADO -->
     <div class="video-bg">
-        <video id="bg-video" src="fondo_humo_azul.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto">
-            <source src="fondo_humo_azul.mp4" type="video/mp4">
-        </video>
+        <video id="bg-video" src="fondo_humo_azul.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
     </div>
     <div class="overlay"></div>
+
+    <!-- ESCUDO DE INTERACCION PARA AUTOPLAY -->
+    <div id="landing-shield" onclick="unlockExperience()">
+        <div class="shield-content">
+            <img src="assets/logo_atmos.png" alt="MusiChris Logo" class="shield-logo">
+            <p>Toca para Entrar a la Atmósfera</p>
+        </div>
+    </div>
 
     <div class="master-container">
         <!-- HEADER MAESTRO -->

@@ -4,308 +4,192 @@ import random
 import subprocess
 from PIL import Image, ImageDraw, ImageFont
 
-# Rutas Absolutas para ejecución en servidor
+# Rutas Absolutas
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# MAPEADO MAESTRO DE ATMÓSFERAS (Global)
+ATMOSPHERE_MAP = {
+    "Refugio": ["refugio", "seguridad", "alivio", "amparo", "abrigo", "protección", "identidad", "pertenencia", "esperanza"],
+    "Confianza": ["confianza", "ayuda", "fidelidad", "dirección", "soberanía", "creer", "fe", "estabilidad", "mano de dios"],
+    "Descanso": ["descanso", "paz", "quietud", "reposo", "meditación", "bienestar", "calma", "silencio"],
+    "Guerra Espiritual": ["guerra", "batalla", "ejército", "valentía", "defensa", "fortaleza", "poder", "victoria"],
+    "Poder": ["poder", "autoridad", "gloria", "majestad", "dominio", "grandeza", "soberanía", "hijo"],
+    "Victoria & Gozo": ["victoria", "gozo", "celebración", "triunfo", "alegría", "vencer", "reino"],
+    "Restauración": ["restauración", "gracia", "sanidad", "renovación", "perdón", "restitución", "redención", "bondad"],
+    "Avivamiento": ["avivamiento", "fuego", "espíritu", "santidad", "adoración", "intimidad", "anhelo", "presencia", "luz"],
+    "Paz Interior": ["paz", "descanso", "noche", "quietud", "dormir", "refugio", "seguro"],
+    "Intimidad": ["intimidad", "adoracion", "santidad", "presencia", "corazon", "amor"]
+}
 
 def clean_assets():
     assets_dir = os.path.join(BASE_DIR, 'assets')
     renders_dir = os.path.join(BASE_DIR, 'renders')
-    
-    # Limpiar assets temporales
     for f in os.listdir(assets_dir):
         if f.endswith('.png') and ('master' in f or 'ref' in f or 'overlay' in f or 'song' in f):
             try: os.remove(os.path.join(assets_dir, f))
             except: pass
-            
-    # Limpiar renders anteriores para ahorrar espacio
     if os.path.exists(renders_dir):
         for f in os.listdir(renders_dir):
             if f.endswith(('.mp4', '.jpg', '.json')):
                 try: os.remove(os.path.join(renders_dir, f))
                 except: pass
 
+def get_font(size):
+    paths = ["/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", "/System/Library/Fonts/Supplemental/Baskerville.ttc", "arial.ttf"]
+    for p in paths:
+        if os.path.exists(p): return ImageFont.truetype(p, size)
+    return ImageFont.load_default()
+
 def create_reflection_overlay(text, output_path):
+    # Imagen de alta resolución para párrafos
     img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    try: font = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 65)
-    except: font = ImageFont.load_default()
-    tw, th = draw.textbbox((0, 0), text, font=font)[2:4]
-    draw.rounded_rectangle([(1280-tw)/2-40, 300, (1280+tw)/2+40, 300+th+40], radius=20, fill=(0,0,0,130))
-    draw.text((1280/2, 300+20), text, font=font, fill="white", anchor="mt")
+    font = get_font(32) # Tamaño ideal para párrafos
+    
+    # Envolver texto (Word Wrap)
+    words = text.split()
+    lines = []
+    current_line = []
+    for word in words:
+        current_line.append(word)
+        tw = draw.textbbox((0, 0), " ".join(current_line), font=font)[2]
+        if tw > 800:
+            lines.append(" ".join(current_line[:-1]))
+            current_line = [word]
+    lines.append(" ".join(current_line))
+    
+    final_text = "\n".join(lines)
+    tw, th = draw.multiline_textbbox((0, 0), final_text, font=font, align="center")[2:4]
+    
+    padding = 50
+    # Caja Glassmorphism
+    draw.rounded_rectangle([(1280-tw)/2 - padding, 300, (1280+tw)/2 + padding, 300 + th + padding*2], radius=40, fill=(0,0,0,160), outline=(255,255,255,40), width=1)
+    draw.multiline_text((1280/2, 300 + padding), final_text, font=font, fill="white", anchor="mt", align="center", spacing=10)
     img.save(output_path)
 
-def create_master_overlays(main_title, output_prefix):
-    # Intro
-    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    try: 
-        f_main = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 85)
-        f_sub = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 40)
-    except: f_main = f_sub = ImageFont.load_default()
-    tw, th = draw.textbbox((0, 0), main_title, font=f_main)[2:4]
-    draw.rounded_rectangle([(1280-tw)/2-50, 250, (1280+tw)/2+50, 250+th+120], radius=25, fill=(0,0,0,180))
-    draw.text((1280/2, 280), main_title, font=f_main, fill="white", anchor="mt")
-    draw.text((1280/2, 280+th+20), "¡CAMINEMOS JUNTOS EN FE!", font=f_sub, fill=(255,255,255,200), anchor="mt")
-    img.save(f"{output_prefix}_intro.png")
-
-    # Footer
-    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    try: f_foot = ImageFont.truetype("/System/Library/Fonts/Supplemental/Baskerville.ttc", 38)
-    except: f_foot = ImageFont.load_default()
-    draw.text((1280/2, 620), "Suscríbete para más momentos de paz", font=f_foot, fill=(255,255,255,220), anchor="mm")
-    draw.text((1280/2, 680), "MusiChris Studio | Música para tu alma", font=f_foot, fill=(255,255,255,100), anchor="mm")
-    img.save(os.path.join(BASE_DIR, f"{output_prefix}_footer.png"))
-
-def generate_atmos_video(duration_secs, theme, output_name):
-    print(f"🎬 [ATMOS ENGINE] Iniciando Protocolo de Turnos...")
-    
-    # 1. Suspender Radio para liberar RAM
-    print("🛰️ Deteniendo Radio 24/7 temporalmente...")
-    subprocess.run(['sudo', 'pkill', '-9', '-f', 'live_manager.py'], capture_output=True)
-    subprocess.run(['sudo', 'pkill', '-9', '-f', 'ffmpeg'], capture_output=True)
-    
-    print(f"🎬 [ATMOS ENGINE FINAL] Iniciando Producción Maestra...")
+def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
+    print(f"🎬 [ATMOS ENGINE v9.0] Iniciando Producción Diamond...")
     clean_assets()
     
     with open(os.path.join(BASE_DIR, 'data/musichris_master_catalog.json'), 'r') as f:
         catalog = json.load(f)
     with open(os.path.join(BASE_DIR, 'data/soul_reflections.json'), 'r') as f:
-        reflections = json.load(f)
+        reflections_data = json.load(f)
     
-    # Cargar canciones desactivadas
-    disabled_songs = []
-    disabled_path = os.path.join(BASE_DIR, 'data/disabled_songs.json')
-    if os.path.exists(disabled_path):
-        with open(disabled_path, 'r') as f:
-            disabled_songs = json.load(f)
+    # Selección de canciones
+    target_themes_1 = ATMOSPHERE_MAP.get(theme1, [theme1])
+    target_themes_2 = ATMOSPHERE_MAP.get(theme2, [theme2]) if theme2 and theme2 != "none" else []
     
-    # Familias de Atmósferas (Herencia)
-    families = {
-        "Protección": ["Refugio", "Confianza", "Descanso", "Noche", "Fortaleza"],
-        "Batalla": ["Guerra Espiritual", "Poder", "Victoria Final", "Fortaleza"],
-        "Presencia": ["Adoración Celestial", "Selah", "Santidad", "Intimidad"],
-        "Triunfo": ["Victoria", "Gozo", "Celebración", "Gratitud"],
-        "Renovación": ["Avivamiento", "Restauración", "Renovación", "Redención"]
-    }
-    
-    category_keywords = {
-        "Refugio": ["refugio", "amparo", "abrigo"], "Confianza": ["confianza", "creer", "fe"], "Descanso": ["descanso", "reposo", "quietud"],
-        "Noche": ["noche", "medianoche", "madrugada"], "Guerra Espiritual": ["guerra", "batalla", "ejército"], "Poder": ["poder", "autoridad", "fuerza"],
-        "Fortaleza": ["fortaleza", "roca", "castillo"], "Victoria Final": ["victoria final", "triunfo eterno"], "Adoración Celestial": ["adoración", "celestial", "trono"],
-        "Selah": ["selah", "meditación", "reflexión"], "Santidad": ["santidad", "santo", "puro"], "Intimidad": ["intimidad", "secreto", "presencia"],
-        "Victoria": ["victoria", "vencer", "triunfo"], "Gozo": ["gozo", "alegría", "deleite"], "Celebración": ["celebración", "fiesta", "exaltación"],
-        "Gratitud": ["gratitud", "gracias", "reconocimiento"], "Avivamiento": ["avivamiento", "despertar", "fuego"], "Restauración": ["restauración", "restitución", "sanidad"],
-        "Renovación": ["renovación", "nuevo", "transformación"], "Redención": ["redención", "rescate", "gracia"]
-    }
+    relevant_songs_1 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_1)]
+    relevant_songs_2 = [s for s in catalog if any(t.lower() in str(s.get('moments', [])).lower() for t in target_themes_2)] if target_themes_2 else []
 
-    # 1. Buscar canciones EXACTAS
-    eligible_songs = []
-    primary_keywords = category_keywords.get(theme, [theme.lower()])
-    
-    for s in catalog:
-        if s['title'] in disabled_songs: continue
-        song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
-        if any(k in song_text for k in primary_keywords):
-            eligible_songs.append(s)
-            
-    # 2. Si no hay suficientes canciones (menos de 15), buscar en la FAMILIA
-    if len(eligible_songs) < 15:
-        print(f"⚠️ Poco contenido en {theme}. Buscando herencia familiar...")
-        family_members = []
-        for fam, members in families.items():
-            if theme in members:
-                family_members = members
-                break
-        
-        for member in family_members:
-            if member == theme: continue
-            member_keywords = category_keywords.get(member, [])
-            for s in catalog:
-                if s['title'] in disabled_songs or s in eligible_songs: continue
-                song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
-                if any(k in song_text for k in member_keywords):
-                    eligible_songs.append(s)
-            
-    random.shuffle(eligible_songs)
-            
-    random.shuffle(eligible_songs)
-    
-    # Seleccionamos canciones y hacemos LOOP si es necesario para cubrir el tiempo
     selected_songs = []
     current_audio_time = 0
-    
-    if not eligible_songs:
-        print("❌ Error: No hay canciones para este tema.")
-        return
+    if theme2 and theme2 != "none":
+        random.shuffle(relevant_songs_1); random.shuffle(relevant_songs_2)
+        for s in relevant_songs_1:
+            if current_audio_time >= duration_secs/2: break
+            selected_songs.append(s); current_audio_time += s.get('duration_secs', 250)
+        for s in relevant_songs_2:
+            if current_audio_time >= duration_secs: break
+            selected_songs.append(s); current_audio_time += s.get('duration_secs', 250)
+    else:
+        random.shuffle(relevant_songs_1)
+        for s in relevant_songs_1:
+            if current_audio_time >= duration_secs: break
+            selected_songs.append(s); current_audio_time += s.get('duration_secs', 250)
 
-    # Loop infinito hasta llenar el tiempo solicitado
-    while current_audio_time < duration_secs:
-        for s in eligible_songs:
-            if current_audio_time >= duration_secs:
-                break
-            selected_songs.append(s)
-            # Intentamos obtener duración real, si no usamos 250s como fallback
-            current_audio_time += s.get('duration_secs', 250)
-        
-        # Mezclamos para la siguiente vuelta si el loop continúa
-        random.shuffle(eligible_songs)
-    
-    create_master_overlays(theme.upper(), os.path.join(BASE_DIR, "assets/master"))
-    
-    # Reflexiones distribuidas
-    num_refs = max(2, int(duration_secs / 600)) # 1 cada 10 min
+    # 1. Crear Reflexiones (Párrafos)
+    refs_list = reflections_data.get(theme1, reflections_data.get("Paz Interior", []))
     reflection_overlays = []
-    for i in range(num_refs):
-        ref_text = random.choice(reflections)
+    for i, ref_text in enumerate(refs_list[:3]): # Máximo 3 por video
         path = os.path.join(BASE_DIR, f"assets/ref_{i}.png")
         create_reflection_overlay(ref_text, path)
-        start_t = (duration_secs / (num_refs+1)) * (i+1)
-        reflection_overlays.append((path, start_t, start_t + 12))
+        start_t = (current_audio_time / 4) * (i+1)
+        reflection_overlays.append((path, start_t, start_t + 20)) # 20 segundos de duración para leer párrafos
 
-    # Definimos la duración real orgánica + 12 segundos para el cierre maestro
-    final_duration = current_audio_time + 12
-
-    # Seleccionar PAISAJE y extraer FOTOGRAMA para velocidad
-    landscapes_dir = os.path.join(BASE_DIR, 'assets/landscapes')
-    landscapes = [f for f in os.listdir(landscapes_dir) if f.endswith('.mp4')]
-    selected_landscape = os.path.join(landscapes_dir, random.choice(landscapes) if landscapes else 'landscape_test.mp4')
-    master_bg_image = os.path.join(BASE_DIR, "assets/master_bg_frame.jpg")
+    # 2. Selección de Paisajes (Variación Dinámica)
+    paisajes_dir = os.path.join(BASE_DIR, 'ui/assets/Paisajes')
+    v_paisajes = [f for f in os.listdir(paisajes_dir) if f.endswith('.mp4')]
+    selected_landscapes = random.sample(v_paisajes, min(3, len(v_paisajes))) # Seleccionamos 3 paisajes diferentes
     
-    print(f"🌍 Capturando fotograma maestro de: {selected_landscape}")
-    subprocess.run([
-        "ffmpeg", "-y", "-ss", "00:00:05", "-i", selected_landscape,
-        "-frames:v", "1", master_bg_image
-    ], capture_output=True)
-
-    # Componer Comando FFmpeg
-    cmd = [
-        "ffmpeg", "-y",
-        "-loop", "1", "-framerate", "15", "-i", master_bg_image,
-        "-i", os.path.join(BASE_DIR, "assets/master_intro.png"),
-        "-i", os.path.join(BASE_DIR, "assets/master_footer.png"),
-        "-i", os.path.join(BASE_DIR, "assets/watermark_layer.png"),
-        "-stream_loop", "-1", "-i", os.path.join(BASE_DIR, "assets/logo_animado.mp4"),
-        "-i", os.path.join(BASE_DIR, "assets/outro_layer_premium.png")
-    ]
+    # Comando FFmpeg Base
+    cmd = ["ffmpeg", "-y"]
+    for lp in selected_landscapes: cmd += ["-stream_loop", "-1", "-i", os.path.join(paisajes_dir, lp)]
     
-    # Añadir overlays de reflexiones
+    # Overlays fijos
+    logo_path = os.path.join(BASE_DIR, "ui/assets/Logo Hjalmar Animado.mp4")
+    cmd += ["-stream_loop", "-1", "-i", logo_path] # Logo [3] (si hay 3 paisajes) o [len(landscapes)]
+    
     for r_ov in reflection_overlays: cmd += ["-i", r_ov[0]]
     
-    # Añadir AUDIOS
-    audio_start_idx = 6 + len(reflection_overlays)
-    for s in selected_songs:
-        cmd += ["-i", s['audio_url']]
+    audio_idx = len(selected_landscapes) + 1 + len(reflection_overlays)
+    for s in selected_songs: cmd += ["-i", s['audio_url']]
 
-    # Filtros
-    v_filters = "[0:v]scale=1280:720,format=yuv420p[v_bg];"
-    v_filters += "[v_bg][1:v]overlay=0:0:enable='between(t,2,15)'[v_intro];"
-    v_filters += f"[v_intro][2:v]overlay=0:0:enable='lt(t,{duration_secs-10})'[v_footer];"
-    v_filters += "[v_footer][3:v]overlay=0:0[v_wm];"
+    # Filtros de Video
+    v_filters = ""
+    num_l = len(selected_landscapes)
+    interval = current_audio_time / num_l
+    for i in range(num_l):
+        v_filters += f"[{i}:v]scale=1280:720,format=yuv420p[bg{i}];"
     
-    last_v = "v_wm"
+    # Mezcla de paisajes
+    last_v = "bg0"
+    for i in range(1, num_l):
+        next_v = f"mix{i}"
+        v_filters += f"[{last_v}][bg{i}]overlay=enable='gt(t,{i*interval})'[{next_v}];"
+        last_v = next_v
+    
+    # Logo y Reflexiones
+    v_filters += f"[{num_l}:v]colorkey=0x000000:0.1:0.1,scale=-1:200,format=rgba[logo_clean];"
+    v_filters += f"[{last_v}][logo_clean]overlay=50:50[v_with_logo];"
+    
+    last_v = "v_with_logo"
     for i, r_ov in enumerate(reflection_overlays):
         next_v = f"v_ref_{i}"
-        v_filters += f"[{last_v}][{i+6}:v]overlay=0:0:enable='between(t,{r_ov[1]},{r_ov[2]})'[{next_v}];"
+        v_filters += f"[{last_v}][{num_l+1+i}:v]overlay=0:0:enable='between(t,{r_ov[1]},{r_ov[2]})'[{next_v}];"
         last_v = next_v
 
-    v_filters += f"[4:v]colorkey=0x000000:0.1:0.1,scale=-1:600,format=rgba[logo_clean];"
-    v_filters += f"[{last_v}][logo_clean]overlay=(W-w)/2:(H-h)/2-150:enable='between(t,{final_duration-12},{final_duration-2})'[v_logo];"
-    v_filters += f"[v_logo][5:v]overlay=0:0:enable='between(t,{final_duration-12},{final_duration})'[v_final]"
-
-    print(f"⏱️ Duración total de la producción: {final_duration/60:.2f} minutos")
-
-    # Filtro de Audio (Concat)
-    a_filters = "".join([f"[{audio_start_idx+i}:a]" for i in range(len(selected_songs))])
-    a_filters += f"concat=n={len(selected_songs)}:v=0:a=1[a_final]"
+    # Audio Concat
+    a_filters = "".join([f"[{audio_idx+i}:a]" for i in range(len(selected_songs))]) + f"concat=n={len(selected_songs)}:v=0:a=1[a_final]"
 
     output_path = os.path.join(BASE_DIR, f"renders/{output_name}")
-    cmd += [
-        "-filter_complex", f"{v_filters};{a_filters}",
-        "-map", "[v_final]", "-map", "[a_final]",
-        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "30", "-b:v", "2000k", "-maxrate", "2500k", "-bufsize", "4000k", "-r", "15", "-c:a", "aac", "-b:a", "128k",
-        "-t", str(final_duration), # Usamos la duración real calculada
-        output_path
-    ]
+    cmd += ["-filter_complex", f"{v_filters};{a_filters}", "-map", f"[{last_v}]", "-map", "[a_final]", "-c:v", "libx264", "-preset", "ultrafast", "-crf", "30", "-t", str(current_audio_time), output_path]
     
-    print(f"🚀 EJECUTANDO COMANDO MAESTRO:\n{' '.join(cmd)}")
+    print(f"🚀 Renderizando Video Híbrido con Variación de Paisajes...")
     subprocess.run(cmd)
     
-    # NUEVO: Generar Miniatura y Metadatos post-renderizado
-    generate_thumbnail(theme, output_name, selected_landscape)
-    generate_metadata(theme, output_name)
+    generate_thumbnail_intelligent(theme1, output_name, os.path.join(paisajes_dir, selected_landscapes[0]), selected_songs, theme2)
+    generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
 
-    # 2. Reiniciar Radio Automáticamente
-    print("🛰️ Producción Terminada. Resucitando Radio 24/7...")
-    try:
-        # Volvemos a la carpeta home para lanzar la radio
-        home_dir = os.path.expanduser("~")
-        subprocess.Popen(['python3', os.path.join(home_dir, 'live_manager.py')], 
-                         cwd=home_dir,
-                         stdout=open(os.path.join(home_dir, 'live_manager.log'), 'a'),
-                         stderr=subprocess.STDOUT,
-                         start_new_session=True)
-        print("✅ Radio 24/7 reactivada con éxito.")
-    except Exception as e:
-        print(f"⚠️ Error al reactivar la radio: {e}")
-
-def generate_thumbnail(theme, output_name, video_path):
-    print(f"🖼️ Capturando fotograma de impacto desde {video_path}...")
-    temp_frame = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_FRAME.jpg")
+def generate_thumbnail_intelligent(theme1, output_name, landscape_path, selected_songs, theme2=None):
     thumb_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg")
-    
-    # 1. Capturar fotograma al segundo 5 (para asegurar que haya imagen)
-    cap_cmd = [
-        "ffmpeg", "-y", "-ss", "00:00:05", "-i", video_path,
-        "-frames:v", "1", temp_frame
-    ]
-    subprocess.run(cap_cmd, capture_output=True)
-    
-    # 2. Aplicar diseño ministerial sobre el fotograma capturado
-    hooks = {
-        "Refugio": "TU LUGAR SEGURO", "Confianza": "CREE SIN DUDAR", "Descanso": "PAZ PARA TU ALMA",
-        "Noche": "DUERME EN SU PAZ", "Guerra Espiritual": "PODER Y VICTORIA", "Poder": "FUERZA DIVINA",
-        "Fortaleza": "TU ROCA ETERNA", "Victoria Final": "EL TRIUNFO DE LA FE", "Adoración Celestial": "PRESENCIA DIVINA",
-        "Santidad": "PURO ANTE EL PADRE", "Intimidad": "EN EL LUGAR SECRETO", "Victoria": "VENCIENDO EL MIEDO",
-        "Gozo": "ALEGRÍA INAGOTABLE", "Celebración": "FIESTA EN EL CIELO", "Gratitud": "GRACIAS SEÑOR",
-        "Avivamiento": "FUEGO EN TU INTERIOR", "Restauración": "DIOS TE SANA HOY", "Renovación": "TODO NUEVO",
-        "Redención": "POR SU GRACIA"
-    }
-    hook = hooks.get(theme, "MÚSICA PARA ORAR")
-
-    design_cmd = [
-        "ffmpeg", "-y", "-i", temp_frame,
-        "-vf", f"drawtext=text='{theme.upper()}':fontcolor=white:fontsize=130:x=(w-tw)/2:y=(h-th)/2-100:shadowcolor=black:shadowx=6:shadowy=6,drawtext=text='{hook}':fontcolor=white:fontsize=60:x=(w-tw)/2:y=(h-th)/2+40:shadowcolor=black:shadowx=4:shadowy=4,drawtext=text='MUSICHRIS STUDIO':fontcolor=#ffcc00:fontsize=35:x=(w-tw)/2:y=h-80:letter_spacing=15",
-        "-frames:v", "1", thumb_path
-    ]
+    final_theme = f"{theme1} + {theme2}" if theme2 and theme2 != "none" else theme1
+    hook = selected_songs[0].get('context', {}).get('focus', 'MÚSICA PARA TU ALMA').upper()
+    design_cmd = ["ffmpeg", "-y", "-ss", "00:00:05", "-i", landscape_path, "-vf", (f"scale=1280:720,drawbox=x=(w-900)/2:y=(h-450)/2:w=900:h=450:color=black@0.6:t=fill,drawtext=text='{final_theme.upper()}':fontcolor=#C5A059:fontsize=90:x=(w-tw)/2:y=(h-th)/2-80,drawtext=text='{hook[:40]}':fontcolor=white:fontsize=40:x=(w-tw)/2:y=(h-th)/2+60"), "-frames:v", "1", thumb_path]
     subprocess.run(design_cmd, capture_output=True)
-    
-    # Limpiar temporal
-    if os.path.exists(temp_frame): os.remove(temp_frame)
-    print(f"✅ Miniatura capturada y diseñada: {thumb_path}")
 
-def generate_metadata(theme, output_name):
-    print(f"📝 Generando Metadatos SEO Potentes...")
-    meta_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_METADATA.json")
+def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=None):
+    final_theme = f"{theme1} y {theme2}" if theme2 and theme2 != "none" else theme1
+    title = f"💎 EXPERIENCIA DIAMOND: {final_theme.upper()} | MusiChris Studio"
     
-    metadata = {
-        "title": f"1 HORA DE {theme.upper()} | Música para Orar en Intimidad y Paz | MusiChris Studio",
-        "description": f"Bienvenido a MusiChris Studio. \n\n¿Buscas {theme.lower()}? Esta selección ha sido creada para transformar tu ambiente y llevarte a un nivel profundo de comunión con Dios. \n\n✨ Lo que sentirás en esta hora: \n- Paz profunda para tu alma.\n- Renovación espiritual.\n- Conexión real con el Padre.\n\nIdeal para momentos de oración, lectura bíblica o simplemente para descansar en Su presencia. \n\n🕊️ SUSCRÍBETE AHORA y activa la campana para no perderte ninguna atmósfera ministerial.\n\n#MusiChrisStudio #MusicaParaOrar #InstrumentalCristiano #OracionMatutina #PazInterior #MusicaCristiana #{theme.replace(' ', '')}",
-        "tags": ["musichris studio", "musica para orar", "musica cristiana instrumental", "instrumental para orar", theme.lower(), "paz de dios", "meditacion espiritual", "musica de adoracion", "adoracion instrumental"]
-    }
-    
-    with open(meta_path, 'w', encoding='utf-8') as f:
+    time_codes = "📌 Capítulos de esta sesión:\n"
+    current_t = 0
+    for s in selected_songs[:15]: # Limitar capítulos para la descripción
+        minutes = int(current_t // 60)
+        seconds = int(current_t % 60)
+        time_codes += f"{minutes:02d}:{seconds:02d} - {s['title']}\n"
+        current_t += s.get('duration_secs', 250)
+
+    description = f"{title}\n\n{time_codes}\n\nEsta sesión incluye Variación Dinámica de Paisajes y Párrafos de Reflexión Ministerial para una experiencia profunda.\n\n#MusiChrisStudio #{theme1.replace(' ', '')}"
+    metadata = {"title": title, "description": description, "tags": [theme1, theme2, "musichris"]}
+    with open(os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_METADATA.json"), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=4, ensure_ascii=False)
-    print(f"✅ Metadatos de alto impacto listos: {meta_path}")
 
 if __name__ == "__main__":
     import sys
-    # Valores por defecto: 1 hora, Confianza, Nombre automático
-    duration = int(sys.argv[1]) if len(sys.argv) > 1 else 3600
-    theme = sys.argv[2] if len(sys.argv) > 2 else "Confianza"
-    
-    # Nombre de salida dinámico basado en tema y tiempo
-    timestamp = random.randint(1000, 9999)
-    output_name = f"STUDIO_{theme.replace(' ', '_').upper()}_{duration//60}MIN_{timestamp}.mp4"
-    
-    generate_atmos_video(duration, theme, output_name)
+    duration = int(sys.argv[1]) if len(sys.argv) > 1 else 1800
+    theme1 = sys.argv[2] if len(sys.argv) > 2 else "Paz Interior"
+    theme2 = sys.argv[3] if len(sys.argv) > 3 else "none"
+    output_name = f"STUDIO_DIAMOND_{random.randint(1000,9999)}.mp4"
+    generate_atmos_video(duration, theme1, output_name, theme2)

@@ -229,30 +229,27 @@ function ensureVideoPlay() {
     }
 }
 
+// UNLOCK EXPERIENCE (FOR AUTOPLAY)
+function unlockExperience() {
+    const shield = document.getElementById('landing-shield');
+    if (shield) {
+        shield.classList.add('hidden');
+        if (videoElement) {
+            videoElement.play().catch(e => console.log("Fallo final:", e));
+        }
+        // Small delay to ensure smooth transition
+        setTimeout(() => shield.style.display = 'none', 1000);
+    }
+}
+
 // INIT
 window.onload = () => {
+    // Initial attempt (some browsers might allow it)
     if (videoElement) {
         videoElement.muted = true;
-        videoElement.defaultMuted = true;
-        
-        const forcePlay = () => {
-            videoElement.play().then(() => {
-                console.log("🔥 Fondo iniciado con éxito.");
-                document.removeEventListener('click', forcePlay);
-                document.removeEventListener('touchstart', forcePlay);
-            }).catch(e => console.log("Reintentando fondo..."));
-        };
-
-        forcePlay();
-        // Escudo persistente
-        document.addEventListener('click', forcePlay);
-        document.addEventListener('touchstart', forcePlay);
-        
-        // Reintento en bucle por si el DOM no estaba listo
-        let retry = setInterval(() => {
-            if (!videoElement.paused) clearInterval(retry);
-            else forcePlay();
-        }, 2000);
+        videoElement.play().catch(() => {
+            console.log("🛡️ Escudo de interacción activo.");
+        });
     }
     loadData();
     if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;

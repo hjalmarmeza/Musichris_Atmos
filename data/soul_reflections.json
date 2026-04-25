@@ -1,14 +1,27 @@
-[
-    "Dios tiene el control de tu tormenta.",
-    "En Su paz, encontrarás tu fuerza.",
-    "No temas, porque Yo estoy contigo.",
-    "Su gracia es suficiente para ti hoy.",
-    "Confía en el proceso, Dios está obrando.",
-    "Tu victoria no depende de tus fuerzas, sino de Su poder.",
-    "Donde termina tu capacidad, comienza el milagro de Dios.",
-    "Él restaura tu alma y guía tus pasos.",
-    "La paz de Dios sobrepasa todo entendimiento.",
-    "Descansa en Su amor, Él cuida de ti.",
-    "Hoy es un buen día para confiar en Sus promesas.",
-    "Tu fe es la llave que abre puertas imposibles."
-]
+{
+    "Paz Interior": [
+        "En la quietud de este momento, permite que una paz profunda que sobrepasa todo entendimiento guarde tu corazón. Suelta las cargas de hoy, pues hay un cuidado paternal que vela por ti mientras descansas, renovando tus fuerzas para el mañana.",
+        "El verdadero reposo se encuentra cuando entregamos el control de nuestra vida a manos soberanas. No caminas solo en el silencio; hay una presencia constante que te susurra que todo estará bien, porque Su fidelidad es tu refugio eterno.",
+        "Respira la calma que solo proviene de saberse amado y protegido. Deja que esta atmósfera limpie tu mente de ansiedad, recordando que cada detalle de tu historia está siendo guiado hacia un propósito de bien y de paz absoluta."
+    ],
+    "Guerra Espiritual": [
+        "Levántate con la convicción de que las armas de tu milicia no son humanas, sino poderosas para derribar cualquier fortaleza. No peleas por la victoria, sino desde la victoria que ya ha sido ganada para ti. ¡Mantente firme, guerrero!",
+        "Tu alabanza es un estruendo en los lugares celestiales que rompe cadenas y abre caminos donde no los había. El que está contigo es más fuerte que cualquier gigante que se levante. Sigue adorando, porque el muro está a punto de caer.",
+        "Fortalécete en el gran poder que reside en ti. La luz que portas disipa toda tiniebla y ninguna oposición prosperará contra el propósito que ha sido sellado en tu espíritu. Camina con la autoridad de quien sabe quién es su respaldo."
+    ],
+    "Intimidad": [
+        "Entra en el lugar secreto donde los velos desaparecen y solo queda la verdad de tu corazón ante la Majestad. En esta profundidad de adoración, las palabras sobran y el alma se rinde ante la belleza de la santidad que lo llena todo.",
+        "Busca el rostro de tu Creador con sinceridad y hallarás un amor que no conoce límites. En la intimidad de este espacio, el tiempo se detiene y eres renovado por la gloria de una presencia que te conoce por nombre y te llama suyo.",
+        "Ríndete ante la dulzura de este encuentro. Permite que el fuego de Su amor consuma todo lo que te separa de Su esencia, llevándote a una comunión tan profunda que tu espíritu se funda en un solo sentir con el cielo."
+    ],
+    "Victoria & Gozo": [
+        "¡Tu lamento se ha convertido en baile y tu desierto ha comenzado a florecer! Celebra la bondad que te ha perseguido todos los días de tu vida. Hoy es tiempo de levantar un canto de gratitud por las maravillas que tus ojos están viendo.",
+        "El gozo es tu fortaleza en este día. Alégrate en la esperanza de que lo que ha comenzado se completará con gloria. No hay nada imposible para el poder que te levanta hoy; celebra con júbilo, porque tu victoria ya ha sido decretada.",
+        "Hoy las puertas se abren y la bendición sobreabunda en tu casa. Has pasado por el fuego y has salido purificado para reinar. Disfruta de este tiempo de triunfo y deja que tu alegría sea una luz para todos los que te rodean."
+    ],
+    "Restauración": [
+        "Lo que el dolor intentó destruir, la mano del Alfarero lo está reconstruyendo con más gloria que antes. Dios está haciendo nuevas todas las cosas en ti, trayendo belleza de las cenizas y un nuevo cántico de redención a tu boca.",
+        "No temas por lo que perdiste, pues el tiempo de la restitución ha llegado. Aquello que fue quebrado está siendo unido por una gracia que no conoce el fracaso. Tu historia no termina en el dolor, sino en una restauración completa.",
+        "Siente cómo el bálsamo del cielo sana cada herida de tu alma, devolviéndote la frescura de la juventud y la claridad de la visión. Estás siendo levantado con nuevas alas para volar más alto que nunca antes."
+    ]
+}
