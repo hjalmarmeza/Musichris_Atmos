@@ -1,1376 +1,2167 @@
 [
-  {
-    "title": "Cireneo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360897/wi5649ngot0kzi9m7mwu.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Lucas 23:26 ",
-      "theme": "Carga compartida / Sufrimiento",
-      "focus": "Queríamos explorar la psicología de la transformación: de ser un espectador renuente y molesto a convertirse en un partícipe íntimo del sufrimiento redentor. Musicalizar el peso físico de la madera y la respiración compartida entre el hombre y Dios en el camino al Gólgota.",
-      "bpm": 68
+    {
+        "title": "LA TIERRA TEMBLÓ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761523/xu3amwrjdwioqgcpqgob.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "POR SUS LLAGAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213851/por_sus_llagas_v2_zn6jqb.jpg"
+    },
+    {
+        "title": "NADA ME APARTARÁ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761555/qpo0ff8xscptfahlj3z9.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "POR SUS LLAGAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213851/por_sus_llagas_v2_zn6jqb.jpg"
+    },
+    {
+        "title": "REGRESA LA VIDA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761589/o8vd6h1j9xyhpfm7idd5.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "POR SUS LLAGAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213851/por_sus_llagas_v2_zn6jqb.jpg"
+    },
+    {
+        "title": "UN CAMINO EN EL MAR",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761619/yw3f63by284nunjerufg.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "POR SUS LLAGAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213851/por_sus_llagas_v2_zn6jqb.jpg"
+    },
+    {
+        "title": "GRACIA SIN CONDICIÓN",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761884/n2vmlfodhixjo5oeajvf.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "POR SUS LLAGAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213851/por_sus_llagas_v2_zn6jqb.jpg"
+    },
+    {
+        "title": "BONDAD INAGOTABLE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761918/ff2eyes9sarp0p6jtgpz.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "MI ETERNA SALVACIÓN",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761942/ter1gn4egsfi0tn9dfwq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "MI PASTOR Y MI REY",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761965/cm5j9nleoxttmu4afnf6.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "OPORTUNO SOCORRO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764761983/twmdbbwedd1djvyiy45v.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "MISERICORDIA ES LA RESPUESTA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764762054/iexg5joqmko6pcmgexy5.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "EL REGRESO DEL HIJO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764762129/zz8hqg12co4pcp2jtlq5.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "GOZO EN EL CIELO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764762187/psomq98hgixcvsgbibve.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VIENTOS NUEVOS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765359074/eli4wlrixa8rmfoka9bd.jpg"
+    },
+    {
+        "title": "GRACIA MAJESTUOSA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764781146/yxw6lxablm8qnmpdw3ah.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "GRAN GOZO AL MUNDO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764802488/auzvagwswcy8dftesqyq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "REY DE CADA MAÑANA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764810275/cubosbjemuptwltlirip.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "EN PAZ ME ACOSTARÉ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1764810305/txhzljn27mfyq2lpceqd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "SOPLO DE VIDA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360163/tmei63neapamcfetjqlx.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Avivamiento / Restauración"
+        ],
+        "context": {
+            "verse": "Ezequiel 37 ",
+            "focus": "Dios manda al profeta a profetizar al \"Ruach\" (Viento/Espíritu/Aliento). Es el mismo aliento de vida de Génesis 2. La restauración no depende de la calidad de los huesos, sino del poder del Soplo de Dios para regenerar un ejército."
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "A MEDIANOCHE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360204/syrgbhwqxpqbmh2jxtcx.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "2"
+        ],
+        "context": {
+            "verse": "Hechos 16 ",
+            "focus": "done"
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "TU SOMBRA Y TU LUZ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360242/rlfi7n3ha7esvdpkjgwq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Dirección divina"
+        ],
+        "context": {
+            "verse": "Éxodo 13 ",
+            "focus": "Dios no les dio un mapa, les dio su Presencia visible. La Columna de Nube les daba sombra (protección) de día y la Columna de Fuego les daba luz y calor de noche. Eran manifestaciones de la Shekinah. Si la nube paraba, ellos paraban."
+        },
+        "album": "ROMPIENDO CADENAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360105/upyii0jbazuu6hfipret.jpg"
+    },
+    {
+        "title": "SIETE VUELTAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360281/sv6flgpmehveyfnnjasq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Victoria / Fe activa"
+        ],
+        "context": {
+            "verse": "Josué 6 ",
+            "focus": "La instrucción divina fue litúrgica, no militar: sacerdotes, el Arca, shofares y silencio absoluto durante 6 días. El día 7, el grito de fe derribó los muros. Enseña que las batallas espirituales se ganan con obediencia radical, no con fuerza humana."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "GUARDIÁN",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360373/tvm78ysiajiloc7vntaq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Protección / Poder"
+        ],
+        "context": {
+            "verse": "Apocalipsis 5 ",
+            "focus": "Se anuncia al León de la Tribu de Judá (profecía de Génesis 49) como el conquistador. Pero cuando Juan mira, ve a un Cordero como inmolado. Cristo es el Guardián porque venció muriendo. Él es el único capaz de abrir los sellos de la historia."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "MÍO ERES TÚ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360412/hxynwygagjizcfujavwi.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Identidad / Pertenencia"
+        ],
+        "context": {
+            "verse": "Isaías 43 ",
+            "focus": "Dios usa lenguaje jurídico de redención y lenguaje matrimonial de pacto. \"Te puse nombre\" implica propiedad y conocimiento íntimo. Promete que cuando pasen por aguas y fuego (metáforas de juicio y peligro extremo), Él estará allí. No los libra DEL fuego, sino EN el fuego."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "REFUGIO ETERNO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360495/a6mkdlnidkdqtdqtcc2h.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Compendio de Protección Divina"
+        ],
+        "context": {
+            "verse": "Salmos 61, 62, 91, 121",
+            "focus": "Es un himno de síntesis. La estructura lírica viaja desde la necesidad humana hasta la seguridad divina, utilizando las imágenes más potentes de cada salmo (Roca, Ojos, Alas, Silencio)."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "ALABASTRO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360791/gqprsmse1a8q0b9rxboa.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Adoración extravagante / Perdón"
+        ],
+        "context": {
+            "verse": "Lucas 7:37 ",
+            "focus": "La mujer trae un frasco de alabastro con perfume (posiblemente su herramienta de trabajo o dote) y lo rompe. Jesús defiende su acto extravagante contrastándolo con la falta de hospitalidad de Simón el Fariseo (quien no ofreció agua ni beso). La enseñanza central es: \"Al que mucho se le perdona, mucho ama\"."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "LA MEJOR PARTE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360814/l6vkoxz2igljmyjcf6od.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Prioridad / Presencia"
+        ],
+        "context": {
+            "verse": "Lucas 10:42 ",
+            "focus": "Marta está distraída con \"mucha faena\" (diakonia). Jesús no critica su servicio en sí, sino su ansiedad y división interna. Valida la elección de María diciendo que ha escogido la \"buena parte\" (la eterna), la cual no le será quitada por las demandas urgentes."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "EL SUSURRO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360835/o25nyep019z0ofkdyfsk.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Voz de Dios / Calma"
+        ],
+        "context": {
+            "verse": "1 Reyes 19 ",
+            "focus": "Dios no trata su depresión con \"más trabajo\" ni con gritos. Primero le da comida y sueño. Luego se revela en la cueva, no en el terremoto, ni en el viento, ni en el fuego, sino en el \"silbo apacible y delicado\". Dios restaura en la intimidad quieta."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "EN TUS MANOS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360858/slji0tnwpchardcrzcpd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Formación / Soberanía"
+        ],
+        "context": {
+            "verse": "Jeremías 18 ",
+            "focus": "El vaso se \"echó a perder\" en las manos del alfarero (por impurezas o resistencia en el barro). Lo sorprendente es que el alfarero no tiró el barro a la basura, sino que \"volvió y lo hizo otra vasija\". Muestra la soberanía restauradora y la paciencia infinita de Dios con nuestras fallas."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "INVISIBLE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360877/hqs0otahkbsesrldpu8v.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Fe en lo no visto"
+        ],
+        "context": {
+            "verse": "Hebreos 11 (Fe)",
+            "focus": "El autor define la fe como \"Hupostasis\" (sustancia, título de propiedad, certeza) de lo que se espera. La fe se presenta como un sexto sentido que permite ver al Invisible (como Moisés). Es operar en la realidad espiritual dándole más peso que a la realidad física."
+        },
+        "album": "A SUS PIES",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360658/uwne2nu5fobsre07ysh8.jpg"
+    },
+    {
+        "title": "CIRENEO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360897/wi5649ngot0kzi9m7mwu.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Carga compartida / Sufrimiento"
+        ],
+        "context": {
+            "verse": "Lucas 23:26 ",
+            "focus": "El pasaje ilustra el concepto de discipulado \"forzoso\" que se vuelve voluntario. Aunque Simón fue obligado, el Evangelio de Marcos (15:21) menciona a sus hijos, Alejandro y Rufo, como figuras conocidas por la iglesia primitiva, sugiriendo que este encuentro con la cruz llevó a la conversión de toda su familia."
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "LEÓN Y CORDERO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361122/pv8lom15xpowq7swo4w9.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Soberanía / Sacrificio"
+        ],
+        "context": {
+            "verse": "Apocalipsis 5",
+            "focus": "El Apocalipsis subvierte radicalmente esta idea. Jesús gana la guerra cósmica no matando a sus enemigos, sino dejando que lo maten a él. Es presentado como León (Soberanía/Fuerza) y Cordero (Sacrificio/Mansedumbre) simultáneamente. Su sangre es el precio de la victoria."
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "KADOSH",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361154/sfm2apwuowwiajwnhi6v.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Santidad de Dios"
+        ],
+        "context": {
+            "verse": "Isaías 6 ",
+            "focus": "Isaías ve al verdadero Rey que no muere (Adonai) en el templo. Los serafines no dicen \"Poderoso\" o \"Amoroso\", dicen \"Santo, Santo, Santo\" (Kadosh). La repetición triple es el superlativo hebreo. La santidad de Dios es su \"peso\", su perfección absoluta separada del pecado."
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "ESPEJO DE FUEGO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361173/uoenmbrytyvyyx7xnjc7.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Adoración celestial"
+        ],
+        "context": {
+            "verse": "Apocalipsis 15 / 4",
+            "focus": "El \"mar de vidrio mezclado con fuego\" simboliza la santidad transparente de Dios y su juicio purificador. Sobre ese mar están parados los que vencieron a la bestia, cantando no su propia canción, sino el \"Cántico del Cordero\" y de Moisés."
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "CIELO NUEVO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361198/xtohlfixqntzhytw0q72.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Esperanza eterna"
+        ],
+        "context": {
+            "verse": "Apocalipsis 21",
+            "focus": "Juan ve \"Cielo Nuevo y Tierra Nueva\". No es un escape de las almas al éter, sino la bajada de la Nueva Jerusalén a la tierra renovada. La promesa central es la eliminación del dolor: \"Dios enjugará toda lágrima\". El fin definitivo de la muerte."
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "SOBRE LAS AGUAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361758/wwfwrqujvmi8tjlwgwvd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "MANOS DE GRACIA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765485940/Manos_de_Gracia._u0cbld.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Servicio / Humildad"
+        ],
+        "context": {
+            "verse": "Juan 13 ",
+            "focus": "Jesús, \"sabiendo que venía de Dios y a Dios iba\", se quita el manto (símbolo de estatus) y toma la toalla (símbolo de servicio). Pedro se resiste porque no entiende que en el Reino de los Cielos, la autoridad se valida a través del servicio y la limpieza del otro."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "GETSEMANÍ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486162/Getsemani%CC%81_ondgti.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Rendición / Voluntad"
+        ],
+        "context": {
+            "verse": "Mateo 26:39",
+            "focus": "Jesús experimenta angustia mortal y tristeza hasta la muerte. La batalla por la redención no se ganó técnicamente en la cruz (donde fue la ejecución), sino en el huerto, al rendir su voluntad humana: \"No se haga mi voluntad, sino la tuya\"."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "CONSUMADO ES",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486214/Consum_do_es_gyquu6.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Redención completa"
+        ],
+        "context": {
+            "verse": "Juan 19 ",
+            "focus": "\"Tetelestai\" es una palabra griega que se encontraba en recibos de impuestos antiguos y significaba \"La deuda ha sido pagada en su totalidad\". Jesús no muere como una víctima pasiva del destino, sino como un vencedor activo que ha completado la misión del Padre."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "EL MANTO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486272/El_Manto_mfbwpu.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Fe desesperada / Sanidad"
+        ],
+        "context": {
+            "verse": "Marcos 5 ",
+            "focus": "Aunque su teología era imperfecta (\"si toco su manto como amuleto me sanaré\"), su fe era genuina. Jesús detiene a la multitud no para regañarla por tocarlo, sino para mirarla y llamarla \"Hija\" (única vez que usa este término), dándole sanidad integral y dignidad social."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "LA PIEDRA RODÓ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486313/La_piedra_rodo%CC%81._qmkuiu.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Victoria sobre la muerte"
+        ],
+        "context": {
+            "verse": "Mateo 28 ",
+            "focus": "El ángel remueve la piedra y se sienta sobre ella (un gesto de triunfo total y burla a la autoridad romana). La piedra no se movió para dejar salir a Jesús (él ya tenía un cuerpo glorificado), sino para dejar entrar a las mujeres y testigos."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "EL CAMINO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486356/El_Camino_vhutle.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Revelación / Compañerismo"
+        ],
+        "context": {
+            "verse": "Lucas 24 ",
+            "focus": "Jesús resucitado elige no revelarse mediante un milagro visual deslumbrante, sino a través de la exposición de las Escrituras (Moisés y los profetas) y en el acto ordinario y doméstico de \"partir el pan\". Sus ojos fueron abiertos en la mesa, pero su corazón ya \"ardía\" en el camino."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "EN LA ORILLA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486404/En_la_orilla_gjbede.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Restauración / Gracia"
+        ],
+        "context": {
+            "verse": "Juan 21 ",
+            "focus": "Hay un paralelismo literario intencional: Jesús prepara una \"hoguera de carbón\" (Juan 21:9), usando la misma palabra griega para la hoguera donde Pedro lo negó (Juan 18:18). Jesús le pregunta tres veces \"¿Me amas?\" para sanar y redimir cada una de las tres negaciones previas."
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "MARANATHA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765588152/Maranatha_lowk4e.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Anhelo del regreso"
+        ],
+        "context": {
+            "verse": "Apocalipsis 22",
+            "focus": "Es el cierre de la Biblia. El Espíritu y la Esposa (la Iglesia) dicen \"Ven\". Es el gemido de amor de la novia que extraña al novio. No es miedo al fin del mundo, es deseo ardiente de encuentro y consumación."
+        },
+        "album": "VISIONES DE GLORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765360998/zvfskry1jqfvlnuf8tkj.jpg"
+    },
+    {
+        "title": "ECOS DE LUZ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765806926/Ecos_de_Luz_hipibk.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Majestad / Creación"
+        ],
+        "context": {
+            "verse": "Salmo 19",
+            "focus": "El Salmo divide la revelación de Dios en dos libros: La Naturaleza (v.1-6) y La Escritura (v.7-14). Los cielos \"cuentan\" (saphir - enumeran/narran) la gloria de Dios sin usar palabras audibles. Es un lenguaje universal que llega a toda la tierra."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "SOLO UNA COSA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807152/Solo_una_cosa_lor5km.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Anhelo / Contemplación"
+        ],
+        "context": {
+            "verse": "Salmo 27:4",
+            "focus": "Sin embargo, es capaz de reducir su vida a un \"Mínimo Común Multiplicador\": Una cosa he demandado. Estar en la Casa de Jehová. \"Inquirir\" (Baqar) implica contemplar con deleite y reflexionar. Prioriza la intimidad sobre la actividad militar o real."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "TU MIRADA ME SIGUE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807241/Tu_Mirada_Me_Sigue_oldqom.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Confianza / Omnisciencia"
+        ],
+        "context": {
+            "verse": "Salmo 139:1-8",
+            "focus": "La omnisciencia de Dios (conoce mi sentarse y levantarme) y su omnipresencia no se presentan como una vigilancia policial para castigar, sino como una compañía amorosa. Incluso en el Seol (muerte) o las tinieblas, Él está presente."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "EL ESCONDITE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807406/El_Escondite_u7n6qp.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Refugio / Seguridad"
+        ],
+        "context": {
+            "verse": "Salmo 32:7 / Salmo 91",
+            "focus": "Dios se presenta como \"Seter\" (Lugar Secreto/Escondedero). El Salmo 32 conecta este refugio directamente con el perdón: cuando confieso mi pecado y soy perdonado, Dios mismo me rodea con \"cánticos de liberación\". El refugio es su Gracia."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "ALAS DEL ALBA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807499/Alas_del_Alba_jl4izi.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Omnipresencia / Guía"
+        ],
+        "context": {
+            "verse": "Salmo 139",
+            "focus": "El punto central es la ineludibilidad de Dios. \"Aun allí me guiará tu mano\". No hay distancia geográfica ni oscuridad emocional (v.12 \"las tinieblas no encubren de ti\") que pueda separarnos de su Espíritu."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "QUIETUD",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807569/Quietud_n2z3na.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz / Confianza (\"Raphah\")"
+        ],
+        "context": {
+            "verse": "Salmo 46",
+            "focus": "El mandato \"Estad quietos\" (Raphah) es un imperativo fuerte. Literalmente significa \"soltar las manos\", \"dejar caer los brazos\", \"relajarse\". Es dejar de intentar manipular el resultado con fuerza humana y reconocer que \"Yo soy Dios\" (y tú no)."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "AGUA DE VIDA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807662/Agua_de_Vida_tww6rl.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Sed espiritual / Renovación"
+        ],
+        "context": {
+            "verse": "Salmo 42",
+            "focus": "El \"bramar\" (arag) del ciervo no es un sonido bonito, es un grito agónico de un animal deshidratado buscando agua. El salmista admite su depresión honestamente: \"¿Por qué te abates, oh alma mía?\". La sed de Dios es dolorosa pero es señal de vida."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "VOZ DE JEHOVÁ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807755/Voz_de_Jehova%CC%81_cvmn7w.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "VALE MÁS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933146/Vale_Ma%CC%81s._rqkdib.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Esperanza / Fuerza en el camino"
+        ],
+        "context": {
+            "verse": "Salmo 84",
+            "focus": "La tesis central es la comparación de valor: Un día con Dios vale más que mil días de éxito mundano. Dios se presenta como Escudo y Guía, fuente de protección total. Transforma el lamento en bendición."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "¿QUIEN MÁS?",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933146/Quie%CC%81n_Ma%CC%81s__baxn9h.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "ENCONTRÉ MI HOGAR",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933147/Encontre%CC%81_mi_Hogar_rxe25k.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Descanso / Hogar espiritual"
+        ],
+        "context": {
+            "verse": "Salmo 84:3 (El Gorrión)",
+            "focus": "El salmista expresa una \"envidia santa\" hacia estas aves. Si un ser tan pequeño e insignificante encuentra seguridad total cerca del fuego de Dios, cuánto más el alma humana. Es la transición de visitante a habitante."
+        },
+        "album": "RESONANCIAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769213977/resonancias_V2_cpktav.jpg"
+    },
+    {
+        "title": "AL DESPERTAR",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933147/Al_Despertar_1_vzs4e7.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Intimidad de madrugada / Sed del alma"
+        ],
+        "context": {
+            "verse": "Salmo 63",
+            "focus": "David declara que su sed de Dios (\"mi carne te anhela\") es más fuerte y urgente que su sed física en una \"tierra seca y árida donde no hay agua\". Usa la vigilia de la madrugada para saciarse, no con agua, sino con la memoria y la adoración de Dios."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "NO TEMERÉ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933148/No_Temere%CC%81_v2_ohyhah.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Valentía / Confianza en medio del peligro"
+        ],
+        "context": {
+            "verse": "Salmo 27:1-3",
+            "focus": "Declara una confianza radical: \"Jehová es mi luz y mi salvación; ¿de quién temeré?\". Aunque se levante guerra, su corazón no tiembla. La presencia de Dios es su fortaleza inexpugnable, permitiéndole mantener la paz en medio del asedio."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "TUS ALAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933150/Tus_Alas_xugymd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Protección / Satisfacción en Dios"
+        ],
+        "context": {
+            "verse": "Salmo 63:7",
+            "focus": "Se enfoca en la satisfacción (\"médula y grosura\") y la protección (\"sombra de tus alas\"). A diferencia del lamento por la sed, aquí hay una declaración de plenitud y gozo. Su alma está \"pegada\" a Dios y su diestra lo sostiene firmemente."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "MI BIEN",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765934223/Mi_Bien_wx3htw.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "El verdadero éxito / Intimidad con Dios"
+        ],
+        "context": {
+            "verse": "Salmo 73:28",
+            "focus": "Esta canción captura la conclusión final y victoriosa de su crisis. Asaf declara que, sin importar lo que tengan los demás, su definición de éxito y felicidad (\"el bien\") es simplemente estar cerca de Dios. Es una declaración de prioridades reordenadas."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "MI BIEN v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765934224/Mi_Bien_v2_m3lh0l.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "SANTUARIO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765936793/Santuario_getrev.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Resumen del viaje espiritual / Pertenencia"
+        ],
+        "context": {
+            "verse": "Salmos 84, 63, 27 y 73",
+            "focus": "Es una síntesis teológica y emocional: Pasamos de la sed (Sal 63) al hallazgo del nido (Sal 84), de la protección de las alas (Sal 63) a la valentía frente al miedo (Sal 27), concluyendo que el mayor bien es estar cerca de Dios (Sal 73)."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "LA TORRE MAS ALTA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765972345/La_Torre_Mas_Alta_a5anau.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REFUGIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766337038/Refu%CC%81gio_Album_lvdm6d.jpg"
+    },
+    {
+        "title": "ALZARÉ MIS OJOS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765980701/Alzare%CC%81_Mis_Ojos_yxugj3.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Socorro divino / Protección en el camino"
+        ],
+        "context": {
+            "verse": "Salmo 121",
+            "focus": "El salmo responde categóricamente que la ayuda no viene de la creación (montes/horizontes), sino del Creador. Enfatiza que Dios es el \"Guardián\" (Shomer) que nunca duerme, protegiendo contra peligros diurnos (sol) y nocturnos (luna), cuidando cada paso del camino."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "SOLO EN DIOS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765984180/Solo_en_DIos_kuckgh.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Quietud / Confianza Silenciosa"
+        ],
+        "context": {
+            "verse": "Salmo 62",
+            "focus": "La canción captura la esencia de la confianza absoluta que no necesita gritar. \"Alma mía, en Dios solamente reposa\". Se enfatiza que el poder y la misericordia pertenecen a Dios, y que confiar en hombres o riquezas es vanidad. Es un llamado a derramar el corazón delante de Él en silencio."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "MIL A TU LADO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765986123/Mil_A_Tu_Lado_x9jl8i.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Inmunidad divina / Protección sobrenatural"
+        ],
+        "context": {
+            "verse": "Salmo 91",
+            "focus": "El salmo promete inmunidad sobrenatural: aunque el peligro (mil y diez mil) caiga alrededor, no tocará al creyente. Abarca protección contra trampas, enfermedades, ataques nocturnos y diurnos, garantizando la intervención de ángeles para guardar el camino del justo."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "A DONDE HUIRÉ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766006309/A_Do%CC%81nde_Huire%CC%81_mvkoxi.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "A DONDE HUIRE v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766006310/A_Do%CC%81nde_Huire%CC%81_v2_mrvpfs.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "TORRE FUERTE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766323142/Torre_Fuerte_c7qjvd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Refugio activo / Protección en la guerra"
+        ],
+        "context": {
+            "verse": "Salmo 61:3",
+            "focus": "La imagen de \"Torre Fuerte\" (Migdal Oz) implica una estructura defensiva inexpugnable diseñada para resistir asedios prolongados. No es solo un escondite natural, es una fortaleza divina activa frente a la amenaza directa del enemigo."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "NO DORMIRÁ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766330342/No_Dormira%CC%81_v5kbsz.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Vigilancia divina / Descanso seguro"
+        ],
+        "context": {
+            "verse": "Salmo 121:3-6",
+            "focus": "La canción aborda la vulnerabilidad del sueño y el insomnio espiritual, basándose en los versos 3-6. El coro retoma textualmente la promesa bíblica: \"No se dormirá el que te guarda\". Mientras el cuerpo descansa, Dios mantiene una vigilancia perpetua, protegiendo del sol y la luna."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "BAJO TUS ALAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766337013/Bajo_tus_Alas_rajwkr.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Protección íntima / Cobertura divina"
+        ],
+        "context": {
+            "verse": "Salmo 91:1-4",
+            "focus": "Se centra en los versículos 1-4, específicamente en la imagen de las \"alas\" y \"plumas\" (v.4). A diferencia de la protección rígida de una torre, las alas implican calor, cercanía y cobertura viva ante el \"lazo del cazador\". El coro mantiene la promesa literal de seguridad bajo su cobertura."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "REFUGIO ETERNO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766337313/Refugio_Eterno_v1fkk0.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Compendio de Protección Divina"
+        ],
+        "context": {
+            "verse": "Salmos 61, 62, 91, 121",
+            "focus": "Es un himno de síntesis. La estructura lírica viaja desde la necesidad humana hasta la seguridad divina, utilizando las imágenes más potentes de cada salmo (Roca, Ojos, Alas, Silencio)."
+        },
+        "album": "SANTUARIO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1765935984/santuario_epzcvg.jpg"
+    },
+    {
+        "title": "SILENCIO EN LA ROCA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766337666/Silencio_en_la_Roca_twcrvm.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Confianza exclusiva / Silencio activo"
+        ],
+        "context": {
+            "verse": "Salmo 62:1-8",
+            "focus": "Basado en Salmo 62:1-8. Las palabras clave son \"Solamente\" y \"Roca\". La letra rechaza la confianza en la violencia o la riqueza, afirmando que el poder y la misericordia pertenecen a Dios."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "RAÍCES EN EL RÍO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766340614/Rai%CC%81ces_en_el_Ri%CC%81o._nttoaw.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Estabilidad / Elección del Camino"
+        ],
+        "context": {
+            "verse": "Salmo 1:1-3",
+            "focus": "La canción se centra en la estabilidad y la dicha (Bienaventurado) del que elige la Ley de Dios. Contrasta el \"caminar/pararse/sentarse\" de los malos (v.1) con el \"meditar\" del justo (v.2). El coro explota la metáfora del árbol (v.3) que se nutre de una fuente inagotable, asegurando que \"su hoja no cae\" y \"prosperará\"."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "EL VIENTO Y LA NADA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766349739/El_Viento_Y_La_Nada_t0b2zc.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Futilidad / Cimientos Falsos"
+        ],
+        "context": {
+            "verse": "Salmo 1:4-6",
+            "focus": "El texto describe el destino de los \"malos\" no necesariamente como un castigo fulminante, sino como una consecuencia natural de su falta de arraigo (raíz). \"No se levantarán\" implica que no tienen base sólida para sostenerse cuando llega la prueba (el juicio). Contrastando con el árbol de la canción anterior, el malvado es volátil, temporal y termina en la nada."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "PASOS DE FUEGO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766352756/Pasos_de_Fuego_rpuszo.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Guía / Luz en Oscuridad"
+        ],
+        "context": {
+            "verse": "Salmo 119:105",
+            "focus": "El versículo es una declaración de dependencia. La Palabra de Dios no siempre revela el futuro lejano, sino que da la instrucción necesaria para el momento presente (\"a mis pies\"). Transforma la oscuridad amenazante en un camino transitable. La canción enfatiza la seguridad y la intimidad de esta guía en medio de la \"noche\" (problemas/confusión)."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "ORO Y MIEL",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766361039/Oro_y_Miel_ga2v2q.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Alivio / Refugio Inmersivo"
+        ],
+        "context": {
+            "verse": "Salmo 119:97-104",
+            "focus": "La sabiduría de Dios trae paz y supera al conocimiento humano. Enfocamos la canción en el alivio sensorial y el refugio."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "INQUEBRANTABLE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766365196/Inquebrantable_raxf8q.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Seguridad / Adoración / Protección"
+        ],
+        "context": {
+            "verse": "Salmo 119:113-120",
+            "focus": "El pasaje es un clamor de seguridad. El título resume el estado del creyente protegido por el \"Escudo\" y el \"Refugio\" de Dios."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "AGUAS DE CALMA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766368359/Aguas_de_Calma_df83gm.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz / Meditación / Descanso"
+        ],
+        "context": {
+            "verse": "Salmo 23:1-3",
+            "focus": "\"En lugares de delicados pastos me hará descansar\"."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "CASA DE PAZ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766418043/Casa_de_Paz_jjqgeu.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Eternidad / Hogar / Seguridad"
+        ],
+        "context": {
+            "verse": "Salmo 23:4-6",
+            "focus": "\"En la casa de Jehová moraré por largos días\". El destino eterno del creyente tras superar el valle de sombra."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "DESDE LA ETERNIDAD",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766419143/Desde_la_Eternidad_ydh4ps.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Eternidad de Dios / Fragilidad Humana / Refugio Ancestral"
+        ],
+        "context": {
+            "verse": "Salmo 90:1-6",
+            "focus": "\"Señor, tú nos has sido refugio... Antes que los montes fuesen engendrados... desde el siglo y hasta el siglo, tú eres Dios\"."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "SENDA ETERNA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766420566/Senda_Eterna_z8arku.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Compromiso Total / Resumen del Viaje"
+        ],
+        "context": {
+            "verse": "Resumen Global (Salmos 1, 23, 90, 119)",
+            "focus": "Integra la estabilidad (S.1), la guía (S.119), el cuidado (S.23) y la eternidad (S.90)."
+        },
+        "album": "SENDAS",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1766421222/sendas_portada_upbxvx.jpg"
+    },
+    {
+        "title": "CIELO CLARO v1",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292234/CIELO_CLARO_ezwtaw.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "CIELO CLARO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292243/CIELO_CLARO_v2_lbgmsa.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "MI INVIERNO ACABÓ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292259/MI_INVIERNO_ACABO%CC%81_fkom0l.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La intimidad de reconciliarse con el Padre."
+        ],
+        "context": {
+            "verse": "Salmo 32:3-5",
+            "focus": "El contraste entre la sequía espiritual y el alivio del perdón."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "LUGAR SEGURO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292259/LUGAR_SEGURO_bktmk7.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La seguridad de estar protegido y guiado."
+        ],
+        "context": {
+            "verse": "Salmo 32:7-8",
+            "focus": "Dios como refugio (escondedero) y guía personal (\"fijaré mis ojos\")."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "INMENSA BONDAD v1",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292252/INMENSA_BONDAD_zqcvmb.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "INMENSA BONDAD v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292248/INMENSA_BONDAD_v2_gev808.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "CORAZÓN NUEVO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292245/CORAZO%CC%81N_NUEVO_vz1hfe.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La petición de una renovación espiritual completa."
+        ],
+        "context": {
+            "verse": "Salmo 51:10-12",
+            "focus": "La creación (\"bara\") de un corazón limpio y la restauración del gozo."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "CORAZÓN NUEVO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292237/CORAZO%CC%81N_NUEVO_v2_kud8pn.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "ABRE MIS LABIOS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292243/ABRE_MIS_LABIOS_biluq4.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La respuesta natural al perdón es la adoración pública."
+        ],
+        "context": {
+            "verse": "Salmo 51:14-17",
+            "focus": "La verdadera adoración no es el sacrificio ritual, sino el espíritu quebrantado y la alabanza verbal."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "ABRE MIS LABIOS v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292244/ABRE_MIS_LABIOS_v2_nuvg8n.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "TENGO SED v1",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292258/TENGO_SED_uhb6ty.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "TENGO SED v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292258/TENGO_SED_v2_l5ufuu.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "TU DIESTRA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292232/TU_DIESTRA_abzyhv.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La seguridad de estar sostenido por la mano de Dios."
+        ],
+        "context": {
+            "verse": "Salmo 63:5-8",
+            "focus": "\"Mi alma está pegada a ti\", \"Tu diestra me ha sostenido\"."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "TU DIESTRA v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292264/TU_DIESTRA_v2_dqvzsw.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "LABIOS DE JÚBILO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292251/LABIOS_DE_JU%CC%81BILO_gumfqz.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La alegría de encontrar satisfacción total en Dios."
+        ],
+        "context": {
+            "verse": "Salmo 63:5",
+            "focus": "La satisfacción plena en Dios (\"meollo y grosura\") y la respuesta de alabanza alegre."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "EL SALMO DE MI VIDA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292249/EL_SALMO_DE_MI_VIDA_p5rrrv.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La fidelidad de Dios a través de toda la historia de vida."
+        ],
+        "context": {
+            "verse": "Resumen Salmos 23, 51, 63",
+            "focus": "Integración de la provisión (23), el perdón (51) y la satisfacción (63) en una sola alabanza."
+        },
+        "album": "REGRESO A TI",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1769291955/albumregresoati-ezgif.com-resize_m9jv3o.png"
+    },
+    {
+        "title": "AQUÍ SIGO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748055/AQUI%CC%81_SIGO_pjelnn.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "ALUMBRA MIS OJOS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748059/ALUMBRA_MIS_OJOS_ev45y7.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La necesidad de la luz de Dios para mantener la fe despierta y viva."
+        ],
+        "context": {
+            "verse": "Salmo 13:3-4",
+            "focus": "La petición de iluminación (\"alumbra mis ojos\") y vitalidad espiritual."
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "TU BONDAD",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748056/TU_BONDAD_am8ua5.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La alegría de confiar en la misericordia de Dios pase lo que pase."
+        ],
+        "context": {
+            "verse": "Salmo 13:5-6",
+            "focus": "La decisión voluntaria de confiar y la celebración de la bondad divina (\"me ha hecho bien\")."
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "EN TÍ CONFÍO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748055/EN_TI%CC%81_CONFI%CC%81O_ckwhza.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "NO FUE MI FUERZA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748056/NO_FUE_MI_FUERZA_ec56zv.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Joyful"
+        ],
+        "context": {
+            "verse": "salmo 44 ",
+            "focus": "Mensaje central centrado en la soberanía divina y el fundamento teológico de la fe en Jesús."
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "TU BONDAD v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748059/TU_BONDAD_v2_q7x3q9.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "MI ROCA FIRME",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748056/MI_ROCA_FIRME_qsn6dx.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Seguridad y Paz en Dios"
+        ],
+        "context": {
+            "verse": "Salmo 18:1-3",
+            "focus": "Declaración de Dios como fortaleza y roca"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "EL CIELO SE ABRIÓ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774824923/El_Cielo_se_Abrio%CC%81_gjuypr.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Victoria y Gratitud"
+        ],
+        "context": {
+            "verse": "Salmo 18:4-6",
+            "focus": "Respuesta de Dios al clamor del afligido"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "TU BAJASTE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748057/TU_BAJASTE_bzogmv.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "TU BAJASTE v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748057/TU_BAJASTE_v2_gnq8y5.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "LUGAR ESPACIOSO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748058/LUGAR_ESPACIOSO_ofgrf7.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "El Deleite de Dios y el Rescate"
+        ],
+        "context": {
+            "verse": "Salmo 18:16-19",
+            "focus": "Rescate divino por deleite en el hijo"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "LUGAR ESPACIOSO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748058/LUGAR_ESPACIOSO_v2_tieh0f.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "EL CAMINO DE LA LUZ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748059/EL_CAMINO_DE_LA_LUZ_ebionv.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Integridad y Obediencia"
+        ],
+        "context": {
+            "verse": "Salmo 18:20-24",
+            "focus": "La recompensa de la integridad"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "PIES EN LAS ALTURAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748063/PIES_EN_LAS_ALTURAS_upokzx.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Fortaleza y Agilidad Divina"
+        ],
+        "context": {
+            "verse": "Salmo 18:32-42",
+            "focus": "Dios como capacitador y fuerza del guerrero"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "PIES EN LAS ALTURAS v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748063/PIES_EN_LAS_ALTURAS_v2_muwbkp.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "VIVA EL SEÑOR",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748064/VIVA_EL_SEN%CC%83OR_r6fviz.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Gratitud y Exaltación"
+        ],
+        "context": {
+            "verse": "Salmo 18:46-50",
+            "focus": "Exaltación final y gratitud eterna"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "VIVA EL SEÑOR v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748063/VIVA_EL_SEN%CC%83OR_v2_zo6etg.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CAMINOS DE LUZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774748258/CAMINOS_DE_LUZ_gbyy8t.png"
+    },
+    {
+        "title": "PELEA POR MÍ.",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902991/Pelea_por_Mi%CC%81_dovqux.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "VIENTO Y SOMBRAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902991/Viento_y_Sombras_u8trvz.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La Luz que Despeja el Camino"
+        ],
+        "context": {
+            "verse": "Salmo 35:4-8",
+            "focus": "La protección divina como viento que dispersa el mal"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "¿QUIÉN COMO TÚ?",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902987/Quie%CC%81n_como_Tu%CC%81_uwg89n.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La Exclusividad y Bondad de Dios"
+        ],
+        "context": {
+            "verse": "Salmo 35:9-10",
+            "focus": "La unicidad de Dios y Su compasión"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "CAMINO DERECHO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902987/Camino_Derecho_d3nklj.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Determinación e Integridad"
+        ],
+        "context": {
+            "verse": "Salmo 35:11-16",
+            "focus": "Integridad y respuesta en oración"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "TU AMOR NO CALLARÁ",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902995/Tu_Amor_No_Callara%CC%81_rwhrdv.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La Voz Activa de Dios"
+        ],
+        "context": {
+            "verse": "Salmo 35:17-23",
+            "focus": "La fidelidad activa de Dios"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "GRANDE ES EL SEÑOR",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902990/GRANDE_ES_EL_SEN%CC%83OR_naxdii.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "El Gozo como Regalo Divino"
+        ],
+        "context": {
+            "verse": "Salmo 35:24-28",
+            "focus": "Gratitud por la paz y la justicia"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "ECO DE VICTORIA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902991/Eco_de_Victoria_jyzufi.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "El Triunfo de la Fe"
+        ],
+        "context": {
+            "verse": "Salmo 35 (Completo)",
+            "focus": "Recuento de la protección divina"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "ECO DE VICTORIA v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902987/Eco_de_Victoria_v2_euxonl.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "VUELO DE VICTORIA",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774902989/Gemini_Generated_Image_6bdaco6bdaco6bda_k0587i.png"
+    },
+    {
+        "title": "LEVÁNTATE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916122/Leva%CC%81ntate_u6p8gh.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "LEVÁNTATE v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916122/Leva%CC%81ntate_v2_bjt1wd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "HOGAR EN TU PRESENCIA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916138/Hogar_en_Tu_Presencia_lgfxpa.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La Paternidad de Dios"
+        ],
+        "context": {
+            "verse": "Salmo 68:5-10",
+            "focus": "Dios como Padre y Refugio"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "HOGAR EN TU PRESENCIA v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/Hogar_en_Tu_Presencia_v2_nemyyy.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "BUENAS NUEVAS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916123/Buenas_Nuevas_xufujo.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "El Mensaje de Victoria"
+        ],
+        "context": {
+            "verse": "Salmo 68:11-14",
+            "focus": "Proclamación masiva del bien"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "EL MONTE SAGRADO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/El_Monte_Sagrado_syfdad.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La Grandeza de Su Presencia"
+        ],
+        "context": {
+            "verse": "Salmo 68:15-19",
+            "focus": "Majestad y dones de Dios"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "PUERTA DE ESCAPE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/Puerta_de_Escape_flaazo.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "La Victoria y el Desfile Divino"
+        ],
+        "context": {
+            "verse": "Salmo 68:20-27",
+            "focus": "Dios que libra de la muerte"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "REINOS DE LA TIERRA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916127/Reinos_de_la_Tierra_pfpfol.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "El Dominio Eterno de Dios"
+        ],
+        "context": {
+            "verse": "Salmo 68:28-35",
+            "focus": "Soberanía y poder universal"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "REINOS DE LA TIERRA v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916123/Reinos_de_la_Tierra_v2_unqj6o.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "CUMBRE DE MAJESTAD",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/Cumbre_de_Majestad_tp3mv0.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Piano",
+            "Brass",
+            "Batería",
+            "Bajo"
+        ],
+        "context": {
+            "verse": "Salmo 68:1-35",
+            "focus": "Narrativo y Épico"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "CUMBRE DE MAJESTAD v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/Cumbre_de_Majestad_v2_faosbc.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "CUMBRE DE MAJESTAD",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774916299/Gemini_Generated_Image_1j9sfg1j9sfg1j9s_obcvk0.png"
+    },
+    {
+        "title": "MIS MANOS PARA LA GUERRA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979357/Mis_Manos_para_la_Guerra_plugvw.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Guitarras Delay",
+            "Pads",
+            "Bajo"
+        ],
+        "context": {
+            "verse": "Salmo 144:1-2",
+            "focus": "Seguridad y Confianza"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "MIS MANOS PARA LA GUERRA v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979349/Mis_Manos_para_la_Guerra_v2_rofzjo.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "¿QUE ES EL HOMBRE?",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979357/Que%CC%81_es_el_Hombre__mlsx5u.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "¿QUE ES EL HOMBRE? v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979362/Que%CC%81_es_el_Hombre__v2_cfm1rr.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "TOCA LOS MONTES",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979350/Toca_los_Montes_lng7nr.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Pads",
+            "Guitarra",
+            "Bajo"
+        ],
+        "context": {
+            "verse": "Salmo 144:5-8",
+            "focus": "Ruego y Reverencia"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "TOCA LOS MONTES v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979362/Toca_los_Montes_v2_grs0hp.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "CÁNTICO NUEVO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979354/Ca%CC%81ntico_Nuevo_mkqylj.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Guitarras",
+            "Sintetizadores",
+            "Bajo"
+        ],
+        "context": {
+            "verse": "Salmo 144:9-11",
+            "focus": "Alegría y Gratitud"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "DICHOSO EL PUEBLO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979354/Dichoso_el_Pueblo_nvebem.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Bienestar y plenitud"
+        ],
+        "context": {
+            "verse": "Salmo 144:12-15",
+            "focus": "Prosperidad y Familia"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "DICHOSO EL PUEBLO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979352/Dichoso_el_Pueblo_v2_fq0tvz.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "ROCA Y ESCUDO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774980498/Roca_y_Escudo_Medley_tjrrgg.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "ROCA Y ESCUDO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774980498/Roca_y_Escudo_Medley_v2_p5mdzy.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "ROCA Y ESCUDO",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774979350/Gemini_Generated_Image_gdtihngdtihngdti_sdtsxu.png"
+    },
+    {
+        "title": "HERENCIA MÍA",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996288/Herencia_Mi%CC%81a_mozdax.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Autoridad del Hijo"
+        ],
+        "context": {
+            "verse": "Salmo 2:7-9",
+            "focus": "Identidad y Herencia"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "HERENCIA MÍA v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996292/Herencia_Mi%CC%81a_v2_cv4wzd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "REFUGIO SANTO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996292/Refugio_Santo_aflnkt.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Victoria en Dios"
+        ],
+        "context": {
+            "verse": "Salmo 2:10-12",
+            "focus": "Sabiduría y Refugio"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "REFUGIO SANTO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996290/Refugio_Santo_v2_abaorh.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "DESDE SIEMPRE",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996286/Desde_Siempre_qw9dwd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Fidelidad desde el origen"
+        ],
+        "context": {
+            "verse": "Salmo 22:9-10",
+            "focus": "Cuidado Maternal de Dios"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "DESDE SIEMPRE v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996286/Desde_Siempre_v2_tdpbcd.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "CERCA ESTÁS",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996286/Cerca_Esta%CC%81s_mfb4aq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Confianza en la ayuda"
+        ],
+        "context": {
+            "verse": "Salmo 22:19-21",
+            "focus": "Seguridad y Cercanía"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "CERCA ESTÁS v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996285/Cerca_Esta%CC%81s_v2_voks0g.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "GRAN REUNIÓN",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996288/Gran_Reunio%CC%81n_spki8x.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Celebración Colectiva"
+        ],
+        "context": {
+            "verse": "Salmo 22:22-26",
+            "focus": "Invitación a la Fiesta"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "GRAN REUNIÓN v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996289/Gran_Reunio%CC%81n_v2_xf2ozb.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "REINO ETERNO",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996293/Reino_Eterno_kimkbq.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Victoria Final"
+        ],
+        "context": {
+            "verse": "Salmo 22:27-31",
+            "focus": "Victoria y Legado"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
+    },
+    {
+        "title": "REINO ETERNO v2",
+        "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996296/Reino_Eterno_v2_srcbqe.mp3",
+        "duration_secs": 240,
+        "moments": [
+            "Paz Interior"
+        ],
+        "context": {
+            "verse": "Salmos 23:1",
+            "focus": "Adoración y descanso"
+        },
+        "album": "HERENCIA DE PAZ",
+        "thumbnail": "https://res.cloudinary.com/dveqs8f3n/image/upload/v1774996289/Gemini_Generated_Image_5cy0ef5cy0ef5cy0_egxkzd.png"
     }
-  },
-  {
-    "title": "Alabastro",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360791/gqprsmse1a8q0b9rxboa.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Lucas 7:37 ",
-      "theme": "Adoración extravagante / Perdón",
-      "focus": "Nos enfocamos en la adoración que rompe protocolos y \"pierde la compostura\". La canción busca transmitir la tensión entre la frialdad religiosa del juicio (Simón) y el fuego emocional del perdón recibido (la mujer), priorizando la extravagancia sobre la opinión pública.",
-      "bpm": 71
-    }
-  },
-  {
-    "title": "En la Orilla",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486404/En_la_orilla_gjbede.mp3",
-    "moments": [
-      "Restauración"
-    ],
-    "context": {
-      "verse": "Juan 21 ",
-      "theme": "Restauración / Gracia",
-      "focus": "Musicalizar la gracia que supera el fracaso. No queríamos un tono de regaño, sino de amanecer y desayuno en la playa. El enfoque es la restauración de la identidad y el propósito después de haber tocado fondo.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "El Sí de María",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765357513/bm03vfa6jhy7kfevv8yn.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Lucas 1:38 ",
-      "theme": "Disposición / Humildad",
-      "focus": "Capturar la intimidad y la fragilidad del momento. No queríamos una pintura renacentista gloriosa, sino el momento humano de miedo superado por la fe. El enfoque es la disposición total de una persona común ante un destino divino humanamente imposible.",
-      "bpm": 60
-    }
-  },
-  {
-    "title": "El Camino",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486356/El_Camino_vhutle.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Lucas 24 ",
-      "theme": "Revelación / Compañerismo",
-      "focus": "Evocar el viaje emocional: empezar caminando lento y abatidos (\"esperábamos que él fuera\") y terminar corriendo de regreso a Jerusalén con la noticia. Enfocamos en que la revelación de Dios ocurre en la conversación y la comunión, no solo en el espectáculo.",
-      "bpm": 65
-    }
-  },
-  {
-    "title": "Manos de Gracia",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765485940/Manos_de_Gracia._u0cbld.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Juan 13 ",
-      "theme": "Servicio / Humildad",
-      "focus": "Ilustrar la humildad revolucionaria de Dios. Queríamos un sonido íntimo, casi de \"agua y silencio\", que refleje la vergüenza de los discípulos al ver a su Dios en el suelo y la ternura del acto. Establece el \"liderazgo de servicio\" como norma.",
-      "bpm": 60
-    }
-  },
-  {
-    "title": "La Mejor Parte",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360814/l6vkoxz2igljmyjcf6od.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Lucas 10:42 ",
-      "theme": "Prioridad / Presencia",
-      "focus": "Enfatizar la tensión moderna entre el activismo (\"hacer cosas para Dios\") y la contemplación (\"estar con Dios\"). La canción es una invitación a \"soltar el cucharón\" y sentarse a escuchar. Priorizar la Presencia sobre el desempeño.",
-      "bpm": 62
-    }
-  },
-  {
-    "title": "La Travesía Tranquila",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765357613/zaewdj4uocvax3sud4c1.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Lucas 2 ",
-      "theme": "Espera / Viaje",
-      "focus": "Transmitir la atmósfera de una \"Road Movie\" bíblica: fatiga, polvo, el paso lento de un burro, pero una calma sobrenatural interior sabiendo que llevan la Promesa. La espera tensa y la confianza ciega en el plan divino antes del milagro.",
-      "bpm": 60
-    }
-  },
-  {
-    "title": "Siete Vueltas",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360281/sv6flgpmehveyfnnjasq.mp3",
-    "moments": [
-      "Guerra Espiritual",
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Josué 6 ",
-      "theme": "Victoria / Fe activa",
-      "focus": "La adoración como arma de guerra (\"Warfare Praise\"). Usamos un ritmo progresivo que simule las vueltas, aumentando la tensión musical hasta el \"grito\" final donde entra toda la banda. La fe activa que camina antes de ver la victoria.",
-      "bpm": 110
-    }
-  },
-  {
-    "title": "El Manto",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486272/El_Manto_mfbwpu.mp3",
-    "moments": [
-      "Restauración"
-    ],
-    "context": {
-      "verse": "Marcos 5 ",
-      "theme": "Fe desesperada / Sanidad",
-      "focus": "Expresar la desesperación que rompe barreras religiosas y sociales. El ritmo \"Deep Kick\" simula el corazón latiendo rápido y el empujar físico entre la multitud. Es la fe que se atreve a tocar a Dios \"ilegalmente\" por necesidad.",
-      "bpm": 66
-    }
-  },
-  {
-    "title": "Guardián",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360373/tvm78ysiajiloc7vntaq.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Apocalipsis 5 ",
-      "theme": "Protección / Poder",
-      "focus": "Resaltar la majestad protectora y temible de Cristo. En un mundo que parece fuera de control, Jesús tiene el libro de la historia en su mano. Usamos sonidos exóticos (Duduk) y rugidos FX para evocar poder antiguo y misterio soberano.",
-      "bpm": 66
-    }
-  },
-  {
-    "title": "Soplo de Vida",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360163/tmei63neapamcfetjqlx.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Ezequiel 37 ",
-      "theme": "Avivamiento / Restauración",
-      "focus": "Musicalizar el proceso de avivamiento. Empezar seco, estático y minimalista, y construir hacia un ritmo vital y épico. Es la canción para cantar sobre situaciones muertas (hijos perdidos, matrimonios rotos, sueños) creyendo en la resurrección.",
-      "bpm": 62
-    }
-  },
-  {
-    "title": "La Piedra Rodó",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486313/La_piedra_rodo%CC%81._qmkuiu.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Mateo 28 ",
-      "theme": "Victoria sobre la muerte",
-      "focus": "Enfocarse en la victoria explosiva y física. La impotencia del máximo poder humano (Roma) frente al poder de Dios. Es un himno de triunfo: la tumba está vacía, el sello roto y la muerte ha muerto.",
-      "bpm": 62
-    }
-  },
-  {
-    "title": "A Medianoche",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360204/syrgbhwqxpqbmh2jxtcx.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Hechos 16 ",
-      "theme": "2",
-      "focus": "El poder de la \"alabanza sacrificio\". Cantar cuando duele físicamente. La canción empieza oscura y tensa (sonido de cadenas) y explota en libertad. La adoración funciona como una llave maestra para las cárceles espirituales.",
-      "bpm": 59
-    }
-  },
-  {
-    "title": "Tu Sombra y Tu Luz",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360242/rlfi7n3ha7esvdpkjgwq.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Éxodo 13 ",
-      "theme": "Dirección divina",
-      "focus": "Plasmar la dependencia total y dinámica. El ritmo constante simula la marcha por el desierto. La letra se enfoca en que no necesitamos saber el destino final, solo necesitamos seguir la Presencia paso a paso.",
-      "bpm": 63
-    }
-  },
-  {
-    "title": "Kadosh",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361154/sfm2apwuowwiajwnhi6v.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Isaías 6 ",
-      "theme": "Santidad de Dios",
-      "focus": "Recuperar el asombro sagrado (\"Mysterium Tremendum\"). La música debe sonar antigua, con raíces judías y un toque místico. No es una canción de \"amigo\", es una canción de reverencia y temblor ante el Fuego Consumidor.",
-      "bpm": 62
-    }
-  },
-  {
-    "title": "León y Cordero",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361122/pv8lom15xpowq7swo4w9.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Apocalipsis 5",
-      "theme": "Soberanía / Sacrificio",
-      "focus": "Explorar la paradoja central del Reino. La música debe combinar lo épico y orquestal (el rugido del León) con lo dulce y triste (la inmolación del Cordero). Cristo es fuerte y tierno a la vez, Soberano y Sacrificio.",
-      "bpm": 75
-    }
-  },
-  {
-    "title": "Consumado Es",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486214/Consum_do_es_gyquu6.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Juan 19 ",
-      "theme": "Redención completa",
-      "focus": "No es un canto fúnebre triste, es un canto de alivio profundo y victoria final. La atmósfera \"Ambient\" sugiere el momento espiritual en que el velo se rasga y el espíritu se entrega en paz absoluta. La obra está hecha.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "El Susurro",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360835/o25nyep019z0ofkdyfsk.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "1 Reyes 19 ",
-      "theme": "Voz de Dios / Calma",
-      "focus": "El contraste entre el ruido del mundo (y del ministerio público) y la voz íntima de Dios. La canción es casi una nana, un susurro al oído para el alma cansada de pelear batallas espirituales.",
-      "bpm": 61
-    }
-  },
-  {
-    "title": "Mío Eres Tú",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360412/hxynwygagjizcfujavwi.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Isaías 43 ",
-      "theme": "Identidad / Pertenencia",
-      "focus": "Fundamentar la seguridad en la pertenencia. No importa lo que pase alrededor o lo que perdamos, el sello de propiedad de Dios es inborrable. Sonido moderno y envolvente para reafirmar la identidad del creyente.",
-      "bpm": 67
-    }
-  },
-  {
-    "title": "En Tus Manos",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360858/slji0tnwpchardcrzcpd.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Jeremías 18 ",
-      "theme": "Formación / Soberanía",
-      "focus": "Aceptar que somos barro. A veces el proceso de \"hacerse de nuevo\" duele (la presión de los dedos, la velocidad de la rueda, el horno), pero confiamos en las manos del Artista. Música orgánica, cíclica y contemplativa.",
-      "bpm": 63
-    }
-  },
-  {
-    "title": "Getsemaní",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765486162/Getsemani%CC%81_ondgti.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Mateo 26:39",
-      "theme": "Rendición / Voluntad",
-      "focus": "Enfocar en la rendición (\"Surrender\") como el acto de adoración supremo. La canción debe transmitir la agonía de la decisión y la paz profunda que viene inmediatamente después de decir \"Sí\" a Dios. Piano melancólico pero firme.",
-      "bpm": 61
-    }
-  },
-  {
-    "title": "Invisible",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765360877/hqs0otahkbsesrldpu8v.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Hebreos 11 (Fe)",
-      "theme": "Fe en lo no visto",
-      "focus": "Validar la fe en tiempos de silencio y oscuridad. Animación a caminar \"viendo al Invisible\". Música etérea, con pads y texturas misteriosas que sugieren esa dimensión espiritual que los ojos físicos no captan.",
-      "bpm": 60
-    }
-  },
-  {
-    "title": "Espejo de Fuego",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361173/uoenmbrytyvyyx7xnjc7.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Apocalipsis 15 / 4",
-      "theme": "Adoración celestial",
-      "focus": "Visualizar la adoración celestial. Queríamos un sonido \"Celtic/Ethereal\" que transporte al oyente fuera del tiempo cronos. Es la iglesia militante en la tierra uniéndose al coro de la iglesia triunfante en el cielo.",
-      "bpm": 60
-    }
-  },
-  {
-    "title": "Cielo Nuevo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765361198/xtohlfixqntzhytw0q72.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Apocalipsis 21",
-      "theme": "Esperanza eterna",
-      "focus": "Impartir esperanza escatológica. Consolar al que sufre hoy recordándole el final del libro. El piano debe sonar cristalino y puro, evocando la transparencia de esa ciudad celestial donde Dios habita con los hombres.",
-      "bpm": 61
-    }
-  },
-  {
-    "title": "Maranatha",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765588152/Maranatha_lowk4e.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Apocalipsis 22",
-      "theme": "Anhelo del regreso",
-      "focus": "Expresar el anhelo urgente (\"Longing\"). La música debe tener un sentido de suspensión, de espera activa. El efecto \"Reverse Piano\" sugiere que el tiempo se está rebobinando o acabando hacia el encuentro final.",
-      "bpm": 64
-    }
-  },
-  {
-    "title": "Solo una Cosa",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807152/Solo_una_cosa_lor5km.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 27:4",
-      "theme": "Anhelo / Contemplación",
-      "focus": "La simplificación radical de la vida. En un mundo moderno de multitarea y distracción infinita, esta canción es un ancla. \"Solo una cosa\". Piano y Cello para lograr la máxima intimidad y sencillez.",
-      "bpm": 64
-    }
-  },
-  {
-    "title": "El Escondite",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807406/El_Escondite_u7n6qp.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 32:7 / Salmo 91",
-      "theme": "Refugio / Seguridad",
-      "focus": "Musicalizar la sensación de estar \"cubierto\" y a salvo. Sonidos envolventes (Pads profundos) que hagan sentir al oyente como si estuviera dentro de una burbuja de protección divina donde el enemigo no puede tocarlo.",
-      "bpm": 60
-    }
-  },
-  {
-    "title": "Tu Mirada Me Sigue",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807241/Tu_Mirada_Me_Sigue_oldqom.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 139:1-8",
-      "theme": "Confianza / Omnisciencia",
-      "focus": "Consuelo contra la soledad existencial. Nunca estamos realmente solos. El sonido \"Shimmer\" y \"E-Bow\" sugiere esa presencia continua, brillante y sostenida que nos envuelve suavemente sin asfixiar.",
-      "bpm": 73
-    }
-  },
-  {
-    "title": "AGUA DE VIDA",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807662/Agua_de_Vida_tww6rl.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 42",
-      "theme": "Sed espiritual / Renovación",
-      "focus": "Validar la \"noche oscura del alma\". No es una canción feliz, es una canción honesta sobre la depresión espiritual. Sonidos de agua (Water FX) contrastan irónicamente con la letra de sed, creando tensión y anhelo.",
-      "bpm": 69
-    }
-  },
-  {
-    "title": "ECOS DE LUZ",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765806926/Ecos_de_Luz_hipibk.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 19",
-      "theme": "Majestad / Creación",
-      "focus": "Dar sonido a la \"música de las esferas\". Usar instrumentos cristalinos y resonantes (Vibráfono, Handpan) que suenen a estrellas, luz y espacio. La majestuosidad cósmica del Creador que habla en silencio.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "ALAS DEL ALBA",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807499/Alas_del_Alba_jl4izi.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 139",
-      "theme": "Omnipresencia / Guía",
-      "focus": "Enfatizar la persecución amorosa de Dios (\"The Hound of Heaven\"). Estilo Post-Rock con guitarras etéreas y delays largos para evocar la sensación de vuelo, distancia inmensa y encuentro inevitable.",
-      "bpm": 66
-    }
-  },
-  {
-    "title": "QUIETUD",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765807569/Quietud_n2z3na.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 46",
-      "theme": "Paz / Confianza (\"Raphah\")",
-      "focus": "Invocar una paz sobrenatural en medio del caos global. El sonido \"Liquid\" y el Pedal Steel crean una atmósfera de calma inamovible y fluida, mientras el mundo parece caerse alrededor.",
-      "bpm": 65
-    }
-  },
-  {
-    "title": "AL DESPERTAR",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933147/Al_Despertar_1_vzs4e7.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 63",
-      "theme": "Intimidad de madrugada / Sed del alma",
-      "focus": "Intimidad extrema. Aplicamos la regla \"Muestra, no digas\": usamos imágenes sensoriales de sequedad y amanecer. Piano solo para reflejar la soledad del desierto que se convierte en un santuario personal.",
-      "bpm": 66
-    }
-  },
-  {
-    "title": "VALE MÁS",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933146/Vale_Ma%CC%81s._rqkdib.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 84",
-      "theme": "Esperanza / Fuerza en el camino",
-      "focus": "Buscamos un Himno de Esperanza (\"Hit\"). El estilo es Epic Cinematic Pop: elegante, eufórico y brillante. La letra es directa (\"Crucé desiertos y mares\") y motivadora (\"Nada lo frena\"), eliminando metáforas complejas para centrarse en la decisión imparable de vivir guiados por Dios.",
-      "bpm": 75
-    }
-  },
-  {
-    "title": "QUIÉN MÁS",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933146/Quie%CC%81n_Ma%CC%81s__baxn9h.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 73",
-      "theme": "Suficiencia de Dios / Victoria sobre la duda",
-      "focus": "Mantenemos la energía de Himno Épico. Transformamos la duda de Asaf en un grito de victoria limpio. La letra empieza con \"Casi dejo de creer / Casi olvido quién es mi Rey\" y el coro culmina en la seguridad de Dios como \"Roca y certeza\". Estilo Epic Cinematic Pop con Bass Boosted elegante.",
-      "bpm": 75
-    }
-  },
-  {
-    "title": "ENCONTRÉ MI HOGAR",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933147/Encontre%CC%81_mi_Hogar_rxe25k.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 84:3 (El Gorrión)",
-      "theme": "Descanso / Hogar espiritual",
-      "focus": "Buscamos una intimidad envolvente. La letra contrasta el cansancio de buscar fuera con la paz de encontrar el \"nido\". Musicalmente, el ritmo simula un latido lento y profundo que envuelve al oyente, creando una atmósfera de seguridad materna y descanso absoluto.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "NO TEMERÉ",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933148/No_Temere%CC%81_v2_ohyhah.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 27:1-3",
-      "theme": "Valentía / Confianza en medio del peligro",
-      "focus": "Contrastamos la violencia de la guerra con la paz interior del creyente. Usamos el mismo estilo \"Bass Boosted\" de la canción anterior para representar el latido tranquilo del corazón de David, que no se acelera por el miedo, sino que mantiene un ritmo lento y seguro porque confía en su Dios.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "TUS ALAS",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765933150/Tus_Alas_xugymd.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 63:7",
-      "theme": "Protección / Satisfacción en Dios",
-      "focus": "Cambiamos la perspectiva del desierto (sed) a la del refugio (alas). La canción transmite una seguridad maternal y envolvente. Mantenemos el sonido profundo de \"latido\" para simbolizar la calma y el descanso seguro bajo la protección divina, como un polluelo bajo las alas de su madre.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "MI BIEN",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765934223/Mi_Bien_wx3htw.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 73:28",
-      "theme": "El verdadero éxito / Intimidad con Dios",
-      "focus": "Diseñamos la canción como un \"amanecer\" sonoro. Mantenemos el bajo profundo (el corazón latente de la serie), pero añadimos texturas brillantes y esperanzadoras en la melodía para representar la claridad mental y la luz que llega después de la duda.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "SANTUARIO",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765936793/Santuario_getrev.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmos 84, 63, 27 y 73",
-      "theme": "Resumen del viaje espiritual / Pertenencia",
-      "focus": "Diseñada como un himno cinematográfico que resume musicalmente todo el álbum. Mantenemos el \"latido\" (bajo profundo) que ha estado presente en todas las pistas, pero elevamos la intensidad emocional con cuerdas y capas vocales para dar un cierre épico y definitivo.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "ALZARÉ MIS OJOS",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765980701/Alzare%CC%81_Mis_Ojos_yxugj3.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 121",
-      "theme": "Socorro divino / Protección en el camino",
-      "focus": "Mantenemos la fórmula de éxito del álbum anterior pero adaptada al movimiento. El bajo profundo marca un ritmo de \"caminata\" constante. La letra es altamente bíblica (80%), respetando la estructura litúrgica del salmo casi al pie de la letra para reforzar la sensación de promesa inquebrantable.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "SOLO EN DIOS",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765984180/Solo_en_DIos_kuckgh.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 62",
-      "theme": "Quietud / Confianza Silenciosa",
-      "focus": "Excepción creativa: Añadimos texturas de Viento y Flauta (Wind FX) para evocar la soledad y la quietud del desierto, diferenciándola del resto del álbum. La letra se ha pulido para ser más melódica y menos literal (\"Ante ti... guarda silencio\"). Mantenemos el bajo profundo, pero con más espacio y aire (\"Breathy\").",
-      "bpm": 66
-    }
-  },
-  {
-    "title": "MIL A TU LADO",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765986123/Mil_A_Tu_Lado_x9jl8i.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 91",
-      "theme": "Inmunidad divina / Protección sobrenatural",
-      "focus": "Volvemos a la fórmula sonora del álbum anterior (Deep Bass + Heartbeat) donde el bajo actúa como un \"escudo\" envolvente. La letra se ha adaptado para fluidez moderna (cambiando \"adarga\" por \"escudo\" y \"diestra\" por \"derecha\"), manteniendo la rima y la solemnidad épica de la promesa.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "A DÓNDE HUIRÉ",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766006309/A_Do%CC%81nde_Huire%CC%81_mvkoxi.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 139",
-      "theme": "Omnipresencia / Intimidad Total",
-      "focus": "Equilibrio Lírico y Reverente: Letra corregida para mantener la solemnidad (\"Pones tu mano sobre mí\"). Enfoque Sonoro: Estilo Cinematic Pop con un bajo tipo \"Reese\" (vibrante y sostenido) para dar calidez y majestuosidad, alejándonos de ritmos rotos o ambientes fríos, buscando una atmósfera de adoración profunda.",
-      "bpm": 71
-    }
-  },
-  {
-    "title": "Torre Fuerte",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766323142/Torre_Fuerte_c7qjvd.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 61:3",
-      "theme": "Refugio activo / Protección en la guerra",
-      "focus": "La canción se enfoca en la experiencia de estar *dentro* de la fortaleza mientras la guerra ruge afuera. Utilizamos el estilo \"Ambient Post-Rock\" con guitarras E-Bow para crear una \"pared de sonido\" continua y envolvente que simula los muros protectores. El \"Felt Piano\" aporta la intimidad y seguridad del interior, mientras la atmósfera crece progresivamente (\"Slow Build\") representando la confianza que se fortalece.",
-      "bpm": 65
-    }
-  },
-  {
-    "title": "No Dormirá",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766330342/No_Dormira%CC%81_v5kbsz.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 121:3-6",
-      "theme": "Vigilancia divina / Descanso seguro",
-      "focus": "Musicalmente, utilizamos el \"Hyper Bass\" y \"Deep Sub-Bass\" no para agitar, sino para crear un efecto de \"manta de peso\" (Deep Pressure Therapy), una frecuencia baja y constante que arrulla y da seguridad física al oyente. La letra equilibra la poesía sobre el cansancio humano con la autoridad literal de la Biblia en el coro, apoyada por arreglos vocales de \"segunda voz\".",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "Bajo Tus Alas",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766337013/Bajo_tus_Alas_rajwkr.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 91:1-4",
-      "theme": "Protección íntima / Cobertura divina",
-      "focus": "Musicalmente, utilizamos un \"Deep Reese Bass\" (bajo vibrante y cinemático) para crear una atmósfera densa y cálida que envuelve al oyente, transformando el texto en un himno épico (\"Anthemic\"). Líricamente, usamos una técnica de entrelazado donde cada declaración bíblica recibe una respuesta poética emocional, reforzada por armonías vocales.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Silencio en la Roca",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766337666/Silencio_en_la_Roca_twcrvm.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 62:1-8",
-      "theme": "Confianza exclusiva / Silencio activo",
-      "focus": "Seguimos la línea \"Cinematic Anthem\", usando un \"Deep Reese Bass\" masivo y sostenido para representar sónicamente la solidez e inamovilidad de la \"Roca\". La estructura lírica utiliza \"Llamada y Respuesta\": la voz principal describe el ataque (poesía) y la segunda voz responde con la verdad bíblica textual.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Refugio Eterno",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766337313/Refugio_Eterno_v1fkk0.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmos 61, 62, 91, 121",
-      "theme": "Compendio de Protección Divina",
-      "focus": "Musicalmente, combina todos los elementos previos (Reese Bass, Cuerdas, Armonías) para un sonido masivo y conclusivo. El \"Slow Motion Beat\" a 70 BPM otorga la majestuosidad de un himno final.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Raíces en el Río",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766340614/Rai%CC%81ces_en_el_Ri%CC%81o._nttoaw.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 1:1-3",
-      "theme": "Estabilidad / Elección del Camino",
-      "focus": "Buscando innovar y modernizar el sonido, nos alejamos de la orquestación clásica para usar \"Organic Ambient Pop\". Empleamos texturas de sintetizadores líquidos y bajos profundos para evocar el fluir del agua y la profundidad de las raíces. La letra utiliza la \"Técnica de Intercalado\", mezclando poesía introspectiva moderna con la literalidad bíblica.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "El Viento y la Nada",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766349739/El_Viento_Y_La_Nada_t0b2zc.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 1:4-6",
-      "theme": "Futilidad / Cimientos Falsos",
-      "focus": "Optamos por un enfoque narrativo (\"Storytelling\") tipo parábola moderna para generar empatía y comprensión. En lugar de un tono acusatorio, contamos la historia del \"Coleccionista\" que construye un imperio visualmente impresionante (castillo de arena/cristal) pero estructuralmente nulo. La canción busca que el oyente visualice la tragedia y la futilidad de invertir la vida en lo que el viento se lleva.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Pasos de Fuego",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766352756/Pasos_de_Fuego_rpuszo.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 119:105",
-      "theme": "Guía / Luz en Oscuridad",
-      "focus": "Buscamos un equilibrio entre movimiento y belleza. No es una balada estática, sino una canción de \"caminata\" (Mid-tempo). La imagen de \"Pasos de Fuego\" evoca la intensidad sagrada de la luz divina. La melodía debe ser cálida y envolvente, transmitiendo esperanza y dirección segura.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Oro y Miel",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766361039/Oro_y_Miel_ga2v2q.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 119:97-104",
-      "theme": "Alivio / Refugio Inmersivo",
-      "focus": "Enfoque Ambient Pop con Sub-Bass. La canción funciona como una \"cápsula de seguridad\". La letra poética contrasta el \"ruido constante\" del mundo con la dulzura y el descanso de la Verdad. El bajo profundo envuelve al oyente, creando una experiencia inmersiva de protección.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "Inquebrantable",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766365196/Inquebrantable_raxf8q.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 119:113-120",
-      "theme": "Seguridad / Adoración / Protección",
-      "focus": "Estilo Worship (Tipo Marco Barrientos). Letra sencilla y vertical. La música crece hasta un final épico. El título \"Inquebrantable\" captura la fuerza de la protección divina.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "Aguas de Calma",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766368359/Aguas_de_Calma_df83gm.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 23:1-3",
-      "theme": "Paz / Meditación / Descanso",
-      "focus": "Versión Atmosférica / Semi-Instrumental. Eliminamos los versos para dejar solo la música y el Coro. El objetivo es la meditación pura. El Deep Bass es el protagonista, creando una cama de sonido profunda (\"aguas profundas\") donde flota la melodía del piano y la voz escasa.",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "Casa de Paz",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766418043/Casa_de_Paz_jjqgeu.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 23:4-6",
-      "theme": "Eternidad / Hogar / Seguridad",
-      "focus": "Bloque 3: El Pastor. Cierre del bloque. El título enfoca la meta final: la permanencia en la presencia de Dios. Musicalmente es un himno de victoria con Deep Reese Bass y atmósfera épica.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Desde la Eternidad",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766419143/Desde_la_Eternidad_ydh4ps.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 90:1-6",
-      "theme": "Eternidad de Dios / Fragilidad Humana / Refugio Ancestral",
-      "focus": "Bloque 4: La Eternidad. La música debe sonar inmensa y antigua, \"prehistórica\". Usamos Vast Atmosphere y Deep Sub-Bass para transmitir la escala de un Dios que existe fuera del tiempo. La letra es de asombro y pequeñez humana.",
-      "bpm": 65
-    }
-  },
-  {
-    "title": "Senda Eterna",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1766420566/Senda_Eterna_z8arku.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Resumen Global (Salmos 1, 23, 90, 119)",
-      "theme": "Compromiso Total / Resumen del Viaje",
-      "focus": "Gran Final. Narrativa progresiva: Origen -> Guía -> Viaje -> Destino. Musicalmente es un himno épico que crece hasta un final majestuoso. Usa referencias directas a las canciones anteriores (\"Miel\", \"Aguas\", \"Montes\", \"Inquebrantable\").",
-      "bpm": 69
-    }
-  },
-  {
-    "title": "Mi Invierno Acabó",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292259/MI_INVIERNO_ACABO%CC%81_fkom0l.mp3",
-    "moments": [
-      "Restauración",
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 32:3-5",
-      "theme": "La intimidad de reconciliarse con el Padre.",
-      "focus": "Estilo Jesús Adrián Romero (Poético/Íntimo).",
-      "bpm": 68
-    }
-  },
-  {
-    "title": "Lugar Seguro",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292259/LUGAR_SEGURO_bktmk7.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 32:7-8",
-      "theme": "La seguridad de estar protegido y guiado.",
-      "focus": "Poético / Confianza. Metáforas de protección ante la marea.",
-      "bpm": 70
-    }
-  },
-  {
-    "title": "Corazón Nuevo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292245/CORAZO%CC%81N_NUEVO_vz1hfe.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 51:10-12",
-      "theme": "La petición de una renovación espiritual completa.",
-      "focus": "Estilo JAR / Optimista. Enfoque en la renovación y el gozo de la salvación.",
-      "bpm": 75
-    }
-  },
-  {
-    "title": "Abre Mis Labios",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292243/ABRE_MIS_LABIOS_biluq4.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 51:14-17",
-      "theme": "La respuesta natural al perdón es la adoración pública.",
-      "focus": "Estilo JAR / Himno. Contraste entre religión externa y adoración interna.",
-      "bpm": 78
-    }
-  },
-  {
-    "title": "Tu Diestra",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292232/TU_DIESTRA_abzyhv.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 63:5-8",
-      "theme": "La seguridad de estar sostenido por la mano de Dios.",
-      "focus": "Estilo JAR / Confort. Sensación de seguridad y protección paternal.",
-      "bpm": 72
-    }
-  },
-  {
-    "title": "Labios de Júbilo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292251/LABIOS_DE_JU%CC%81BILO_gumfqz.mp3",
-    "moments": [
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 63:5",
-      "theme": "La alegría de encontrar satisfacción total en Dios.",
-      "focus": "Estilo JAR / Tropipop. Celebración de la plenitud espiritual.",
-      "bpm": 100
-    }
-  },
-  {
-    "title": "El Salmo de mi Vida",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1769292249/EL_SALMO_DE_MI_VIDA_p5rrrv.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Resumen Salmos 23, 51, 63",
-      "theme": "La fidelidad de Dios a través de toda la historia de vida.",
-      "focus": "Estilo JAR / Anthem. Narrativa que une los tres bloques temáticos con fuerza.",
-      "bpm": 80
-    }
-  },
-  {
-    "title": "Alumbra mis Ojos",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748059/ALUMBRA_MIS_OJOS_ev45y7.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 13:3-4",
-      "theme": "La necesidad de la luz de Dios para mantener la fe despierta y viva.",
-      "focus": "Estilo JAR / Esperanza. Enfocado en el despertar y la claridad, evitando el tono lúgubre de la \"muerte\".",
-      "bpm": 74
-    }
-  },
-  {
-    "title": "Tu Bondad",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748056/TU_BONDAD_am8ua5.mp3",
-    "moments": [
-      "Restauración"
-    ],
-    "context": {
-      "verse": "Salmo 13:5-6",
-      "theme": "La alegría de confiar en la misericordia de Dios pase lo que pase.",
-      "focus": "Estilo JAR / Celebración. Ritmo más vivo para marcar el cambio de lamento a baile.",
-      "bpm": 76
-    }
-  },
-  {
-    "title": "En Ti Confío",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748055/EN_TI%CC%81_CONFI%CC%81O_ckwhza.mp3",
-    "moments": [
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 22:1-2",
-      "theme": "La decisión activa de creer sin depender de señales visibles.",
-      "focus": "Estilo JAR / Directo y Rítmico. Frases cortas y activas. Título cambiado para reflejar la acción central.",
-      "bpm": 78
-    }
-  },
-  {
-    "title": "NO FUE MI FUERZA",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748056/NO_FUE_MI_FUERZA_ec56zv.mp3",
-    "moments": [
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "salmo 44 ",
-      "theme": "Joyful",
-      "focus": "Producción profesional de estilo Joyful para Suno AI",
-      "bpm": 110
-    }
-  },
-  {
-    "title": "Mi Roca Firme",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748056/MI_ROCA_FIRME_qsn6dx.mp3",
-    "moments": [
-      "Restauración",
-      "Paz Interior"
-    ],
-    "context": {
-      "verse": "Salmo 18:1-3",
-      "theme": "Seguridad y Paz en Dios",
-      "focus": "Conversacional y Cercano (Vibra JAR)",
-      "bpm": 74
-    }
-  },
-  {
-    "title": "El Cielo se Abrió",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774824923/El_Cielo_se_Abrio%CC%81_gjuypr.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 18:4-6",
-      "theme": "Victoria y Gratitud",
-      "focus": "Celebración y Aliento (Vibra JAR Upbeat)",
-      "bpm": 115
-    }
-  },
-  {
-    "title": "Tú Bajaste",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748057/TU_BAJASTE_bzogmv.mp3",
-    "moments": [
-      "Guerra Espiritual",
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 18:7-15",
-      "theme": "El Poder de Dios a nuestro favor",
-      "focus": "Majestuoso y Rítmico (Vibra JAR Épico)",
-      "bpm": 122
-    }
-  },
-  {
-    "title": "Lugar Espacioso",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748058/LUGAR_ESPACIOSO_ofgrf7.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 18:16-19",
-      "theme": "El Deleite de Dios y el Rescate",
-      "focus": "Gracia y Libertad (Vibra JAR Pop)",
-      "bpm": 118
-    }
-  },
-  {
-    "title": "El Camino de la Luz",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748059/EL_CAMINO_DE_LA_LUZ_ebionv.mp3",
-    "moments": [
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 18:20-24",
-      "theme": "Integridad y Obediencia",
-      "focus": "Humildad y Transparencia (Vibra JAR)",
-      "bpm": 110
-    }
-  },
-  {
-    "title": "Pies en las Alturas",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748063/PIES_EN_LAS_ALTURAS_upokzx.mp3",
-    "moments": [
-      "Guerra Espiritual",
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 18:32-42",
-      "theme": "Fortaleza y Agilidad Divina",
-      "focus": "Capacitación y Gracia (Vibra JAR)",
-      "bpm": 118
-    }
-  },
-  {
-    "title": "Viva el Señor",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774748064/VIVA_EL_SEN%CC%83OR_r6fviz.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 18:46-50",
-      "theme": "Gratitud y Exaltación",
-      "focus": "Celebración y Doxología (Vibra JAR Upbeat)",
-      "bpm": 125
-    }
-  },
-  {
-    "title": "Pelea por Mí",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902991/Pelea_por_Mi%CC%81_dovqux.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 35:1-3",
-      "theme": "Seguridad en la Defensa Divina",
-      "focus": "Confianza Alegre (Vibra JAR Upbeat)",
-      "bpm": 122
-    }
-  },
-  {
-    "title": "Viento y Sombras",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902991/Viento_y_Sombras_u8trvz.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 35:4-8",
-      "theme": "La Luz que Despeja el Camino",
-      "focus": "Libertad y Movimiento (Vibra JAR Pop)",
-      "bpm": 115
-    }
-  },
-  {
-    "title": "¿Quién como Tú?",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902987/Quie%CC%81n_como_Tu%CC%81_uwg89n.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 35:9-10",
-      "theme": "La Exclusividad y Bondad de Dios",
-      "focus": "Adoración Alegre (Vibra JAR Pop)",
-      "bpm": 120
-    }
-  },
-  {
-    "title": "Camino Derecho",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902987/Camino_Derecho_d3nklj.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 35:11-16",
-      "theme": "Determinación e Integridad",
-      "focus": "Resiliencia y Paz Alegre (Vibra JAR)",
-      "bpm": 126
-    }
-  },
-  {
-    "title": "Tu Amor No Callará",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902995/Tu_Amor_No_Callara%CC%81_rwhrdv.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 35:17-23",
-      "theme": "La Voz Activa de Dios",
-      "focus": "Victoria Anticipada (Vibra JAR Rock)",
-      "bpm": 128
-    }
-  },
-  {
-    "title": "Grande es el Señor",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902990/GRANDE_ES_EL_SEN%CC%83OR_naxdii.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 35:24-28",
-      "theme": "El Gozo como Regalo Divino",
-      "focus": "Celebración y Proclamación",
-      "bpm": 130
-    }
-  },
-  {
-    "title": "Eco de Victoria",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774902991/Eco_de_Victoria_jyzufi.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 35 (Completo)",
-      "theme": "El Triunfo de la Fe",
-      "focus": "Himno de Cierre (Vibra JAR Pop)",
-      "bpm": 128
-    }
-  },
-  {
-    "title": "¡Levántate!",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916122/Leva%CC%81ntate_u6p8gh.mp3",
-    "moments": [
-      "Guerra Espiritual",
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 68:1-4",
-      "theme": "La Presencia que Disipa",
-      "focus": "Fuerza y Autoridad (Vibra Rock)",
-      "bpm": 126
-    }
-  },
-  {
-    "title": "Hogar en Tu Presencia",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916138/Hogar_en_Tu_Presencia_lgfxpa.mp3",
-    "moments": [
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 68:5-10",
-      "theme": "La Paternidad de Dios",
-      "focus": "Calidez y Gratitud (Vibra JAR Pop)",
-      "bpm": 95
-    }
-  },
-  {
-    "title": "Buenas Nuevas",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916123/Buenas_Nuevas_xufujo.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 68:11-14",
-      "theme": "El Mensaje de Victoria",
-      "focus": "Alegre y Orgánico (Vibra Folk-Pop)",
-      "bpm": 110
-    }
-  },
-  {
-    "title": "El Monte Sagrado",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/El_Monte_Sagrado_syfdad.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 68:15-19",
-      "theme": "La Grandeza de Su Presencia",
-      "focus": "Himno Majestuoso y Limpio",
-      "bpm": 124
-    }
-  },
-  {
-    "title": "Puerta de Escape",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/Puerta_de_Escape_flaazo.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 68:20-27",
-      "theme": "La Victoria y el Desfile Divino",
-      "focus": "Rítmico y Festivo (Vibra JAR Pop)",
-      "bpm": 122
-    }
-  },
-  {
-    "title": "Reinos de la Tierra",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916127/Reinos_de_la_Tierra_pfpfol.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 68:28-35",
-      "theme": "El Dominio Eterno de Dios",
-      "focus": "Celebración Épica y Final",
-      "bpm": 128
-    }
-  },
-  {
-    "title": "Cumbre de Majestad",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774916125/Cumbre_de_Majestad_tp3mv0.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 68:1-35",
-      "theme": "Piano, Brass, Batería, Bajo",
-      "focus": "",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Mis Manos para la Guerra",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979357/Mis_Manos_para_la_Guerra_plugvw.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 144:1-2",
-      "theme": "Guitarras Delay, Pads, Bajo",
-      "focus": "",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "¿Qué es el Hombre?",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979357/Que%CC%81_es_el_Hombre__mlsx5u.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 144:3-4",
-      "theme": "Guitarra Clean, Pads, Bajo",
-      "focus": "",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Toca los Montes",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979350/Toca_los_Montes_lng7nr.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 144:5-8",
-      "theme": "Pads, Guitarra, Bajo",
-      "focus": "",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Cántico Nuevo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979354/Ca%CC%81ntico_Nuevo_mkqylj.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 144:9-11",
-      "theme": "Guitarras, Sintetizadores, Bajo",
-      "focus": "",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Dichoso el Pueblo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774979354/Dichoso_el_Pueblo_nvebem.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 144:12-15",
-      "theme": "Bienestar y plenitud",
-      "focus": "Esperanza y Bendición",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Herencia Mía",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996288/Herencia_Mi%CC%81a_mozdax.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 2:7-9",
-      "theme": "Autoridad del Hijo",
-      "focus": "Pop Elegante y Rítmico",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Refugio Santo",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996292/Refugio_Santo_aflnkt.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 2:10-12",
-      "theme": "Victoria en Dios",
-      "focus": "Celebración y Triunfo",
-      "bpm": 128
-    }
-  },
-  {
-    "title": "Desde Siempre",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996286/Desde_Siempre_qw9dwd.mp3",
-    "moments": [
-      "Intimidad"
-    ],
-    "context": {
-      "verse": "Salmo 22:9-10",
-      "theme": "Fidelidad desde el origen",
-      "focus": "Inspirador y Alegre",
-      "bpm": 95
-    }
-  },
-  {
-    "title": "Cerca Estás",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996286/Cerca_Esta%CC%81s_mfb4aq.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 22:19-21",
-      "theme": "Confianza en la ayuda",
-      "focus": "Inspirador y Firme",
-      "bpm": 112
-    }
-  },
-  {
-    "title": "Gran Reunión",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996288/Gran_Reunio%CC%81n_spki8x.mp3",
-    "moments": [
-      "Guerra Espiritual"
-    ],
-    "context": {
-      "verse": "Salmo 22:22-26",
-      "theme": "Celebración Colectiva",
-      "focus": "Alegre y Comunitario",
-      "bpm": 120
-    }
-  },
-  {
-    "title": "Reino Eterno",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1774996293/Reino_Eterno_kimkbq.mp3",
-    "moments": [
-      "Victoria & Gozo"
-    ],
-    "context": {
-      "verse": "Salmo 22:27-31",
-      "theme": "Victoria Final",
-      "focus": "Épico e Inspirador",
-      "bpm": 128
-    }
-  },
-  {
-    "title": "Refugio Seguro",
-    "audio_url": "https://res.cloudinary.com/dveqs8f3n/video/upload/v1765972345/La_Torre_Mas_Alta_a5anau.mp3",
-    "moments": [
-      "Paz Interior",
-      "Restauración",
-      "Refugio"
-    ],
-    "context": {
-      "verse": "Salmo 62 / Salmo 18",
-      "theme": "Dios como Roca / Seguridad",
-      "focus": "Crear un espacio sonoro de seguridad (\"Safe place\"). La guitarra acústica representa esa sencillez de estar sentado en la entrada de una cueva, mirando la tormenta afuera, sabiendo que estás protegido.",
-      "bpm": 62
-    }
-  }
 ]

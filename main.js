@@ -2,16 +2,28 @@ const GITHUB_REPO = "hjalmarmeza/Musichris_Atmos";
 const CATALOG_PATH = "data/musichris_master_catalog.json";
 const DISABLED_PATH = "data/disabled_songs.json";
 const HISTORY_PATH = "data/production_history.json";
-const LANDSCAPES_PATH = "data/landscapes_remote.json";
+const LOCAL_SERVER = "http://localhost:8080";
 
 // ELEMENTOS UI
 const btnLaunch = document.getElementById('btn-launch');
-const playlistSelector = document.getElementById('playlist-selector');
 const durationSelector = document.getElementById('duration-selector');
-const displayTheme = document.getElementById('display-theme');
+const prodTheme = document.getElementById('prod-theme');
+const prodTheme2 = document.getElementById('prod-theme-2');
+const catalogFilter = document.getElementById('catalog-filter');
+const totalSongsBadge = document.getElementById('total-songs-badge');
+const statTotal = document.getElementById('stat-total');
+const statFiltered = document.getElementById('stat-filtered');
 const catalogList = document.getElementById('catalog-list');
 const historyList = document.getElementById('history-list');
 const videoElement = document.getElementById('bg-video');
+const previewLandscape = document.getElementById('preview-landscape');
+const previewTitle = document.getElementById('preview-text-title');
+const previewVerse = document.getElementById('preview-text-verse');
+
+// ESTADO GLOBAL
+let masterCatalog = [];
+let isLocalAvailable = false;
+let GITHUB_TOKEN = localStorage.getItem('gh_token') || "";
 
 // MODAL SETTINGS
 const modalSettings = document.getElementById('modal-settings');
@@ -20,9 +32,7 @@ const btnCloseModal = document.getElementById('btn-close-modal');
 const btnSaveToken = document.getElementById('btn-save-token');
 const inputToken = document.getElementById('github-token-input');
 
-let GITHUB_TOKEN = localStorage.getItem('gh_token') || "";
-
-// --- SISTEMA DE COMUNICACIÓN GITHUB ---
+// --- SISTEMA DE COMUNICACIÓN ---
 
 async function ghFetch(path, options = {}) {
     if (!GITHUB_TOKEN && (options.method === 'POST' || options.method === 'PUT')) {
@@ -51,230 +61,231 @@ async function ghFetch(path, options = {}) {
 
 // --- LÓGICA DE DATOS ---
 
-async function loadLandscapes() {
-    try {
-        const res = await fetch(`${LANDSCAPES_PATH}?t=${Date.now()}`);
-        const landscapes = await res.json();
-        const videoKeys = Object.keys(landscapes);
-        
-        if (videoKeys.length > 0) {
-            const randomVideo = videoKeys[Math.floor(Math.random() * videoKeys.length)];
-            const videoUrl = landscapes[randomVideo];
-            
-            console.log(`🎬 ATMOS: Cargando paisaje ${randomVideo}`);
-            videoElement.src = videoUrl;
-            videoElement.load();
-        }
-    } catch (e) {
-        console.warn("⚠️ Error cargando paisajes remotos, usando fallback.");
-    }
-}
-
 async function loadData() {
     try {
         // Cargar Catálogo (Desde Raw para mayor velocidad en lectura)
         const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}?t=${Date.now()}`);
         const catalog = await resCat.json();
-
-        // Cargar Paisajes de Google Drive
-        loadLandscapes();
+        masterCatalog = catalog;
 
         // Cargar Desactivadas
         let disabled = [];
         try {
             const resDis = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${DISABLED_PATH}?t=${Date.now()}`);
             if (resDis.ok) disabled = await resDis.json();
-        } catch(e) { console.warn("Usando lista vacía."); }
+        } catch(e) { console.warn("Usando lista vacía de desactivadas."); }
 
         renderCatalog(catalog, disabled);
+        setupAtmosphereSelectors(catalog);
+        updatePreview(catalog);
         loadHistory();
+        checkLocalServer();
     } catch (err) {
         console.error("Error cargando datos:", err);
         catalogList.innerHTML = `<p class='error-msg'>⚠️ ERROR DE CONEXIÓN: No se pudo cargar la biblioteca.</p>`;
     }
 }
 
-function renderCatalog(catalog, disabled) {
-    if (!catalog.length) {
-        catalogList.innerHTML = "<p style='text-align:center; opacity:0.5;'>Biblioteca vacía.</p>";
-        return;
-    }
-
+function renderCatalog(catalog, disabled = [], filter = 'all') {
     catalogList.innerHTML = "";
-    catalog.forEach(song => {
-        const isDisabled = disabled.includes(song.title);
-        const item = document.createElement('div');
-        item.className = 'item-card';
-        item.style.display = "flex";
-        item.style.justifyContent = "space-between";
-        item.style.alignItems = "center";
-        item.style.opacity = isDisabled ? "0.3" : "1";
+    
+    const filtered = filter === 'all' 
+        ? catalog 
+        : catalog.filter(s => s.moments.includes(filter));
 
-        item.innerHTML = `
-            <div>
-                <p style="font-weight:700; font-size:0.9rem;">${song.title}</p>
-                <p style="font-size:0.6rem; opacity:0.6; margin-top:3px;">${song.artist || 'MusiChris Studio'}</p>
+    filtered.forEach(song => {
+        const isSongDisabled = disabled.includes(song.title);
+        const card = document.createElement('div');
+        card.className = `item-card glass ${isSongDisabled ? 'disabled' : ''}`;
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h4 style="color:#C5A059;">${song.title}</h4>
+                    <p style="font-size:0.7rem; opacity:0.6;">${song.theme || 'Sin tema'}</p>
+                </div>
+                <button onclick="toggleSong('${song.title}', ${!isSongDisabled})" class="btn-mini">
+                    ${isSongDisabled ? 'HABILITAR' : 'DESACTIVAR'}
+                </button>
             </div>
-            <label class="switch">
-                <input type="checkbox" ${isDisabled ? '' : 'checked'} onchange="toggleSong('${song.title}')">
-                <span class="slider"></span>
-            </label>
         `;
-        catalogList.appendChild(item);
+        catalogList.appendChild(card);
     });
+
+    // Actualizar badges
+    totalSongsBadge.textContent = catalog.length;
+    statTotal.textContent = catalog.length;
+    statFiltered.textContent = filtered.length;
 }
 
-async function toggleSong(title) {
-    if (!GITHUB_TOKEN) return modalSettings.classList.add('active');
-
-    try {
-        const res = await ghFetch(`contents/${DISABLED_PATH}`);
-        const fileData = await res.json();
-        const currentList = JSON.parse(atob(fileData.content));
-        const sha = fileData.sha;
-
-        let newList = currentList.includes(title) 
-            ? currentList.filter(t => t !== title) 
-            : [...currentList, title];
-
-        await ghFetch(`contents/${DISABLED_PATH}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                message: `Admin: Toggle ${title}`,
-                content: btoa(JSON.stringify(newList, null, 2)),
-                sha: sha
-            })
+function setupAtmosphereSelectors(catalog) {
+    const stats = {};
+    catalog.forEach(s => {
+        s.moments.forEach(m => {
+            stats[m] = (stats[m] || 0) + 1;
         });
+    });
 
-        loadData();
-    } catch (e) { alert("Error al sincronizar con GitHub."); }
+    const activeThemes = Object.keys(stats).sort().filter(t => stats[t] > 0);
+    
+    // Select de Producción
+    const options = activeThemes.map(t => `<option value="${t}">${t} (${stats[t]} temas)</option>`).join('');
+    prodTheme.innerHTML = options;
+    prodTheme2.innerHTML = '<option value="none">Sin Cruce (Atmósfera Única)</option>' + options;
+    
+    // Filtro de Catálogo
+    catalogFilter.innerHTML = `<option value="all">Ver Todas (${catalog.length})</option>` + 
+        activeThemes.map(t => `<option value="${t}">${t} (${stats[t]})</option>`).join('');
+}
+
+function filterCatalog() {
+    renderCatalog(masterCatalog, [], catalogFilter.value);
+}
+
+function updatePreview(catalog) {
+    if (!catalog.length) return;
+    
+    const landscapes = [
+        "atardecer_sereno.jpg", "bosque_niebla.jpg", "montana_glacial.jpg",
+        "oceano_profundo.jpg", "pradera_oro.jpg", "valle_estrellado.jpg"
+    ];
+
+    function cycle() {
+        const song = catalog[Math.floor(Math.random() * catalog.length)];
+        const landscape = landscapes[Math.floor(Math.random() * landscapes.length)];
+        
+        previewLandscape.src = `assets/Paisajes/${landscape}`;
+        previewTitle.textContent = song.title;
+        previewVerse.textContent = song.verse || "MusiChris Studio";
+        
+        setTimeout(cycle, 6000);
+    }
+    cycle();
 }
 
 async function loadHistory() {
     try {
         const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${HISTORY_PATH}?t=${Date.now()}`);
+        if (!res.ok) throw new Error();
         const history = await res.json();
         
-        historyList.innerHTML = history.length ? history.reverse().slice(0, 15).map(item => {
-            const dateLabel = isToday(item.timestamp) ? "Hoy" : "Ayer";
-            return `
-                <div class="item-card">
-                    <p style="font-size:0.65rem; opacity:0.5; margin-bottom:5px;">${dateLabel} • ${item.timestamp.split(' ')[1] || ''}</p>
-                    <p style="font-weight:700; font-size:0.85rem; letter-spacing:0.5px;">${item.theme.toUpperCase()}</p>
-                    <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
-                        <span class="badge-ready">Listo</span>
-                        <span style="font-size:0.5rem; opacity:0.3;">#${item.id || 'N/A'}</span>
-                    </div>
-                </div>
-            `;
-        }).join('') : "<p style='opacity:0.3; text-align:center;'>Sin producciones recientes.</p>";
-    } catch (e) { console.error("Error historial"); }
+        historyList.innerHTML = history.map(h => `
+            <div class="item-card glass" style="border-left: 3px solid #C5A059;">
+                <p style="font-weight:700;">${h.theme}</p>
+                <p style="font-size:0.7rem; opacity:0.5;">${h.timestamp} • ${Math.floor(h.duration/60)}min</p>
+            </div>
+        `).join('') || "<p class='loading-msg'>No hay historial disponible.</p>";
+    } catch(e) {
+        historyList.innerHTML = "<p class='loading-msg'>No se pudo cargar el historial.</p>";
+    }
 }
 
-function isToday(timestamp) {
-    const today = new Date().toLocaleDateString();
-    return timestamp.includes(today);
-}
+// --- ACCIONES ---
 
 async function launchProduction() {
-    if (!GITHUB_TOKEN) return modalSettings.classList.add('active');
-
-    const theme = playlistSelector.value;
+    const theme = prodTheme.value;
+    const theme2 = prodTheme2.value;
     const duration = durationSelector.value;
+    
+    const finalTheme = theme2 === 'none' ? theme : `${theme} & ${theme2}`;
 
     btnLaunch.disabled = true;
     btnLaunch.style.opacity = "0.5";
-    btnLaunch.textContent = "DISPARANDO NUBE...";
+    btnLaunch.textContent = "PROCESANDO...";
+
+    // 1. Intentar Local
+    if (isLocalAvailable) {
+        try {
+            const res = await fetch(`${LOCAL_SERVER}/run_atmos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ theme: finalTheme, duration: parseInt(duration) })
+            });
+            if (res.ok) {
+                alert(`🚀 [LOCAL] Diamond Engine Activado: ${finalTheme}`);
+                return finalizeLaunch();
+            }
+        } catch (e) { console.warn("Fallo local, intentando nube..."); }
+    }
+
+    // 2. Fallback Nube (GitHub Dispatch)
+    if (!GITHUB_TOKEN) {
+        modalSettings.classList.add('active');
+        finalizeLaunch();
+        return;
+    }
 
     try {
-        const response = await ghFetch('dispatches', {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/dispatches`, {
             method: 'POST',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            },
             body: JSON.stringify({
-                event_type: "launch_atmos",
-                client_payload: {
-                    theme: theme,
-                    duration: parseInt(duration),
-                    version: "8.12 Serverless"
-                }
+                event_type: "atmos_render",
+                client_payload: { theme: finalTheme, duration: parseInt(duration), version: "10.1 Diamond" }
             })
         });
 
-        if (response.status === 204) {
-            alert("🚀 ¡MISIÓN LANZADA! Producción iniciada en GitHub.");
+        if (res.status === 204) {
+            alert("🚀 [CLOUD] Misión Diamond Lanzada a GitHub Actions.");
         } else {
-            alert("❌ GitHub rechazó la orden. Revisa el Token.");
+            alert("❌ Error al contactar la nube: " + res.status);
         }
-    } catch (err) {
-        alert("Error de red con GitHub.");
-    } finally {
-        btnLaunch.disabled = false;
-        btnLaunch.style.opacity = "1";
-        btnLaunch.textContent = "INICIAR PRODUCCIÓN V7.0";
+    } catch (e) {
+        alert("❌ Error de red: " + e.message);
+    }
+    
+    finalizeLaunch();
+}
+
+function finalizeLaunch() {
+    btnLaunch.disabled = false;
+    btnLaunch.style.opacity = "1";
+    btnLaunch.textContent = "PRODUCIR ATMOS DIAMOND";
+}
+
+async function checkLocalServer() {
+    try {
+        const res = await fetch(`${LOCAL_SERVER}/check_status`);
+        if (res.ok) {
+            isLocalAvailable = true;
+            const badge = document.querySelector('.badge-status');
+            badge.textContent = "DIAMOND ENGINE LOCAL ACTIVO";
+            badge.style.background = "linear-gradient(90deg, #C5A059, #FFD700)";
+            console.log("💎 Diamond Engine Local detectado.");
+        }
+    } catch (e) {
+        console.log("☁️ Modo Cloud (No se detectó servidor local).");
     }
 }
 
-// --- EVENTOS ---
+// --- UI HELPERS ---
 
-playlistSelector.onchange = () => {
-    displayTheme.textContent = `Producción: ${playlistSelector.value}`;
-};
+function switchView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(`view-${viewId}`).classList.add('active');
+    const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.textContent.includes(viewId.toUpperCase()));
+    if (activeBtn) activeBtn.classList.add('active');
+}
 
+function unlockExperience() {
+    document.getElementById('landing-shield').classList.add('hidden');
+    if (videoElement) videoElement.play().catch(e => console.warn("Autoplay bloqueado"));
+}
+
+// Eventos
+btnLaunch.onclick = launchProduction;
 btnSettings.onclick = () => modalSettings.classList.add('active');
 btnCloseModal.onclick = () => modalSettings.classList.remove('active');
 btnSaveToken.onclick = () => {
-    const val = inputToken.value.trim();
-    if (val) {
-        localStorage.setItem('gh_token', val);
-        GITHUB_TOKEN = val;
-        modalSettings.classList.remove('active');
-        loadData();
-    }
+    localStorage.setItem('gh_token', inputToken.value);
+    GITHUB_TOKEN = inputToken.value;
+    modalSettings.classList.remove('active');
+    alert("Token Guardado.");
 };
 
-// Navegación
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.onclick = () => {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(`view-${btn.dataset.view}`).classList.add('active');
-    };
-});
-
-// Autoplay Shield
-function ensureVideoPlay() {
-    if (videoElement) {
-        videoElement.muted = true;
-        videoElement.play().catch(() => {
-            document.addEventListener('mousedown', () => videoElement.play(), { once: true });
-        });
-    }
-}
-
-// UNLOCK EXPERIENCE (FOR AUTOPLAY)
-function unlockExperience() {
-    const shield = document.getElementById('landing-shield');
-    if (shield) {
-        shield.classList.add('hidden');
-        if (videoElement) {
-            // Re-pick a random landscape on enter for variety
-            loadLandscapes();
-            videoElement.play().catch(e => console.log("Fallo final:", e));
-        }
-        // Small delay to ensure smooth transition
-        setTimeout(() => shield.style.display = 'none', 1000);
-    }
-}
-
-// INIT
-window.onload = () => {
-    // Initial attempt (some browsers might allow it)
-    if (videoElement) {
-        videoElement.muted = true;
-        videoElement.play().catch(() => {
-            console.log("🛡️ Escudo de interacción activo.");
-        });
-    }
-    loadData();
-    if (GITHUB_TOKEN) inputToken.value = GITHUB_TOKEN;
-};
+// Inicializar
+window.onload = loadData;

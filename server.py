@@ -26,10 +26,12 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(500, str(e))
         elif self.path == '/stats':
             try:
-                catalog_path = '../data/musichris_master_catalog.json'
-                disabled_path = '../data/disabled_songs.json'
-                if not os.path.exists(catalog_path): catalog_path = 'data/musichris_master_catalog.json'
-                if not os.path.exists(disabled_path): disabled_path = 'data/disabled_songs.json'
+                catalog_path = 'data/musichris_master_catalog.json'
+                disabled_path = 'data/disabled_songs.json'
+                
+                if not os.path.exists(catalog_path):
+                    self.send_error(404, "Catalog not found")
+                    return
                 
                 with open(catalog_path, 'r') as f:
                     catalog = json.load(f)
@@ -64,24 +66,19 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                     if s['title'] in disabled_songs: continue
                     song_text = f"{s.get('title','')} {s.get('theme','')} {s.get('verse','')} {','.join(s.get('moments', []))}".lower()
                     
-                    # Para cada canción, ver en qué categorías entra (incluyendo herencia)
                     matched_categories = []
                     for cat, keywords in category_keywords.items():
                         if any(k in song_text for k in keywords):
                             matched_categories.append(cat)
                     
-                    # Aplicar Herencia: si una canción es de "Refugio", también suma a su familia
                     for cat in matched_categories:
                         stats[cat] += 1
-                        # Si pertenece a una familia, las hermanas también pueden usarla como "backfill"
                         for fam_name, members in families.items():
                             if cat in members:
                                 for member in members:
                                     if member != cat and member not in matched_categories:
-                                        # Solo sumamos si la categoría principal de la canción es compatible
-                                        stats[member] += 0.5 # Peso menor para indicar que es "relleno"
+                                        stats[member] += 0.5
                 
-                # Enviar datos enriquecidos para la UI
                 response_data = {
                     "stats": stats,
                     "ready": {k: (v >= 12) for k, v in stats.items()}
@@ -96,10 +93,8 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(500, str(e))
         elif self.path == '/catalog':
             try:
-                catalog_path = '../data/musichris_master_catalog.json'
-                disabled_path = '../data/disabled_songs.json'
-                if not os.path.exists(catalog_path): catalog_path = 'data/musichris_master_catalog.json'
-                if not os.path.exists(disabled_path): disabled_path = 'data/disabled_songs.json'
+                catalog_path = 'data/musichris_master_catalog.json'
+                disabled_path = 'data/disabled_songs.json'
                 
                 with open(catalog_path, 'r') as f:
                     catalog = json.load(f)
@@ -126,7 +121,7 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                 title = post_data.get('title')
                 disabled = post_data.get('disabled')
                 
-                disabled_path = '../data/disabled_songs.json'
+                disabled_path = 'data/disabled_songs.json'
                 if not os.path.exists(disabled_path): 
                     disabled_songs = []
                 else:
@@ -160,8 +155,8 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
                 duration = post_data.get('duration', 3600)
                 theme = post_data.get('theme', 'Paz Interior')
                 
-                # Ejecutar motor con argumentos
-                subprocess.Popen(['python3', '../scripts/atmos_engine.py', str(duration), theme])
+                # Ejecutar motor con argumentos (ahora relativo a raíz)
+                subprocess.Popen(['python3', 'scripts/atmos_engine.py', str(duration), theme])
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
@@ -178,10 +173,10 @@ class AtmosHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
 
-# Ajustar directorio para que funcione en cualquier entorno
+# Servir desde la raíz del proyecto
 script_dir = os.path.dirname(os.path.abspath(__file__))
-os.chdir(os.path.join(script_dir, 'ui'))
+os.chdir(script_dir)
 
 with socketserver.TCPServer(('', PORT), AtmosHandler) as httpd:
-    print(f'🚀 MusiChris Atmos Server en puerto {PORT}')
+    print(f'💎 MusiChris Diamond Server en puerto {PORT}')
     httpd.serve_forever()

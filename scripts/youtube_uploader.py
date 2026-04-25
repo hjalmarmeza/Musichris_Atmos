@@ -1,57 +1,77 @@
-import json
 import os
-import sys
+import json
+import pickle
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 
-# Cargar configuración de Musichris Soul para reutilizar la conexión a YouTube
-sys.path.append('/Users/hjalmarmeza/Downloads/Antigravity/PROYECTOS_FINALIZADOS/Musichris_Soul/src')
+# Alcances para la API de YouTube
+SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
-# Nota: En Oracle, esta ruta cambiará a la ubicación donde subas el proyecto.
-try:
-    from google_connector import uploadToYouTube
-    YOUTUBE_READY = True
-except ImportError:
-    YOUTUBE_READY = False
-    print("⚠️ Alerta: No se pudo cargar el conector de YouTube. El video solo se guardará localmente.")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def prepare_youtube_metadata(moment, songs):
-    # Generador de Títulos Inspiradores (MusiChris Style)
-    titles = {
-        "Paz Interior": "SOLO EN ÉL: El Descanso que tu Alma necesita | MusiChris Studio",
-        "Victoria & Gozo": "MÁS QUE VENCEDOR: El Grito de Victoria en tu Prueba | MusiChris Studio",
-        "Guerra Espiritual": "GIGANTES CAERÁN: Himnos de Poder y Autoridad | MusiChris Studio"
-    }
+def get_authenticated_service():
+    credentials = None
+    token_path = os.path.join(BASE_DIR, 'scripts/token.pickle')
+    secrets_path = os.path.join(BASE_DIR, 'scripts/client_secrets.json')
+
+    if os.path.exists(token_path):
+        with open(token_path, 'rb') as token:
+            credentials = pickle.load(token)
     
-    title = titles.get(moment, f"{moment} | MusiChris Studio")
-    
-    # Construcción de la Descripción con Timestamps y Versículos
-    description = f"🕊️ {title}\n\n"
-    description += "Cuando el ruido del mundo te quite la paz, deja que estas promesas bíblicas restauren tu alma.\n\n"
-    description += "--- CONTENIDO DEL VIDEO ---\n"
-    
-    # Añadir tracklist automático
-    # TODO: Implementar cálculo de tiempo real para los timestamps
-    for i, song in enumerate(songs):
-        description += f"- {song['title']} (Reflexión: {song['verse']})\n"
+    if not credentials or not credentials.valid:
+        if credentials and credentials.expired and credentials.refresh_token:
+            credentials.refresh(Request())
+        else:
+            if not os.path.exists(secrets_path):
+                print("⚠️ Error: Falta 'client_secrets.json' en scripts/")
+                return None
+            flow = InstalledAppFlow.from_client_secrets_file(secrets_path, SCOPES)
+            credentials = flow.run_local_server(port=0)
         
-    description += "\n\nSuscríbete a MusiChris Studio para más momentos de conexión con Dios."
-    
-    return title, description
+        with open(token_path, 'wb') as token:
+            pickle.dump(credentials, token)
 
-# Esta función se llamará después del renderizado exitoso
-def execute_upload(video_path, moment, songs):
-    if not YOUTUBE_READY: return
+    return build('youtube', 'v3', credentials=credentials)
+
+def upload_video(video_file, thumb_file, meta_file):
+    youtube = get_authenticated_service()
+    if not youtube: return
+
+    # Leer Metadatos
+    with open(meta_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
     
-    title, description = prepare_youtube_metadata(moment, songs)
+    title = lines[1].strip() # Según el formato de nuestro meta.txt
+    description = "".join(lines[4:])
     
-    print(f"📡 [YOUTUBE] Iniciando subida de: {title}")
-    # Creamos un objeto ficticio para el conector que ya conoces
-    metadata_obj = {
-        "reflection_title": title,
-        "verse_citation": "Varios Versículos (Ver descripción)"
+    print(f"📤 [YOUTUBE] Subiendo: {title}...")
+    
+    body = {
+        'snippet': {
+            'title': title,
+            'description': description,
+            'tags': ['MusiChris', 'Atmos', 'Adoración', 'Paz'],
+            'categoryId': '10' # Música
+        },
+        'status': {
+            'privacyStatus': 'unlisted', # Por seguridad, se sube como No Listado para revisión final
+            'selfDeclaredMadeForKids': False
+        }
     }
+
+    media = MediaFileUpload(video_file, chunksize=-1, resumable=True)
+    request = youtube.videos().insert(part=','.join(body.keys()), body=body, media_body=media)
     
-    # uploadToYouTube(video_path, metadata_obj)
-    print("✅ [YOUTUBE] Video subido con éxito (Simulado para esta prueba).")
+    response = request.execute()
+    video_id = response.get('id')
+    print(f"✅ [YOUTUBE] Video subido con ID: {video_id}")
+
+    # Subir Miniatura
+    youtube.thumbnails().set(videoId=video_id, media_body=MediaFileUpload(thumb_file)).execute()
+    print("🖼️ [YOUTUBE] Miniatura vinculada correctamente.")
 
 if __name__ == "__main__":
-    print("Módulo de Subida ATMOS configurado.")
+    # Esto se llamará desde el motor principal al terminar el render
+    pass

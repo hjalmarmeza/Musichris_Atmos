@@ -22,3 +22,14 @@ assets/ref_*.png
 assets/master_*.png
 assets/song_*.png
 assets/overlay_*.png
+
+# Credenciales y Secretos (SEGURIDAD)
+scripts/client_secrets.json
+scripts/token.pickle
+scripts/token.json
+.agents/
+
+# Datos Generados (Sincronización)
+data/*.json
+!data/landscapes_remote.json
+

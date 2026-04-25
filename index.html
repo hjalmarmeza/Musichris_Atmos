@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MusiChris Atmos | Dashboard</title>
+    <title>MusiChris Diamond | Control Center</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,49 +17,54 @@
     <div id="landing-shield" onclick="unlockExperience()">
         <div class="shield-content">
             <img src="assets/logo_atmos.png" alt="MusiChris Logo" class="shield-logo">
-            <p>Toca para Entrar a la Atmósfera</p>
+            <p>Toca para Entrar a la Atmósfera Diamond</p>
         </div>
     </div>
 
     <div class="master-container">
         <!-- HEADER MAESTRO -->
         <header class="header-main">
-            <img src="assets/logo_atmos.png" class="logo-img" alt="Atmos Logo">
-            <h1>MUSICHRIS <span>ATMOS</span></h1>
+            <img src="assets/logo_atmos.png" class="logo-img" alt="Diamond Logo">
+            <h1>MUSICHRIS <span>DIAMOND v10</span></h1>
         </header>
 
         <!-- NAVEGACIÓN PÍLDORA -->
         <nav class="nav-pill">
-            <button class="nav-btn active" data-view="dashboard">PANEL</button>
-            <button class="nav-btn" data-view="catalog">TEMAS</button>
-            <button class="nav-btn" data-view="renders">HISTORIAL</button>
+            <div class="nav-btn active" onclick="switchView('dashboard')">PRODUCCIÓN</div>
+            <div class="nav-btn" onclick="switchView('catalog')">CATÁLOGO <span id="total-songs-badge" class="badge-mini">0</span></div>
+            <div class="nav-btn" onclick="switchView('history')">HISTORIAL</div>
             <button id="btn-settings" class="nav-btn-icon">⚙️</button>
         </nav>
 
         <!-- SECCIÓN: PANEL (DASHBOARD) -->
         <section id="view-dashboard" class="view active">
             <div class="card-hero glass">
-                <div class="badge-status">SISTEMA LISTO</div>
-                <h2 id="display-theme">Producción: Confianza</h2>
+                <div class="badge-status">SISTEMA CLOUD ONLINE</div>
+                <h2 id="display-theme">Atmos: Confianza</h2>
                 <p class="quote">"Donde las palabras fallan, la música habla."</p>
+                
+                <!-- PREVISUALIZACIÓN DE MINIATURA -->
+                <div class="preview-miniature glass">
+                    <img id="preview-landscape" src="assets/Paisajes/atardecer_sereno.jpg" alt="Preview Landscape" class="preview-img">
+                    <div class="preview-text-overlay">
+                        <span id="preview-text-title">CARGANDO TEMA...</span>
+                        <span id="preview-text-verse">MusiChris Studio</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <div class="input-wrapper">
-                    <label class="input-label">ATMÓSFERA MINISTERIAL</label>
-                    <select id="playlist-selector" class="input-box">
-                        <option value="Adoración Celestial">Adoración Celestial</option>
-                        <option value="Avivamiento">Avivamiento</option>
-                        <option value="Celebración">Celebración</option>
-                        <option value="Confianza" selected>Confianza</option>
-                        <option value="Descanso">Descanso</option>
-                        <option value="Fortaleza">Fortaleza</option>
-                        <option value="Gozo">Gozo</option>
-                        <option value="Gratitud">Gratitud</option>
-                        <option value="Guerra Espiritual">Guerra Espiritual</option>
-                        <option value="Intimidad">Intimidad</option>
-                        <option value="Paz Interior">Paz Interior</option>
-                        <option value="Victoria & Gozo">Victoria & Gozo</option>
+                    <label class="input-label">SELECCIONAR ATMÓSFERA</label>
+                    <select id="prod-theme" class="input-box">
+                        <!-- Opciones dinámicas -->
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">CRUCE CON (OPCIONAL)</label>
+                    <select id="prod-theme-2" class="input-box">
+                        <option value="none">Sin Cruce (Atmósfera Única)</option>
+                        <!-- Opciones dinámicas -->
                     </select>
                 </div>
 
@@ -72,54 +77,69 @@
                     </select>
                 </div>
 
-                <button id="btn-launch" class="btn-main">INICIAR PRODUCCIÓN V7.0</button>
+                <button id="btn-launch" class="btn-main">PRODUCIR ATMOS DIAMOND</button>
             </div>
 
             <!-- STATUS CARDS INFERIORES -->
             <div class="status-grid">
                 <div class="status-card glass">
-                    <span class="status-label">STATUS CLOUD</span>
-                    <p class="status-value">ONLINE</p>
+                    <span class="status-label">MOTOR ATMOS</span>
+                    <p class="status-value">v10.1.0</p>
                 </div>
                 <div class="status-card glass">
                     <span class="status-label">MOTOR FFmpeg</span>
-                    <p class="status-value">v8.0.1</p>
+                    <p class="status-value">v8.2.0</p>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN: TEMAS (CATÁLOGO) -->
+        <!-- VIEW: CATALOG -->
         <section id="view-catalog" class="view">
-            <div class="card-hero glass">
-                <h2>Catálogo Maestro</h2>
-                <p>Explora tu biblioteca ministerial</p>
+            <div class="status-grid">
+                <div class="status-card glass">
+                    <span class="status-label">TOTAL DISPONIBLES</span>
+                    <span id="stat-total" class="status-value">0</span>
+                </div>
+                <div class="status-card glass">
+                    <span class="status-label">FILTRADOS</span>
+                    <span id="stat-filtered" class="status-value">0</span>
+                </div>
             </div>
+            
+            <div class="input-wrapper">
+                <label class="input-label">FILTRAR POR ATMÓSFERA</label>
+                <select id="catalog-filter" class="input-box" onchange="filterCatalog()">
+                    <option value="all">Ver Todas las Canciones</option>
+                    <!-- Opciones dinámicas -->
+                </select>
+            </div>
+
             <div id="catalog-list" class="list-container">
                 <p class="loading-msg">Cargando biblioteca MusiChris Studio...</p>
             </div>
         </section>
 
         <!-- SECCIÓN: HISTORIAL (RENDERS) -->
-        <section id="view-renders" class="view">
+        <section id="view-history" class="view">
             <div class="card-hero glass">
                 <h2>Historial Atmos</h2>
-                <p>Producciones finalizadas en la nube</p>
+                <p>Producciones finalizadas recientemente</p>
             </div>
             <div id="history-list" class="list-container">
-                <p class="loading-msg">Consultando nube...</p>
+                <p class="loading-msg">Consultando historial...</p>
             </div>
         </section>
 
         <footer class="footer-main">
-            MusiChris Atmos v8.12 • © 2026
+            MusiChris Diamond v10.1 • © 2026
         </footer>
     </div>
 
     <!-- MODAL DE CONFIGURACIÓN (TOKEN) -->
     <div id="modal-settings" class="modal">
         <div class="modal-content glass">
-            <h3>Configuración Maestro</h3>
-            <p style="font-size:0.7rem; opacity:0.6; margin-bottom:15px;">Pega tu GitHub Token para habilitar el control remoto.</p>
+            <h3>Diamond Settings</h3>
+            <p style="font-size:0.7rem; opacity:0.6; margin-bottom:15px;">GitHub Token para control remoto.</p>
             <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx" class="input-box">
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button id="btn-save-token" class="btn-main" style="padding:10px; font-size:0.8rem;">GUARDAR</button>
