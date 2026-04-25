@@ -266,3 +266,24 @@ function unlockExperience() {
     const bgVideo = document.getElementById('bg-video');
     if (bgVideo) bgVideo.play().catch(e => console.log("Autoplay blocked:", e));
 }
+
+// SETTINGS MODAL LOGIC
+document.getElementById('btn-settings').addEventListener('click', () => {
+    document.getElementById('modal-settings').classList.add('active');
+    document.getElementById('github-token-input').value = localStorage.getItem('GH_PAT') || '';
+});
+
+document.getElementById('btn-close-modal').addEventListener('click', () => {
+    document.getElementById('modal-settings').classList.remove('active');
+});
+
+document.getElementById('btn-save-token').addEventListener('click', () => {
+    const token = document.getElementById('github-token-input').value;
+    if (token) {
+        localStorage.setItem('GH_PAT', token);
+        alert("✅ GitHub Token guardado correctamente.");
+        document.getElementById('modal-settings').classList.remove('active');
+    } else {
+        alert("❌ Por favor, ingresa un token válido.");
+    }
+});
