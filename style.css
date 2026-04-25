@@ -121,29 +121,73 @@ h1 span { font-weight: 400; opacity: 0.6; color: #C5A059; }
     color: #C5A059;
     padding: 8px 15px;
     border-radius: 12px;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(5px);
+    text-transform: uppercase;
 }
 
 .btn-mini:hover {
     background: #C5A059;
     color: #000;
     box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
-    transform: scale(1.05);
+    transform: translateY(-2px);
 }
 
-.item-card.disabled {
-    opacity: 0.4;
-    filter: grayscale(1);
+.btn-enable {
+    border-color: var(--green-status);
+    color: var(--green-status);
 }
 
-.item-card.disabled .btn-mini {
-    border-color: rgba(255,255,255,0.3);
-    color: white;
+.btn-disable {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.song-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.song-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(197, 160, 89, 0.3);
+}
+
+.song-info h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.song-info p {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-bottom: 10px;
+}
+
+.tag-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.tag-mini {
+    background: rgba(197, 160, 89, 0.1);
+    color: #C5A059;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    font-weight: 600;
 }
 
 .nav-btn-icon {

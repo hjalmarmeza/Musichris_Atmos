@@ -1,127 +1,71 @@
-const GITHUB_REPO = "hjalmarmeza/Musichris_Atmos";
-const CATALOG_PATH = "data/musichris_master_catalog.json";
-const DISABLED_PATH = "data/disabled_songs.json";
-const HISTORY_PATH = "data/production_history.json";
-const LOCAL_SERVER = "http://localhost:8080";
+// CONFIGURACIÓN MAESTRA
+const GITHUB_USER = 'hjalmarmeza';
+const GITHUB_REPO = 'Musichris_Atmos';
+const LOCAL_SERVER = 'http://localhost:5001';
 
-// ELEMENTOS UI
-const btnLaunch = document.getElementById('btn-launch');
-const durationSelector = document.getElementById('duration-selector');
+// ELEMENTOS DOM
 const prodTheme = document.getElementById('prod-theme');
-const prodTheme2 = document.getElementById('prod-theme-2');
-const catalogFilter = document.getElementById('catalog-filter');
-const totalSongsBadge = document.getElementById('total-songs-badge');
-const statTotal = document.getElementById('stat-total');
-const statFiltered = document.getElementById('stat-filtered');
+const durationSelector = document.getElementById('duration-selector');
+const btnLaunch = document.getElementById('btn-launch');
 const catalogList = document.getElementById('catalog-list');
+const catalogFilter = document.getElementById('catalog-filter');
+const statTotal = document.getElementById('stat-total');
+const totalSongsBadge = document.getElementById('total-songs-badge');
 const historyList = document.getElementById('history-list');
-const videoElement = document.getElementById('bg-video');
-const previewLandscape = document.getElementById('preview-landscape');
-const previewTitle = document.getElementById('preview-text-title');
-const previewVerse = document.getElementById('preview-text-verse');
 
-// ESTADO GLOBAL
 let masterCatalog = [];
 let isLocalAvailable = false;
-let GITHUB_TOKEN = localStorage.getItem('gh_token') || "";
 
-// MODAL SETTINGS
-const modalSettings = document.getElementById('modal-settings');
-const btnSettings = document.getElementById('btn-settings');
-const btnCloseModal = document.getElementById('btn-close-modal');
-const btnSaveToken = document.getElementById('btn-save-token');
-const inputToken = document.getElementById('github-token-input');
+// LISTA MAESTRA DE ATMÓSFERAS (10 Puras + 5 Cruces)
+const MASTER_ATMOSPHERES = [
+    { id: "Refugio", name: "🛡️ Refugio", type: "pura" },
+    { id: "Confianza", name: "⚓ Confianza", type: "pura" },
+    { id: "Descanso", name: "🌿 Descanso", type: "pura" },
+    { id: "Paz Interior", name: "🌙 Paz Interior", type: "pura" },
+    { id: "Intimidad", name: "🕊️ Intimidad", type: "pura" },
+    { id: "Poder", name: "👑 Poder", type: "pura" },
+    { id: "Restauración", name: "🩹 Restauración", type: "pura" },
+    { id: "Avivamiento", name: "🔥 Avivamiento", type: "pura" },
+    { id: "Guerra Espiritual", name: "⚔️ Guerra Espiritual", type: "pura" },
+    { id: "Victoria & Gozo", name: "🎉 Victoria & Gozo", type: "pura" },
+    { id: "Serenidad Profunda", name: "🌊 Serenidad Profunda (Paz + Descanso)", type: "cruce", parts: ["Paz Interior", "Descanso"] },
+    { id: "Roca de Salvación", name: "⚓ Roca de Salvación (Refugio + Confianza)", type: "cruce", parts: ["Refugio", "Confianza"] },
+    { id: "Presencia Sagrada", name: "✨ Presencia Sagrada (Intimidad + Avivamiento)", type: "cruce", parts: ["Intimidad", "Avivamiento"] },
+    { id: "Triunfo Espiritual", name: "🛡️ Triunfo Espiritual (Guerra + Victoria)", type: "cruce", parts: ["Guerra Espiritual", "Victoria & Gozo"] },
+    { id: "Gracia Renovadora", name: "💎 Gracia Renovadora (Restauración + Poder)", type: "cruce", parts: ["Restauración", "Poder"] }
+];
 
-// --- SISTEMA DE COMUNICACIÓN ---
+// --- INICIALIZACIÓN ---
+document.addEventListener('DOMContentLoaded', async () => {
+    await checkLocalServer();
+    await loadCatalog();
+    await loadHistory();
+});
 
-async function ghFetch(path, options = {}) {
-    if (!GITHUB_TOKEN && (options.method === 'POST' || options.method === 'PUT')) {
-        modalSettings.classList.add('active');
-        throw new Error("Token requerido para esta acción.");
-    }
-
-    const url = `https://api.github.com/repos/${GITHUB_REPO}/${path}`;
-    const headers = {
-        'Accept': 'application/vnd.github.v3+json',
-        ...(GITHUB_TOKEN ? { 'Authorization': `token ${GITHUB_TOKEN}` } : {})
-    };
-
-    const response = await fetch(url, {
-        ...options,
-        headers: { ...headers, ...options.headers }
-    });
-
-    if (response.status === 401) {
-        localStorage.removeItem('gh_token');
-        modalSettings.classList.add('active');
-    }
-
-    return response;
-}
-
-// --- LÓGICA DE DATOS ---
-
-async function loadData() {
+async function checkLocalServer() {
     try {
-        // Cargar Catálogo (Desde Raw para mayor velocidad en lectura)
-        const resCat = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${CATALOG_PATH}?t=${Date.now()}`);
-        const catalog = await resCat.json();
-        masterCatalog = catalog;
-
-        // Cargar Desactivadas
-        let disabled = [];
-        try {
-            const resDis = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${DISABLED_PATH}?t=${Date.now()}`);
-            if (resDis.ok) disabled = await resDis.json();
-        } catch(e) { console.warn("Usando lista vacía de desactivadas."); }
-
-        renderCatalog(catalog, disabled);
-        setupAtmosphereSelectors(catalog);
-        updatePreview(catalog);
-        loadHistory();
-        checkLocalServer();
-    } catch (err) {
-        console.error("Error cargando datos:", err);
-        catalogList.innerHTML = `<p class='error-msg'>⚠️ ERROR DE CONEXIÓN: No se pudo cargar la biblioteca.</p>`;
-    }
+        const res = await fetch(`${LOCAL_SERVER}/status`);
+        isLocalAvailable = res.ok;
+    } catch(e) { isLocalAvailable = false; }
 }
 
-function renderCatalog(catalog, disabled = [], filter = 'all') {
-    catalogList.innerHTML = "";
-    
-    const filtered = filter === 'all' 
-        ? catalog 
-        : catalog.filter(s => s.moments.includes(filter));
-
-    filtered.forEach(song => {
-        const isSongDisabled = disabled.includes(song.title);
-        const card = document.createElement('div');
-        card.className = `item-card glass ${isSongDisabled ? 'disabled' : ''}`;
-        card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h4 style="color:#C5A059;">${song.title}</h4>
-                    <p style="font-size:0.7rem; opacity:0.6;">${song.theme || 'Sin tema'}</p>
-                </div>
-                <button onclick="toggleSong('${song.title}', ${!isSongDisabled})" class="btn-mini">
-                    ${isSongDisabled ? 'HABILITAR' : 'DESACTIVAR'}
-                </button>
-            </div>
-        `;
-        catalogList.appendChild(card);
-    });
-
-    // Actualizar badges
-    totalSongsBadge.textContent = catalog.length;
-    statTotal.textContent = catalog.length;
-    statFiltered.textContent = filtered.length;
+async function loadCatalog() {
+    try {
+        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data/musichris_master_catalog.json?t=${Date.now()}`);
+        masterCatalog = await res.json();
+        statTotal.textContent = masterCatalog.length;
+        totalSongsBadge.textContent = masterCatalog.length;
+        setupAtmosphereSelectors(masterCatalog);
+        renderCatalog(masterCatalog);
+    } catch (e) {
+        console.error("Error cargando catálogo:", e);
+    }
 }
 
 async function setupAtmosphereSelectors(catalog) {
-    // Cargar historial para estadísticas
     let usageHistory = [];
     try {
-        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/data/usage_history.json?t=${Date.now()}`);
+        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data/usage_history.json?t=${Date.now()}`);
         if (res.ok) usageHistory = await res.json();
     } catch(e) {}
 
@@ -130,204 +74,116 @@ async function setupAtmosphereSelectors(catalog) {
         s.moments.forEach(m => {
             if (!stats[m]) stats[m] = { total: 0, used: 0 };
             stats[m].total++;
-            if (usageHistory.some(h => h.title === s.title && h.atmosphere === m)) {
-                stats[m].used++;
-            }
+            if (usageHistory.some(h => h.title === s.title && h.atmosphere === m)) stats[m].used++;
         });
     });
 
-    const activeThemes = Object.keys(stats).sort();
-    
-    // Select de Producción
-    prodTheme.innerHTML = activeThemes.map(t => {
-        const remaining = stats[t].total - stats[t].used;
-        const statusIcon = remaining === 0 ? '⚠️' : '🟢';
-        return `<option value="${t}">${statusIcon} ${t} (${remaining} nuevas / ${stats[t].total} tot)</option>`;
+    prodTheme.innerHTML = MASTER_ATMOSPHERES.map(atm => {
+        let label = atm.name;
+        if (atm.type === "pura") {
+            const rem = (stats[atm.id]?.total || 0) - (stats[atm.id]?.used || 0);
+            label += ` (${rem} nuevas)`;
+        }
+        return `<option value="${atm.id}">${label}</option>`;
     }).join('');
 
-    prodTheme2.innerHTML = '<option value="none">Sin Cruce (Atmósfera Única)</option>' + 
-        activeThemes.map(t => `<option value="${t}">${t}</option>`).join('');
-    
-    // Sugerencia Inteligente al cambiar
-    prodTheme.onchange = () => {
-        const theme = prodTheme.value;
-        const remaining = stats[theme].total - stats[theme].used;
-        if (remaining === 0) {
-            const suggestion = getSmartSuggestion(theme);
-            alert(`🛡️ [INVENTARIO AGOTADO] No quedan canciones nuevas en "${theme}".\n\n💡 SUGERENCIA DIAMOND: Prueba el cruce "${suggestion.name}" para reutilizar contenido con una nueva esencia.`);
-            prodTheme2.value = suggestion.partner;
-        }
-    };
-
-    // Filtro de Catálogo
-    catalogFilter.innerHTML = `<option value="all">Ver Todas (${catalog.length})</option>` + 
-        activeThemes.map(t => `<option value="${t}">${t} (${stats[t].total})</option>`).join('');
+    catalogFilter.innerHTML = `<option value="all">Ver Todas las Canciones</option>` + 
+        MASTER_ATMOSPHERES.filter(a => a.type === "pura").map(a => `<option value="${a.id}">${a.name}</option>`).join('');
 }
 
-function getSmartSuggestion(theme) {
-    const suggestions = {
-        "Refugio": { name: "Roca de Salvación", partner: "Confianza" },
-        "Confianza": { name: "Roca de Salvación", partner: "Refugio" },
-        "Descanso": { name: "Serenidad Profunda", partner: "Paz Interior" },
-        "Paz Interior": { name: "Serenidad Profunda", partner: "Descanso" },
-        "Intimidad": { name: "Presencia Sagrada", partner: "Avivamiento" },
-        "Avivamiento": { name: "Presencia Sagrada", partner: "Intimidad" },
-        "Guerra Espiritual": { name: "Triunfo Espiritual", partner: "Victoria & Gozo" },
-        "Victoria & Gozo": { name: "Triunfo Espiritual", partner: "Guerra Espiritual" }
-    };
-    return suggestions[theme] || { name: "Mezcla General", partner: "all" };
+function renderCatalog(songs) {
+    catalogList.innerHTML = '';
+    songs.forEach(song => {
+        const card = document.createElement('div');
+        card.className = 'song-card glass';
+        const isSongDisabled = song.disabled === true;
+        
+        card.innerHTML = `
+            <div class="song-info">
+                <h4>${song.title}</h4>
+                <p>${song.verse} | ${song.bpm} BPM</p>
+                <div class="tag-row">${song.moments.map(m => `<span class="tag-mini">${m}</span>`).join('')}</div>
+            </div>
+            <div class="song-actions">
+                <button onclick="toggleSong('${song.title}', ${!isSongDisabled})" class="btn-mini ${isSongDisabled ? 'btn-enable' : 'btn-disable'}">
+                    ${isSongDisabled ? 'HABILITAR' : 'DESACTIVAR'}
+                </button>
+            </div>
+        `;
+        catalogList.appendChild(card);
+    });
 }
-
 
 function filterCatalog() {
-    renderCatalog(masterCatalog, [], catalogFilter.value);
-}
-
-function updatePreview(catalog) {
-    if (!catalog.length) return;
-    
-    const landscapes = [
-        "atardecer_sereno.jpg", "bosque_niebla.jpg", "montana_glacial.jpg",
-        "oceano_profundo.jpg", "pradera_oro.jpg", "valle_estrellado.jpg"
-    ];
-
-    function cycle() {
-        const song = catalog[Math.floor(Math.random() * catalog.length)];
-        const landscape = landscapes[Math.floor(Math.random() * landscapes.length)];
-        
-        previewLandscape.src = `assets/Paisajes/${landscape}`;
-        previewTitle.textContent = song.title;
-        previewVerse.textContent = song.verse || "MusiChris Studio";
-        
-        setTimeout(cycle, 6000);
-    }
-    cycle();
+    const val = catalogFilter.value;
+    const filtered = val === 'all' ? masterCatalog : masterCatalog.filter(s => s.moments.includes(val));
+    renderCatalog(filtered);
 }
 
 async function loadHistory() {
     try {
-        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${HISTORY_PATH}?t=${Date.now()}`);
-        if (!res.ok) throw new Error();
+        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data/usage_history.json?t=${Date.now()}`);
+        if (!res.ok) return;
         const history = await res.json();
-        
-        historyList.innerHTML = history.map(h => `
-            <div class="item-card glass" style="border-left: 3px solid #C5A059;">
-                <p style="font-weight:700;">${h.theme}</p>
-                <p style="font-size:0.7rem; opacity:0.5;">${h.timestamp} • ${Math.floor(h.duration/60)}min</p>
+        historyList.innerHTML = history.reverse().slice(0, 10).map(h => `
+            <div class="history-item glass">
+                <div class="hist-icon">🎬</div>
+                <div class="hist-details">
+                    <strong>${h.atmosphere}</strong>
+                    <span>${h.title}</span>
+                </div>
+                <div class="hist-date">${h.date.split(' ')[0]}</div>
             </div>
-        `).join('') || "<p class='loading-msg'>No hay historial disponible.</p>";
-    } catch(e) {
-        historyList.innerHTML = "<p class='loading-msg'>No se pudo cargar el historial.</p>";
-    }
+        `).join('');
+    } catch(e) {}
 }
 
 // --- ACCIONES ---
+btnLaunch.onclick = launchProduction;
 
 async function launchProduction() {
-    const theme = prodTheme.value;
-    const theme2 = prodTheme2.value;
+    const selectedId = prodTheme.value;
+    const atm = MASTER_ATMOSPHERES.find(a => a.id === selectedId);
     const duration = durationSelector.value;
     
-    const finalTheme = theme2 === 'none' ? theme : `${theme} & ${theme2}`;
+    let theme1 = selectedId;
+    let theme2 = "none";
+
+    if (atm && atm.type === "cruce") {
+        theme1 = atm.parts[0];
+        theme2 = atm.parts[1];
+    }
 
     btnLaunch.disabled = true;
-    btnLaunch.style.opacity = "0.5";
     btnLaunch.textContent = "PROCESANDO...";
 
-    // 1. Intentar Local
     if (isLocalAvailable) {
         try {
             const res = await fetch(`${LOCAL_SERVER}/run_atmos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ theme: finalTheme, duration: parseInt(duration) })
+                body: JSON.stringify({ theme: theme1, theme2: theme2, duration: parseInt(duration) })
             });
-            if (res.ok) {
-                alert(`🚀 [LOCAL] Diamond Engine Activado: ${finalTheme}`);
-                return finalizeLaunch();
-            }
-        } catch (e) { console.warn("Fallo local, intentando nube..."); }
-    }
-
-    // 2. Fallback Nube (GitHub Dispatch)
-    if (!GITHUB_TOKEN) {
-        modalSettings.classList.add('active');
-        finalizeLaunch();
-        return;
-    }
-
-    try {
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/dispatches`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify({
-                event_type: "atmos_render",
-                client_payload: { theme: finalTheme, duration: parseInt(duration), version: "10.1 Diamond" }
-            })
-        });
-
-        if (res.status === 204) {
-            alert("🚀 [CLOUD] Misión Diamond Lanzada a GitHub Actions.");
-        } else {
-            alert("❌ Error al contactar la nube: " + res.status);
-        }
-    } catch (e) {
-        alert("❌ Error de red: " + e.message);
+            if (res.ok) alert(`🚀 Diamond Engine Activado: ${selectedId}`);
+            else alert("❌ Error en el motor local.");
+        } catch(e) { alert("⚠️ Error de conexión local."); }
+    } else {
+        alert("☁️ Disparador Cloud (GitHub Actions) en desarrollo. Use el motor local por ahora.");
     }
     
-    finalizeLaunch();
-}
-
-function finalizeLaunch() {
     btnLaunch.disabled = false;
-    btnLaunch.style.opacity = "1";
     btnLaunch.textContent = "PRODUCIR ATMOS DIAMOND";
 }
 
-async function checkLocalServer() {
-    try {
-        const res = await fetch(`${LOCAL_SERVER}/check_status`);
-        if (res.ok) {
-            isLocalAvailable = true;
-            const badge = document.querySelector('.badge-status');
-            badge.textContent = "DIAMOND ENGINE LOCAL ACTIVO";
-            badge.style.background = "linear-gradient(90deg, #C5A059, #FFD700)";
-            console.log("💎 Diamond Engine Local detectado.");
-        }
-    } catch (e) {
-        console.log("☁️ Modo Cloud (No se detectó servidor local).");
-    }
-}
-
-// --- UI HELPERS ---
-
-function switchView(viewId) {
+function switchView(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    
-    document.getElementById(`view-${viewId}`).classList.add('active');
-    const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.textContent.includes(viewId.toUpperCase()));
-    if (activeBtn) activeBtn.classList.add('active');
+    document.getElementById(`view-${view}`).classList.add('active');
+    event.currentTarget.classList.add('active');
 }
 
 function unlockExperience() {
-    document.getElementById('landing-shield').classList.add('hidden');
-    if (videoElement) videoElement.play().catch(e => console.warn("Autoplay bloqueado"));
+    document.getElementById('landing-shield').style.display = 'none';
+    const bgVideo = document.getElementById('bg-video');
+    if (bgVideo) bgVideo.play().catch(e => console.log("Autoplay blocked:", e));
 }
-
-// Eventos
-btnLaunch.onclick = launchProduction;
-btnSettings.onclick = () => modalSettings.classList.add('active');
-btnCloseModal.onclick = () => modalSettings.classList.remove('active');
-btnSaveToken.onclick = () => {
-    localStorage.setItem('gh_token', inputToken.value);
-    GITHUB_TOKEN = inputToken.value;
-    modalSettings.classList.remove('active');
-    alert("Token Guardado.");
-};
-
-// Inicializar
-window.onload = loadData;
