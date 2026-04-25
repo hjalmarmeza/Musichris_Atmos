@@ -51,14 +51,21 @@ async function checkLocalServer() {
 
 async function loadCatalog() {
     try {
-        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data/musichris_master_catalog.json?t=${Date.now()}`);
+        const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data/musichris_master_catalog.json?t=${Date.now()}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Error HTTP " + res.status);
         masterCatalog = await res.json();
+        
         statTotal.textContent = masterCatalog.length;
-        totalSongsBadge.textContent = masterCatalog.length;
+        if (totalSongsBadge) totalSongsBadge.textContent = masterCatalog.length;
+        
         setupAtmosphereSelectors(masterCatalog);
         renderCatalog(masterCatalog);
     } catch (e) {
         console.error("Error cargando catálogo:", e);
+        if (catalogList) {
+            catalogList.innerHTML = `<p class="error-msg" style="color:#ff4d4d; padding:20px; text-align:center; background:rgba(255,0,0,0.1); border-radius:15px; border:1px solid rgba(255,0,0,0.2);">⚠️ ERROR DE CONEXIÓN: No se pudo cargar la biblioteca.<br><small>${e.message}</small></p>`;
+        }
     }
 }
 
@@ -71,38 +78,48 @@ async function setupAtmosphereSelectors(catalog) {
 
     const stats = {};
     catalog.forEach(s => {
-        s.moments.forEach(m => {
+        const moments = s.moments || [];
+        moments.forEach(m => {
             if (!stats[m]) stats[m] = { total: 0, used: 0 };
             stats[m].total++;
             if (usageHistory.some(h => h.title === s.title && h.atmosphere === m)) stats[m].used++;
         });
     });
 
-    prodTheme.innerHTML = MASTER_ATMOSPHERES.map(atm => {
-        let label = atm.name;
-        if (atm.type === "pura") {
-            const rem = (stats[atm.id]?.total || 0) - (stats[atm.id]?.used || 0);
-            label += ` (${rem} nuevas)`;
-        }
-        return `<option value="${atm.id}">${label}</option>`;
-    }).join('');
+    if (prodTheme) {
+        prodTheme.innerHTML = MASTER_ATMOSPHERES.map(atm => {
+            let label = atm.name;
+            if (atm.type === "pura") {
+                const rem = (stats[atm.id]?.total || 0) - (stats[atm.id]?.used || 0);
+                label += ` (${rem} nuevas)`;
+            }
+            return `<option value="${atm.id}">${label}</option>`;
+        }).join('');
+    }
 
-    catalogFilter.innerHTML = `<option value="all">Ver Todas las Canciones</option>` + 
-        MASTER_ATMOSPHERES.filter(a => a.type === "pura").map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+    if (catalogFilter) {
+        catalogFilter.innerHTML = `<option value="all">Ver Todas las Canciones</option>` + 
+            MASTER_ATMOSPHERES.filter(a => a.type === "pura").map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+    }
 }
 
 function renderCatalog(songs) {
+    if (!catalogList) return;
     catalogList.innerHTML = '';
+    
     songs.forEach(song => {
         const card = document.createElement('div');
         card.className = 'song-card glass';
         const isSongDisabled = song.disabled === true;
+        const verse = song.context?.verse || 'Salmos 23:1';
+        const bpm = song.bpm || 'Slow';
+        const moments = song.moments || [];
         
         card.innerHTML = `
             <div class="song-info">
                 <h4>${song.title}</h4>
-                <p>${song.verse} | ${song.bpm} BPM</p>
-                <div class="tag-row">${song.moments.map(m => `<span class="tag-mini">${m}</span>`).join('')}</div>
+                <p>${verse} | ${bpm} BPM</p>
+                <div class="tag-row">${moments.map(m => `<span class="tag-mini">${m}</span>`).join('')}</div>
             </div>
             <div class="song-actions">
                 <button onclick="toggleSong('${song.title}', ${!isSongDisabled})" class="btn-mini ${isSongDisabled ? 'btn-enable' : 'btn-disable'}">
@@ -116,11 +133,12 @@ function renderCatalog(songs) {
 
 function filterCatalog() {
     const val = catalogFilter.value;
-    const filtered = val === 'all' ? masterCatalog : masterCatalog.filter(s => s.moments.includes(val));
+    const filtered = val === 'all' ? masterCatalog : masterCatalog.filter(s => (s.moments || []).includes(val));
     renderCatalog(filtered);
 }
 
 async function loadHistory() {
+    if (!historyList) return;
     try {
         const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data/usage_history.json?t=${Date.now()}`);
         if (!res.ok) return;
@@ -139,7 +157,7 @@ async function loadHistory() {
 }
 
 // --- ACCIONES ---
-btnLaunch.onclick = launchProduction;
+if (btnLaunch) btnLaunch.onclick = launchProduction;
 
 async function launchProduction() {
     const selectedId = prodTheme.value;
@@ -178,12 +196,14 @@ async function launchProduction() {
 function switchView(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`view-${view}`).classList.add('active');
-    event.currentTarget.classList.add('active');
+    const target = document.getElementById(`view-${view}`);
+    if (target) target.classList.add('active');
+    if (event && event.currentTarget) event.currentTarget.classList.add('active');
 }
 
 function unlockExperience() {
-    document.getElementById('landing-shield').style.display = 'none';
+    const shield = document.getElementById('landing-shield');
+    if (shield) shield.style.display = 'none';
     const bgVideo = document.getElementById('bg-video');
     if (bgVideo) bgVideo.play().catch(e => console.log("Autoplay blocked:", e));
 }
