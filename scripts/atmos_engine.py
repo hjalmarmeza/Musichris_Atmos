@@ -65,7 +65,7 @@ def generate_thumbnail_intelligent(theme1, output_name, landscape_url, songs, th
     print(f"🖼️ [THUMBNAIL] Generando Portada Diamond Premium...")
     thumb_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg")
     temp_frame = os.path.join(BASE_DIR, "assets/temp_frame.jpg")
-    subprocess.run(["/opt/homebrew/bin/ffmpeg", "-y", "-ss", "00:00:05", "-i", landscape_url, "-frames:v", "1", temp_frame], capture_output=True)
+    subprocess.run(["ffmpeg", "-y", "-ss", "00:00:05", "-i", landscape_url, "-frames:v", "1", temp_frame], capture_output=True)
     img = Image.open(temp_frame).convert('RGBA') if os.path.exists(temp_frame) else Image.new('RGB', (1280, 720), (20,20,20))
     draw = ImageDraw.Draw(img, 'RGBA')
     phrase = SEO_PHRASES.get(theme1, f"Música para {theme1}")
