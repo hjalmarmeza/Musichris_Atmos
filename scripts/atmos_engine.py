@@ -214,23 +214,10 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"✅ [PASO 1/3] Base concatenada.")
 
     # ══════════════════════════════════════════════
-    # PASO 2: Aplicar Logo (solo 2 inputs — máxima estabilidad)
+    # PASO 2: Audio, Textos y Logo (Un solo paso final)
+    # Sin PNGs ni stream_loop: máxima estabilidad de RAM
     # ══════════════════════════════════════════════
-    print(f"🎨 [PASO 2/3] Aplicando Logo Animado...")
-    subprocess.run([
-        'ffmpeg', '-y', '-i', base_video,
-        '-stream_loop', '-1', '-i', logo_path,
-        '-filter_complex', '[1:v]scale=120:-1,fps=30,format=yuv420p[logo];[0:v][logo]overlay=x=40:y=40:shortest=1[out]',
-        '-map', '[out]', '-c:v', 'libx264', '-preset', 'ultrafast',
-        '-t', str(acc_time), base_logo
-    ], check=True)
-    print(f"✅ [PASO 2/3] Logo aplicado.")
-
-    # ══════════════════════════════════════════════
-    # PASO 3: Audio + Todos los Textos via drawbox/drawtext
-    # Sin PNGs: solo 1 video + N audios = mínima RAM
-    # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 3/3] Añadiendo Audio y Textos...")
+    print(f"🎵 [PASO 2/2] Añadiendo Audio, Logo y Textos...")
     
     # Font (Ubuntu GitHub Actions)
     font_candidates = [
@@ -243,57 +230,64 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     def esc(t): return t.replace('\\','\\\\').replace("'","\\'").replace(':','\\:')
     
-    # Construir cadena de filtros de video
+    # Logo animado vía filtro 'movie' (evita -stream_loop y OOM)
+    logo_esc = logo_path.replace('\\', '/').replace("'", "\\'")
+    vf_parts = [
+        f"movie=filename='{logo_esc}':loop=0,setpts=N/FRAME_RATE/TB,scale=120:-1,format=yuv420p[logo]",
+        "[0:v][logo]overlay=x=40:y=40:shortest=1[v_logo]"
+    ]
+    
+    # Construir cadena de textos
     phrase = SEO_PHRASES.get(theme1, f"MÚSICA PARA {theme1.upper()}")
     words = phrase.upper().split(' ')
     mid = len(words) // 2
     h1 = esc(' '.join(words[:mid]))
     h2 = esc(' '.join(words[mid:]))
     
-    # Posiciones del cuadro central para Hook/Outro
     bx, by, bw, bh = "(W-900)/2", "(H-220)/2", 900, 220
 
-    vf_parts = [
-        # Hook (0-8s): Cuadro semitransparente central con frase SEO en 2 líneas
-        f"drawbox=x={bx}:y={by}:w={bw}:h={bh}:color=black@0.63:t=fill:enable='between(t,0,8)'",
-        f"drawtext=text='{h1}'{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):enable='between(t,0,8)'",
-        f"drawtext=text='{h2}'{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):enable='between(t,0,8)'",
+    # Hook (0-8s)
+    vf_parts += [
+        f"[v_logo]drawbox=x={bx}:y={by}:w={bw}:h={bh}:color=black@0.63:t=fill:enable='between(t,0,8)'[v_h1]",
+        f"[v_h1]drawtext=text='{h1}'{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):enable='between(t,0,8)'[v_h2]",
+        f"[v_h2]drawtext=text='{h2}'{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):enable='between(t,0,8)'[v_t1]"
     ]
     
-    # Overlays de Canciones (cuadro inferior izquierdo)
-    for title, verse, st, en in song_times:
+    # Canciones
+    curr_v = "[v_t1]"
+    for i, (title, verse, st, en) in enumerate(song_times):
         t = esc(title.upper()); v = esc(verse.upper())
         vf_parts += [
-            f"drawbox=x=60:y=590:w=470:h=100:color=black@0.63:t=fill:enable='between(t,{st},{en})'",
-            f"drawtext=text='{t}'{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:enable='between(t,{st},{en})'",
-            f"drawtext=text='{v}'{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:enable='between(t,{st},{en})'",
+            f"{curr_v}drawbox=x=60:y=590:w=470:h=100:color=black@0.63:t=fill:enable='between(t,{st},{en})'[v_s{i}_1]",
+            f"[v_s{i}_1]drawtext=text='{t}'{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:enable='between(t,{st},{en})'[v_s{i}_2]",
+            f"[v_s{i}_2]drawtext=text='{v}'{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:enable='between(t,{st},{en})'[v_s{i}_3]"
         ]
+        curr_v = f"[v_s{i}_3]"
     
-    # Outro (últimos 8s): Cuadro central con mensaje de cierre
+    # Outro y Fade
     os_t, os_e = int(acc_time - 8), int(acc_time)
     vf_parts += [
-        f"drawbox=x={bx}:y={by}:w={bw}:h={bh}:color=black@0.63:t=fill:enable='between(t,{os_t},{os_e})'",
-        f"drawtext=text='CAMINEMOS JUNTOS EN FE'{ff}:fontsize=44:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):enable='between(t,{os_t},{os_e})'",
-        f"drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO'{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):enable='between(t,{os_t},{os_e})'",
-        # Fade in/out global
-        f"fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2",
+        f"{curr_v}drawbox=x={bx}:y={by}:w={bw}:h={bh}:color=black@0.63:t=fill:enable='between(t,{os_t},{os_e})'[v_o1]",
+        f"[v_o1]drawtext=text='CAMINEMOS JUNTOS EN FE'{ff}:fontsize=44:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):enable='between(t,{os_t},{os_e})'[v_o2]",
+        f"[v_o2]drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO'{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):enable='between(t,{os_t},{os_e})'[v_o3]",
+        f"[v_o3]fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2[v_out]"
     ]
     
-    vf_chain = ",".join(vf_parts)
+    vf_chain = ";".join(vf_parts)
     
-    cmd3 = ['ffmpeg', '-y', '-i', base_logo]
-    for p in local_songs: cmd3 += ['-i', p]  # 1..N
+    cmd2 = ['ffmpeg', '-y', '-i', base_video]
+    for p in local_songs: cmd2 += ['-i', p]  # 1..N
     
     a_tags = "".join([f"[{i+1}:a]" for i in range(n_songs)])
     af = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
     
-    cmd3 += [
-        '-filter_complex', f"[0:v]{vf_chain}[v_out];{af}",
+    cmd2 += [
+        '-filter_complex', f"{vf_chain};{af}",
         '-map', '[v_out]', '-map', '[a_out]',
         '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video
     ]
-    subprocess.run(cmd3, check=True)
-    print(f"✅ [PASO 3/3] Video final listo.")
+    subprocess.run(cmd2, check=True)
+    print(f"✅ [PASO 2/2] Video final listo.")
 
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
