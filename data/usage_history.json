@@ -250,5 +250,17 @@
         "atmosphere": "Descanso",
         "date": "Sun Apr 26 22:35:02 2026",
         "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "RA\u00cdCES EN EL R\u00cdO",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 23:47:29 2026",
+        "render": "ATMOS_Descanso_20260426-2343"
+    },
+    {
+        "title": "UN CAMINO EN EL MAR",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 23:47:29 2026",
+        "render": "ATMOS_Descanso_20260426-2343"
     }
 ]
