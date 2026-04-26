@@ -199,15 +199,15 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     for p, s, e in song_overlays: cmd += ['-i', p]
 
     # Filtros
-    v_f = "[0:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v0];"
     land_dur = acc_time / 3
+    v_f = ""
     for i in range(3):
-        idx = len(selected_songs) + 1 + i
-        v_f += f"[{idx}:v]trim=duration={land_dur},setpts=PTS-STARTPTS,fade=t=in:st=0:d=1,fade=t=out:st={land_dur-1}:d=1[vl{i}];"
-    
-    outro_idx = len(selected_songs) + 4
-    v_f += f"[{outro_idx}:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[vout];"
-    v_f += f"[v0][vl0][vl1][vl2][vout]concat=n=5:v=1:a=0[v_base];"
+        idx = 1 + len(selected_songs) + i
+        v_f += f"[{idx}:v]scale=1280:720,setsar=1/1,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
+
+    v_f += f"[0:v]scale=1280:720,setsar=1/1[v_intro];"
+    v_f += f"[{len(selected_songs)+4}:v]scale=1280:720,setsar=1/1[v_outro];"
+    v_f += f"[v_intro][vl0][vl1][vl2][v_outro]concat=n=5:v=1:a=0[v_base];"
     
     # Audio
     a_f = "".join([f"[{i+1}:a]" for i in range(len(selected_songs))]) + f"concat=n={len(selected_songs)}:v=0:a=1[a_final]"
@@ -223,13 +223,10 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
     cmd += ['-filter_complex', f"{v_f}{a_f}", '-map', curr_v, '-map', '[a_final]', '-c:v', 'libx264', '-preset', 'ultrafast', final_video]
     
-    print(f"⚙️ [FFMPEG] Iniciando Renderizado de Video...")
+    print(f"⚙️ [FFMPEG] Iniciando Renderizado de Video (Modo Transparente)...")
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        if res.returncode != 0:
-            print(f"❌ [FFMPEG] Error Detectado:")
-            print(res.stderr)
-            raise subprocess.CalledProcessError(res.returncode, cmd)
+        # Permitimos que FFmpeg escriba directo a la consola para ver el error real
+        subprocess.run(cmd, check=True)
     except Exception as e:
         print(f"❌ [SISTEMA] Fallo crítico de renderizado.")
         raise e
