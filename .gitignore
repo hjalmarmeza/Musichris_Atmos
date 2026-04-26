@@ -5,6 +5,9 @@
 ui/assets/
 !fondo_humo_azul.mp4
 !assets/fondo_humo_azul.mp4
+!assets/Logo Hjalmar Animado.mp4
+!assets/logo_atmos.png
+!assets/logo_mask.png
 renders/
 
 # Entornos Virtuales y Dependencias
