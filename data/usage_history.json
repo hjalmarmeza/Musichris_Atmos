@@ -208,5 +208,47 @@
         "atmosphere": "Descanso",
         "date": "Sun Apr 26 21:59:40 2026",
         "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "ROCA Y ESCUDO",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "PIES EN LAS ALTURAS v2",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "VIENTO Y SOMBRAS",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "ABRE MIS LABIOS v2",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "LA TORRE MAS ALTA",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "CONSUMADO ES",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
+    },
+    {
+        "title": "\u00bfQUE ES EL HOMBRE?",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 22:35:02 2026",
+        "render": "ATMOS_Descanso_20260426-2224"
     }
 ]
