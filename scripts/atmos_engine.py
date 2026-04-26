@@ -201,42 +201,50 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
             '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', cut_path
         ], check=True)
         cut_lands.append(cut_path)
-        # LIBERAR ESPACIO: Borrar el original descargado
-        try:
-            os.remove(src)
-            print(f"   ✅ Paisaje {i+1} procesado y original liberado.")
-        except:
-            pass
     
-    # Escalar logo después de haber liberado espacio de paisajes
+    # ══════════════════════════════════════════════
+    # PRE-PASO: Normalizar paisaje (1 solo en bucle)
+    # ══════════════════════════════════════════════
+    print(f"🎬 [PRE-PASO] Normalizando paisaje único...")
+    sel_land = random.choice(land_pool)
+    p_orig = os.path.join(TEMP_DIR, "land_orig.mp4")
+    r = requests.get(sel_land, timeout=30)
+    with open(p_orig, 'wb') as f: f.write(r.content)
+    p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
+    
+    subprocess.run([
+        'ffmpeg', '-y', '-ss', '0', '-i', p_orig,
+        '-t', '560', '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-an', p_cut
+    ], check=True)
+    
+    try: os.remove(p_orig)
+    except: pass
+    
     logo_small = os.path.join(TEMP_DIR, "logo_small.mp4")
     subprocess.run([
         'ffmpeg', '-y', '-i', logo_path,
         '-vf', 'scale=120:-1,fps=30,format=yuv420p',
         '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', logo_small
     ], check=True)
-    print(f"   ✅ Archivos normalizados.")
+    print(f"   ✅ Paisaje y logo listos.")
 
     # ══════════════════════════════════════════════
-    # PASO 1/2: Generar Video Base (Paisajes + Logo)
+    # PASO 1/2: Generar Video Base (Bucle + Logo)
     # ══════════════════════════════════════════════
-    print(f"🎞️ [PASO 1/2] Concatenando Paisajes y Logo...")
+    print(f"🎞️ [PASO 1/2] Creando base infinita con Logo...")
     base_video = os.path.join(TEMP_DIR, "base_video_flat.mp4")
     cmd_base = [
         'ffmpeg', '-y',
-        '-i', cut_lands[0], '-i', cut_lands[1], '-i', cut_lands[2],
+        '-stream_loop', '-1', '-i', p_cut,
         '-stream_loop', '-1', '-i', logo_small,
-        '-filter_complex', "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v];[v][3:v]overlay=x=40:y=40:shortest=1[out]",
+        '-filter_complex', "[0:v][1:v]overlay=x=40:y=40:shortest=1[out]",
         '-map', '[out]', '-c:v', 'libx264', '-preset', 'superfast', '-crf', '24',
         '-t', str(acc_time), base_video
     ]
     subprocess.run(cmd_base, check=True)
 
-    # LIBERAR RAM/DISCO: Borrar los cortes de paisajes
-    for p in cut_lands:
-        try: os.remove(p)
-        except: pass
-    print(f"   ✅ Base aplanada y memoria liberada.")
+    try: os.remove(p_cut)
+    except: pass
 
     # ══════════════════════════════════════════════
     # PASO 2/2: Añadir Audio y Textos
@@ -244,13 +252,11 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"🎵 [PASO 2/2] Aplicando Audio y Textos...")
     ff = ":fontfile='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'"
     
-    # Grafo de video simplificado sobre la base plana
-    vf = "null" # Entrada base
+    vf = "null"
     for i, (title, verse, start, end) in enumerate(song_times):
         vf += f",drawtext=text='{title.upper()}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{start},{end})'"
         vf += f",drawtext=text='{verse.upper()}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{start},{end})'"
 
-    # Hook y Outro
     vf += f",drawtext=text='MÚSICA PARA':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'"
     vf += f",drawtext=text='{theme2.upper() if theme2 else theme1.upper()}':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'"
     
@@ -259,13 +265,13 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     vf += f",drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO':{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'"
     vf += f",fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2"
 
-    # Audio
     af_parts = []
     for i in range(n_songs):
         af_parts.append(f"[{i+1}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
     a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
     af = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
 
+    final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
     cmd_final = ['ffmpeg', '-y', '-i', base_video]
     for p in local_songs: cmd_final += ['-i', p]
     
@@ -277,13 +283,10 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     ]
     subprocess.run(cmd_final, check=True)
     
-    # Limpiar base temporal
     try: os.remove(base_video)
     except: pass
     print(f"✅ [PASO FINAL] Video final listo.")
-    print(f"✅ [PASO FINAL] Video final listo.")
-
-    generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
+    generate_thumbnail_intelligent(theme1, output_name, sel_land, selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
     
     try:
