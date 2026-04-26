@@ -185,7 +185,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     cmd = ['ffmpeg', '-y']
     for p in local_songs: cmd += ['-i', p] # 0..N-1
-    for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p] # N, N+1, N+2
+    for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p] # N..N+2
     cmd += ['-stream_loop', '-1', '-i', logo_path] # N+3
     cmd += ['-loop', '1', '-i', hook_path] # N+4
     cmd += ['-loop', '1', '-i', outro_path] # N+5
@@ -195,36 +195,40 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     land_dur = (acc_time / 3) + 2
     v_f = ""
     
-    # 1. Procesar Paisajes con xfade (Normalización Total)
+    # 1. Procesar Paisajes (Normalización de Tiempo y Formato)
     for i in range(3):
         idx = n_songs + i
-        v_f += f"[{idx}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
+        v_f += f"[{idx}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p,settb=AVTB,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
     
-    v_f += f"[vl0][vl1]xfade=transition=fade:duration=2:offset={land_dur-2}[v01];"
-    v_f += f"[v01][vl2]xfade=transition=fade:duration=2:offset={land_dur*2-4}[v_base_lands];"
+    # Concat base de paisajes
+    v_f += f"[vl0][vl1][vl2]concat=n=3:v=1:a=0[v_base_lands];"
     
-    # 2. Logo y Hook/Outro
-    v_f += f"[{n_songs+3}:v]scale=120:-1,fps=30,format=rgba[logo_scaled];"
-    v_f += f"[v_base_lands][logo_scaled]overlay=x=40:y=40[v_with_logo];"
+    # 2. Logo Permanente
+    v_f += f"[{n_songs+3}:v]scale=120:-1,fps=30,format=rgba,settb=AVTB[logo_scaled];"
+    v_f += f"[v_base_lands][logo_scaled]overlay=x=40:y=40[v_base_w_logo];"
     
-    v_f += f"[{n_songs+4}:v]scale=1280:720,fps=30[hook_ov];"
-    v_f += f"[{n_songs+5}:v]scale=1280:720,fps=30[outro_ov];"
-    v_f += f"[v_with_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
-    v_f += f"[v_hooked][outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_base_final];"
+    # 3. Overlays en ORDEN CRONOLÓGICO
+    # HOOK
+    v_f += f"[{n_songs+4}:v]scale=1280:720,fps=30,format=rgba,settb=AVTB[hook_ov];"
+    v_f += f"[v_base_w_logo][hook_ov]overlay=enable='between(t,0,8)'[v_after_hook];"
     
-    # 3. Overlays de Canciones
-    curr_v = "[v_base_final]"
+    # CANCIONES
+    curr_v = "[v_after_hook]"
     for i, (p, st, en) in enumerate(song_overlays):
         ov_idx = n_songs + 6 + i
-        v_f += f"[{ov_idx}:v]scale=1280:720,fps=30[ov{i}];"
-        v_f += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[v{i+1}];"
-        curr_v = f"[v{i+1}]"
+        v_f += f"[{ov_idx}:v]scale=1280:720,fps=30,format=rgba,settb=AVTB[ov{i}];"
+        v_f += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[v_song{i}];"
+        curr_v = f"[v_song{i}]"
+    
+    # CIERRE
+    v_f += f"[{n_songs+5}:v]scale=1280:720,fps=30,format=rgba,settb=AVTB[outro_ov];"
+    v_f += f"{curr_v}[outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_after_outro];"
 
     # 4. Global Fade In/Out
-    v_f += f"{curr_v}fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final_faded];"
+    v_f += f"[v_after_outro]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final_faded];"
 
-    # 5. Audio con Resampling y Fades
-    a_resample = "".join([f"[{i}:a]aresample=44100[as{i}];" for i in range(n_songs)])
+    # 5. Audio con Resampling
+    a_resample = "".join([f"[{i}:a]aresample=44100,settb=AVTB[as{i}];" for i in range(n_songs)])
     a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
     a_f = f"{a_resample}{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_final]"
     
