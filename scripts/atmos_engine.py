@@ -201,7 +201,14 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
             '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', cut_path
         ], check=True)
         cut_lands.append(cut_path)
+        # LIBERAR ESPACIO: Borrar el original descargado
+        try:
+            os.remove(src)
+            print(f"   ✅ Paisaje {i+1} procesado y original liberado.")
+        except:
+            pass
     
+    # Escalar logo después de haber liberado espacio de paisajes
     logo_small = os.path.join(TEMP_DIR, "logo_small.mp4")
     subprocess.run([
         'ffmpeg', '-y', '-i', logo_path,
