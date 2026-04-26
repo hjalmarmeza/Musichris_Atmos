@@ -217,11 +217,10 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     def esc(t): return t.replace('\\','\\\\').replace("'","\\'").replace(':','\\:')
     
-    # Concatenar paisajes y logo animado vía filtro 'movie'
-    logo_esc = logo_path.replace('\\', '/').replace("'", "\\'")
+    # Concatenar paisajes y logo animado (vía input estándar + loop)
     vf_parts = [
         "[0:v][1:v][2:v]concat=n=3:v=1:a=0[base_v]",
-        f"movie=filename='{logo_esc}':loop=0,setpts=N/FRAME_RATE/TB,scale=120:-1,format=yuv420p[logo]",
+        "[3:v]scale=120:-1,format=yuv420p,loop=loop=-1:size=250:start=0[logo]",
         "[base_v][logo]overlay=x=40:y=40:shortest=1[v_logo]"
     ]
     
@@ -265,11 +264,12 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     cmd2 = ['ffmpeg', '-y']
     for p in cut_lands: cmd2 += ['-i', p]    # Inputs 0, 1, 2
-    for p in local_songs: cmd2 += ['-i', p]  # Inputs 3..N+2
+    cmd2 += ['-i', logo_path]                # Input 3
+    for p in local_songs: cmd2 += ['-i', p]  # Inputs 4..N+3
     
     af_parts = []
     for i in range(n_songs):
-        af_parts.append(f"[{i+3}:a]aresample=44100,settb=AVTB[as{i}]")
+        af_parts.append(f"[{i+4}:a]aresample=44100,settb=AVTB[as{i}]")
     
     a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
     af = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
