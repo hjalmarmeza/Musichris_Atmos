@@ -114,7 +114,7 @@ async function setupAtmosphereSelectors(catalog) {
         moments.forEach(m => {
             if (!stats[m]) stats[m] = { total: 0, used: 0 };
             stats[m].total++;
-            if (usageHistory.some(h => h.title === s.title && h.atmosphere === m)) stats[m].used++;
+            if (usageHistory.some(h => h.title === s.title)) stats[m].used++;
         });
     });
 

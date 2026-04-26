@@ -26,20 +26,24 @@ def get_authenticated_service():
         if refresh_token:
             from google.oauth2.credentials import Credentials
             # Intentar cargar client_secrets si existe
+            # Intentar cargar desde variables de entorno primero
             client_id = os.environ.get("YOUTUBE_CLIENT_ID")
             client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET")
             
-            if not client_id and os.path.exists(secrets_path):
+            # Intentar cargar client_secrets si falta algo
+            if (not client_id or not client_secret) and os.path.exists(secrets_path):
                 with open(secrets_path, 'r') as f:
-                    raw_data = json.load(f)
-                    data = raw_data.get('installed') or raw_data.get('web')
-                    if not data:
-                        raise ValueError("❌ Estructura de client_secrets.json inválida (falta 'installed' o 'web')")
-                    client_id = data['client_id']
-                    client_secret = data['client_secret']
+                    try:
+                        raw_data = json.load(f)
+                        data = raw_data.get('installed') or raw_data.get('web')
+                        if data:
+                            if not client_id: client_id = data.get('client_id')
+                            if not client_secret: client_secret = data.get('client_secret')
+                    except Exception as e:
+                        print(f"⚠️ Error al leer client_secrets.json: {e}")
 
             if not client_id or not client_secret:
-                raise ValueError("❌ Faltan Client ID o Client Secret para la autenticación.")
+                raise ValueError("❌ Faltan Client ID o Client Secret para la autenticación (verificar ENVs o client_secrets.json).")
 
             credentials = Credentials(
                 None,

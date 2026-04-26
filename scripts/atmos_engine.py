@@ -8,7 +8,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMP_DIR = os.path.join(BASE_DIR, "assets/temp_assets")
+RENDERS_DIR = os.path.join(BASE_DIR, "renders")
 os.makedirs(TEMP_DIR, exist_ok=True)
+os.makedirs(RENDERS_DIR, exist_ok=True)
 
 # MAPEADO DE CRUCES
 CROSS_MAP = {
@@ -53,14 +55,31 @@ def get_font(size):
 
 def get_song_duration(s): return s.get('duration_secs') or 240
 
+def create_hook_overlay(text, output_path):
+    img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    font = get_font(50)
+    # Box semi-transparente central Diamond
+    w, h = 900, 220
+    x, y = (1280-w)//2, (720-h)//2
+    draw.rounded_rectangle([x, y, x+w, y+h], radius=25, fill=(0,0,0,160), outline=(197,160,89,200), width=4)
+    # Asegurar dos líneas para el Hook (Algoritmo Retención)
+    if "\n" not in text:
+        words = text.split(' ')
+        mid = len(words)//2
+        text = " ".join(words[:mid]) + "\n" + " ".join(words[mid:])
+    draw.multiline_text((640, 360), text.upper(), font=font, fill="#C5A059", anchor="mm", align="center", spacing=20)
+    img.save(output_path)
+
 def create_song_info_overlay(title, verse, output_path):
     img = Image.new('RGBA', (1280, 720), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     font_t = get_font(36); font_v = get_font(24)
     text_t = title.upper(); text_v = verse.upper()
-    draw.rounded_rectangle([50, 580, 500, 680], radius=20, fill=(10,10,10,180), outline=(197,160,89,150), width=2)
-    draw.text((80, 600), text_t, font=font_t, fill="#C5A059")
-    draw.text((80, 640), text_v, font=font_v, fill="#F5F5DC")
+    # Box más elegante y minimalista
+    draw.rounded_rectangle([60, 590, 520, 690], radius=15, fill=(0,0,0,160), outline=(197,160,89,200), width=3)
+    draw.text((90, 610), text_t, font=font_t, fill="#C5A059")
+    draw.text((90, 650), text_v, font=font_v, fill="#F5F5DC")
     img.save(output_path)
 
 def generate_thumbnail_intelligent(theme1, output_name, landscape_url, songs, theme2=None):
@@ -110,28 +129,19 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     # Detectar si es un cruce
     is_cross = theme1 in CROSS_MAP
+    original_theme = theme1
     if is_cross:
         theme2 = CROSS_MAP[theme1][1]
         theme1 = CROSS_MAP[theme1][0]
         print(f"🔀 [CROSS] Detectado Cruce: {theme1} + {theme2}")
 
+    # Cargar historial de uso global para el descuento
+    used_titles_global = [item['title'] for item in history_data] if history_data else []
+    
     rel_1 = [s for s in catalog if theme1 in s.get('moments', [])]
     rel_2 = [s for s in catalog if theme2 in s.get('moments', [])] if theme2 and theme2 != "none" else []
     
-    combined_pool = rel_1 + rel_2
-    
-    # Filtrar usadas (solo para Puras, en Cruces se permiten repetidas según el usuario)
-    if not is_cross:
-        available_pool = [s for s in combined_pool if s['title'] not in used_titles]
-        if not available_pool: 
-            print("⚠️ [WARNING] No hay canciones nuevas, usando pool completo.")
-            available_pool = combined_pool
-    else:
-        available_pool = combined_pool
-    if not theme2 or theme2 == "none":
-        rel_1 = [s for s in rel_1 if s['title'] not in used_titles] or rel_1
-
-    source_pool = rel_1 + rel_2 if theme2 and theme2 != "none" else rel_1
+    source_pool = [s for s in (rel_1 + rel_2) if s['title'] not in used_titles] or (rel_1 + rel_2)
     random.shuffle(source_pool)
     
     selected_songs = []; acc_time = 0
@@ -142,103 +152,89 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     if not selected_songs: return print("❌ Sin canciones.")
 
-    # Crear Intro y Outro
-    intro_path = os.path.join(BASE_DIR, "assets/intro.png")
+    hook_path = os.path.join(BASE_DIR, "assets/hook.png")
     outro_path = os.path.join(BASE_DIR, "assets/outro.png")
-    
-    for path, text, font_size in [(intro_path, f"EXPERIENCIA {theme1.upper()}", 50), (outro_path, "CAMINEMOS JUNTOS EN FE\nSUSCRÍBETE A @MUSICHRIS_STUDIO", 40)]:
-        img = Image.new('RGBA', (1280, 720), (10, 10, 10, 255))
-        draw = ImageDraw.Draw(img)
-        draw.multiline_text((640, 360), text, font=get_font(font_size), fill="#C5A059", anchor="mm", align="center")
-        img.save(path)
+    create_hook_overlay(f"EXPERIENCIA {original_theme.upper()}", hook_path)
+    create_hook_overlay("CAMINEMOS JUNTOS EN FE\nSUSCRÍBETE A @MUSICHRIS_STUDIO", outro_path)
 
-    # Overlays
-    song_overlays = []; curr = 5
+    song_overlays = []; curr = 0
     for i, s in enumerate(selected_songs):
         p = os.path.join(BASE_DIR, f"assets/song_{i}.png")
         create_song_info_overlay(s['title'], s.get('verse', 'Salmos 23'), p)
         song_overlays.append((p, curr + 2, curr + 12))
         curr += get_song_duration(s)
 
-    # Paisajes
     with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: landscapes = list(json.load(f).values())
     sel_lands = [random.choice(landscapes) for _ in range(3)]
     
-    # 📥 DESCARGA DE ASSETS (Asset Shield)
-    print(f"📥 [SISTEMA] Descargando recursos para estabilidad total...")
     local_songs = []
     for i, s in enumerate(selected_songs):
-        # Limpieza de extensión para evitar rutas inválidas (Skill Flow v12.9.16)
-        parts = s['audio_url'].split('.')
-        ext = parts[-1].split('?')[0].lower() if len(parts) > 1 else "mp3"
-        if len(ext) > 4 or "/" in ext: ext = "mp3"
-        
-        path = os.path.join(TEMP_DIR, f"song_{i}.{ext}")
-        print(f"   🎵 Descargando: {s['title']}...")
+        path = os.path.join(TEMP_DIR, f"song_{i}.mp3")
         r = requests.get(s['audio_url'], timeout=30)
         with open(path, 'wb') as f: f.write(r.content)
         local_songs.append(path)
 
     local_lands = []
     for i, l in enumerate(sel_lands):
-        parts = l.split('.')
-        ext = parts[-1].split('?')[0].lower() if len(parts) > 1 else "mp4"
-        if len(ext) > 4 or "/" in ext: ext = "mp4"
-        
-        path = os.path.join(TEMP_DIR, f"land_{i}.{ext}")
-        print(f"   🖼️ Descargando Paisaje {i+1}...")
+        path = os.path.join(TEMP_DIR, f"land_{i}.mp4")
         r = requests.get(l, timeout=30)
         with open(path, 'wb') as f: f.write(r.content)
         local_lands.append(path)
 
-    # FFmpeg Command (Usar paths locales)
-    cmd = ['ffmpeg', '-y', '-loop', '1', '-t', '5', '-i', intro_path]
+    logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
+    
+    cmd = ['ffmpeg', '-y']
     for p in local_songs: cmd += ['-i', p]
     for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p]
-    cmd += ['-loop', '1', '-t', '5', '-i', outro_path]
+    cmd += ['-stream_loop', '-1', '-i', logo_path]
+    cmd += ['-i', hook_path]
+    cmd += ['-i', outro_path]
     for p, s, e in song_overlays: cmd += ['-i', p]
 
-    # Filtros
-    land_dur = acc_time / 3
+    n_songs = len(selected_songs)
+    land_dur = (acc_time / 3) + 2
     v_f = ""
+    
     for i in range(3):
-        idx = 1 + len(selected_songs) + i
-        v_f += f"[{idx}:v]scale=1280:720,setsar=1/1,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
-
-    v_f += f"[0:v]scale=1280:720,setsar=1/1[v_intro];"
-    v_f += f"[{len(selected_songs)+4}:v]scale=1280:720,setsar=1/1[v_outro];"
-    v_f += f"[v_intro][vl0][vl1][vl2][v_outro]concat=n=5:v=1:a=0[v_base];"
+        idx = n_songs + i
+        v_f += f"[{idx}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
     
-    # Audio
-    a_f = "".join([f"[{i+1}:a]" for i in range(len(selected_songs))]) + f"concat=n={len(selected_songs)}:v=0:a=1[a_final]"
+    v_f += f"[vl0][vl1]xfade=transition=fade:duration=2:offset={land_dur-2}[v01];"
+    v_f += f"[v01][vl2]xfade=transition=fade:duration=2:offset={land_dur*2-4}[v_base_lands];"
     
-    # Overlays
-    curr_v = "[v_base]"
+    v_f += f"[{n_songs+3}:v]scale=120:-1,format=rgba[logo_scaled];"
+    v_f += f"[v_base_lands][logo_scaled]overlay=x=40:y=40[v_with_logo];"
+    
+    v_f += f"[{n_songs+4}:v]scale=1280:720[hook_ov];"
+    v_f += f"[{n_songs+5}:v]scale=1280:720[outro_ov];"
+    v_f += f"[v_with_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
+    v_f += f"[v_hooked][outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_base_final];"
+    
+    curr_v = "[v_base_final]"
     for i, (p, st, en) in enumerate(song_overlays):
-        idx = len(selected_songs) + 5 + i
-        v_f += f"[{idx}:v]scale=1280:720[ov{i}];"
+        ov_idx = n_songs + 6 + i
+        v_f += f"[{ov_idx}:v]scale=1280:720[ov{i}];"
         v_f += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[v{i+1}];"
         curr_v = f"[v{i+1}]"
 
-    final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
-    cmd += ['-filter_complex', f"{v_f}{a_f}", '-map', curr_v, '-map', '[a_final]', '-c:v', 'libx264', '-preset', 'ultrafast', final_video]
+    v_f += f"{curr_v}fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final_faded];"
+
+    a_songs = "".join([f"[{i}:a]" for i in range(n_songs)])
+    a_f = f"{a_songs}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_final]"
     
-    print(f"⚙️ [FFMPEG] Iniciando Renderizado de Video (Modo Transparente)...")
-    try:
-        # Permitimos que FFmpeg escriba directo a la consola para ver el error real
-        subprocess.run(cmd, check=True)
-    except Exception as e:
-        print(f"❌ [SISTEMA] Fallo crítico de renderizado.")
-        raise e
+    final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
+    cmd += ['-filter_complex', f"{v_f}{a_f}", '-map', '[v_final_faded]', '-map', '[a_final]', '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
+    
+    print(f"⚙️ [FFMPEG] Renderizado Diamante Cinematic Flow...")
+    subprocess.run(cmd, check=True)
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
     
-    # Historial
     try:
         hist = []
         if os.path.exists(history_path):
             with open(history_path, 'r') as f: hist = json.load(f)
-        for s in selected_songs: hist.append({"title": s['title'], "atmosphere": theme1, "date": time.ctime(), "render": output_name})
+        for s in selected_songs: hist.append({"title": s['title'], "atmosphere": original_theme, "date": time.ctime(), "render": output_name})
         with open(history_path, 'w') as f: json.dump(hist, f, indent=4)
     except: pass
     print(f"✅ Completado: {output_name}")
@@ -246,7 +242,6 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 import sys
 
 if __name__ == "__main__":
-    # Argumentos: duration theme [output_name]
     dur = int(sys.argv[1]) if len(sys.argv) > 1 else 600
     thm = sys.argv[2] if len(sys.argv) > 2 else "Paz Interior"
     

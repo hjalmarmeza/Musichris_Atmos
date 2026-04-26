@@ -27,18 +27,11 @@ jobs:
         run: |
           pip install Pillow requests google-auth-oauthlib google-api-python-client google-auth-httplib2
 
-      - name: Prepare Workspace
-        run: |
-          mkdir -p renders
-          mkdir -p assets
-          # Crear client_secrets.json desde el secreto de GitHub
-          echo '${{ secrets.YOUTUBE_CLIENT_SECRETS }}' > scripts/client_secrets.json
-          # Crear token.pickle si existe (opcional, si no, hará el flow de auth)
-          # Pero mejor usar refresh tokens en el secreto
-
       - name: Run Atmos Engine
         env:
           YOUTUBE_TOKEN: ${{ secrets.YOUTUBE_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
         run: |
           python3 scripts/atmos_engine.py "${{ github.event.client_payload.duration }}" "${{ github.event.client_payload.theme }}"
 
