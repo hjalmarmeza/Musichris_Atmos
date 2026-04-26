@@ -152,17 +152,12 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     if not selected_songs: return print("❌ Sin canciones.")
 
-    hook_path = os.path.join(BASE_DIR, "assets/hook.png")
-    outro_path = os.path.join(BASE_DIR, "assets/outro.png")
-    create_hook_overlay(f"EXPERIENCIA {original_theme.upper()}", hook_path)
-    create_hook_overlay("CAMINEMOS JUNTOS EN FE\nSUSCRÍBETE A @MUSICHRIS_STUDIO", outro_path)
-
-    song_overlays = []; curr = 0
-    for i, s in enumerate(selected_songs):
-        p = os.path.join(BASE_DIR, f"assets/song_{i}.png")
-        create_song_info_overlay(s['title'], s.get('verse', 'Salmos 23'), p)
-        song_overlays.append((p, curr + 2, curr + 12))
-        curr += get_song_duration(s)
+    # Construir tiempos de overlay (sin PNGs)
+    song_times = []
+    curr_t = 0
+    for s in selected_songs:
+        song_times.append((s['title'], s.get('verse', 'Salmos 23'), curr_t + 2, curr_t + 12))
+        curr_t += get_song_duration(s)
 
     with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: landscapes = list(json.load(f).values())
     sel_lands = [random.choice(landscapes) for _ in range(3)]
@@ -182,7 +177,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         local_lands.append(path)
 
     logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
-    base_video = os.path.join(TEMP_DIR, "base_video.mp4")
+    base_video  = os.path.join(TEMP_DIR, "base_video.mp4")
+    base_logo   = os.path.join(TEMP_DIR, "base_logo.mp4")
     final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
     
     n_songs = len(selected_songs)
@@ -190,83 +186,114 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     # ══════════════════════════════════════════════
     # PRE-PASO: Normalizar cada paisaje a duración exacta
-    # (Elimina el conflicto stream_loop + trim)
     # ══════════════════════════════════════════════
     print(f"🎬 [PRE-PASO] Normalizando paisajes a {land_dur:.0f}s cada uno...")
     cut_lands = []
     for i, src in enumerate(local_lands):
         cut_path = os.path.join(TEMP_DIR, f"land_{i}_cut.mp4")
         subprocess.run([
-            'ffmpeg', '-y',
-            '-stream_loop', '-1', '-i', src,
+            'ffmpeg', '-y', '-stream_loop', '-1', '-i', src,
             '-t', str(land_dur),
             '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p',
             '-an', '-c:v', 'libx264', '-preset', 'ultrafast', cut_path
         ], check=True)
         cut_lands.append(cut_path)
-        print(f"   ✅ Paisaje {i+1} cortado a {land_dur:.0f}s")
+        print(f"   ✅ Paisaje {i+1} cortado.")
 
     # ══════════════════════════════════════════════
     # PASO 1: Concatenación Pura de Paisajes
-    # El comando más simple posible — error 254 imposible
     # ══════════════════════════════════════════════
-    print(f"🎞️ [PASO 1/2] Concatenando Paisajes...")
-    
-    cmd1 = ['ffmpeg', '-y']
-    for p in cut_lands: cmd1 += ['-i', p]  # 0, 1, 2
-    cmd1 += [
+    print(f"🎞️ [PASO 1/3] Concatenando Paisajes...")
+    subprocess.run([
+        'ffmpeg', '-y',
+        '-i', cut_lands[0], '-i', cut_lands[1], '-i', cut_lands[2],
         '-filter_complex', '[0:v][1:v][2:v]concat=n=3:v=1:a=0[v_out]',
-        '-map', '[v_out]',
-        '-c:v', 'libx264', '-preset', 'ultrafast',
+        '-map', '[v_out]', '-c:v', 'libx264', '-preset', 'ultrafast',
         '-t', str(acc_time), base_video
+    ], check=True)
+    print(f"✅ [PASO 1/3] Base concatenada.")
+
+    # ══════════════════════════════════════════════
+    # PASO 2: Aplicar Logo (solo 2 inputs — máxima estabilidad)
+    # ══════════════════════════════════════════════
+    print(f"🎨 [PASO 2/3] Aplicando Logo Animado...")
+    subprocess.run([
+        'ffmpeg', '-y', '-i', base_video,
+        '-stream_loop', '-1', '-i', logo_path,
+        '-filter_complex', '[1:v]scale=120:-1,fps=30,format=yuv420p[logo];[0:v][logo]overlay=x=40:y=40:shortest=1[out]',
+        '-map', '[out]', '-c:v', 'libx264', '-preset', 'ultrafast',
+        '-t', str(acc_time), base_logo
+    ], check=True)
+    print(f"✅ [PASO 2/3] Logo aplicado.")
+
+    # ══════════════════════════════════════════════
+    # PASO 3: Audio + Todos los Textos via drawbox/drawtext
+    # Sin PNGs: solo 1 video + N audios = mínima RAM
+    # ══════════════════════════════════════════════
+    print(f"🎵 [PASO 3/3] Añadiendo Audio y Textos...")
+    
+    # Font (Ubuntu GitHub Actions)
+    font_candidates = [
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+        '/System/Library/Fonts/Supplemental/Baskerville.ttc'
     ]
-    subprocess.run(cmd1, check=True)
-    print(f"✅ [PASO 1/2] Base concatenada.")
+    font_path = next((f for f in font_candidates if os.path.exists(f)), None)
+    ff = f":fontfile='{font_path}'" if font_path else ""
+    
+    def esc(t): return t.replace('\\','\\\\').replace("'","\\'").replace(':','\\:')
+    
+    # Construir cadena de filtros de video
+    phrase = SEO_PHRASES.get(theme1, f"MÚSICA PARA {theme1.upper()}")
+    words = phrase.upper().split(' ')
+    mid = len(words) // 2
+    h1 = esc(' '.join(words[:mid]))
+    h2 = esc(' '.join(words[mid:]))
+    
+    # Posiciones del cuadro central para Hook/Outro
+    bx, by, bw, bh = "(W-900)/2", "(H-220)/2", 900, 220
 
-    # ══════════════════════════════════════════════
-    # PASO 2: Audio + Logo + Hook + Cierre + Overlays
-    # Los overlays de imagen son muy ligeros vs. video
-    # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 2/2] Añadiendo Audio, Logo y Overlays...")
-
-    logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
-
-    cmd2 = ['ffmpeg', '-y', '-i', base_video]            # 0: base
-    for p in local_songs: cmd2 += ['-i', p]              # 1..N
-    cmd2 += ['-stream_loop', '-1', '-i', logo_path]      # N+1
-    cmd2 += ['-loop', '1', '-i', hook_path]              # N+2
-    cmd2 += ['-loop', '1', '-i', outro_path]             # N+3
-    for p, s, e in song_overlays: cmd2 += ['-loop', '1', '-i', p]  # N+4..
-
-    logo_idx  = n_songs + 1
-    hook_idx  = n_songs + 2
-    outro_idx = n_songs + 3
-
-    vf2  = f"[{logo_idx}:v]scale=120:-1,fps=30,format=yuv420p[logo_sc];"
-    vf2 += f"[0:v][logo_sc]overlay=x=40:y=40:shortest=1[v_logo];"
-
-    vf2 += f"[{hook_idx}:v]scale=1280:720,fps=30,format=yuv420p[hook_ov];"
-    vf2 += f"[v_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
-
-    curr_v = "[v_hooked]"
-    for i, (p, st, en) in enumerate(song_overlays):
-        ov_idx = n_songs + 4 + i
-        vf2 += f"[{ov_idx}:v]scale=1280:720,fps=30,format=yuv420p[ov{i}];"
-        vf2 += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[vs{i}];"
-        curr_v = f"[vs{i}]"
-
-    vf2 += f"[{outro_idx}:v]scale=1280:720,fps=30,format=yuv420p[outro_ov];"
-    vf2 += f"{curr_v}[outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_overlaid];"
-    vf2 += f"[v_overlaid]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final];"
-
+    vf_parts = [
+        # Hook (0-8s): Cuadro semitransparente central con frase SEO en 2 líneas
+        f"drawbox=x={bx}:y={by}:w={bw}:h={bh}:color=black@0.63:t=fill:enable='between(t,0,8)'",
+        f"drawtext=text='{h1}'{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):enable='between(t,0,8)'",
+        f"drawtext=text='{h2}'{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):enable='between(t,0,8)'",
+    ]
+    
+    # Overlays de Canciones (cuadro inferior izquierdo)
+    for title, verse, st, en in song_times:
+        t = esc(title.upper()); v = esc(verse.upper())
+        vf_parts += [
+            f"drawbox=x=60:y=590:w=470:h=100:color=black@0.63:t=fill:enable='between(t,{st},{en})'",
+            f"drawtext=text='{t}'{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:enable='between(t,{st},{en})'",
+            f"drawtext=text='{v}'{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:enable='between(t,{st},{en})'",
+        ]
+    
+    # Outro (últimos 8s): Cuadro central con mensaje de cierre
+    os_t, os_e = int(acc_time - 8), int(acc_time)
+    vf_parts += [
+        f"drawbox=x={bx}:y={by}:w={bw}:h={bh}:color=black@0.63:t=fill:enable='between(t,{os_t},{os_e})'",
+        f"drawtext=text='CAMINEMOS JUNTOS EN FE'{ff}:fontsize=44:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):enable='between(t,{os_t},{os_e})'",
+        f"drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO'{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):enable='between(t,{os_t},{os_e})'",
+        # Fade in/out global
+        f"fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2",
+    ]
+    
+    vf_chain = ",".join(vf_parts)
+    
+    cmd3 = ['ffmpeg', '-y', '-i', base_logo]
+    for p in local_songs: cmd3 += ['-i', p]  # 1..N
+    
     a_tags = "".join([f"[{i+1}:a]" for i in range(n_songs)])
-    af2 = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_out]"
-
-    cmd2 += ['-filter_complex', f"{vf2}{af2}",
-             '-map', '[v_final]', '-map', '[a_out]',
-             '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
-    subprocess.run(cmd2, check=True)
-    print(f"✅ [PASO 2/2] Video final listo.")
+    af = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
+    
+    cmd3 += [
+        '-filter_complex', f"[0:v]{vf_chain}[v_out];{af}",
+        '-map', '[v_out]', '-map', '[a_out]',
+        '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video
+    ]
+    subprocess.run(cmd3, check=True)
+    print(f"✅ [PASO 3/3] Video final listo.")
 
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
