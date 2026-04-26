@@ -252,15 +252,17 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"   ✅ Recursos normalizados.")
 
     # ══════════════════════════════════════════════
-    # PASO 1/2: Generar Video Base (Bucle + Logo)
+    # PASO 1/2: Generar Video Base (Bucle + Logo Transparente)
     # ══════════════════════════════════════════════
-    print(f"🎞️ [PASO 1/2] Creando base infinita con Logo...")
+    print(f"🎞️ [PASO 1/2] Creando base con Logo Transparente...")
     base_video = os.path.join(TEMP_DIR, "base_video_flat.mp4")
+    
+    # Aplicar colorkey al logo para eliminar el fondo negro
     cmd_base = [
         'ffmpeg', '-y',
         '-stream_loop', '-1', '-i', p_cut,
         '-stream_loop', '-1', '-i', logo_small,
-        '-filter_complex', "[0:v][1:v]overlay=x=40:y=40:shortest=1[out]",
+        '-filter_complex', "[1:v]colorkey=0x000000:0.1:0.1[logo_clear]; [0:v][logo_clear]overlay=x=40:y=40:shortest=1[out]",
         '-map', '[out]', '-c:v', 'libx264', '-preset', 'superfast', '-crf', '24',
         '-t', str(acc_time), base_video
     ]
@@ -272,60 +274,56 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     # ══════════════════════════════════════════════
     # PASO 2/3: Crear Audio Maestro (Estrategia El Tanque)
     # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 2/3] Aplanando pistas de audio (The Tank v12.9.50)...")
+    print(f"🎵 [PASO 2/3] Aplanando pistas de audio...")
     
-    # 1. Normalizar cada pista individualmente (Bajo consumo)
     norm_songs = []
     for i, p in enumerate(local_songs):
         n_path = os.path.join(TEMP_DIR, f"norm_{i}.mp3")
-        subprocess.run(['ffmpeg', '-y', '-i', p, '-ar', '44100', '-ac', '2', '-b:a', '192k', n_path], check=True)
+        subprocess.run(['ffmpeg', '-y', '-i', p, '-ar', '44100', '-ac', '2', '-b:a', '192k', n_path], capture_output=True)
         norm_songs.append(n_path)
     
-    # 2. Crear archivo de lista para concat demuxer
     list_path = os.path.join(TEMP_DIR, "pistas.txt")
     with open(list_path, 'w') as f:
-        for p in norm_songs:
-            # Importante: rutas relativas o absolutas sin caracteres extraños
-            f.write(f"file '{os.path.abspath(p)}'\n")
+        for p in norm_songs: f.write(f"file '{os.path.abspath(p)}'\n")
     
-    # 3. Unir y aplicar fades
     audio_master = os.path.join(TEMP_DIR, "audio_master.mp3")
     cmd_audio = [
         'ffmpeg', '-y', '-f', 'concat', '-safe', '0', '-i', list_path,
-        '-af', f"afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2",
+        '-af', f"afade=t=in:st=0:d=2,afade=t=out:st={max(0, int(acc_time)-2)}:d=2",
         '-c:a', 'libmp3lame', '-q:a', '2', audio_master
     ]
     subprocess.run(cmd_audio, check=True)
     
-    # Limpiar pistas normalizadas
-    for p in norm_songs: 
-        try: os.remove(p)
-        except: pass
-    try: os.remove(list_path)
-    except: pass
-
     # ══════════════════════════════════════════════
-    # PASO 3/3: Ensamblaje Final (Video + Audio + Textos)
+    # PASO 3/3: Ensamblaje Final (Agua de marca + Títulos)
     # ══════════════════════════════════════════════
-    print(f"🎞️ [PASO 3/3] Ensamblaje final y capas de texto...")
+    print(f"🎞️ [PASO 3/3] Capas de branding y títulos dinámicos...")
     
-    # Detección dinámica de fuente para FFmpeg
-    ff_paths = ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/System/Library/Fonts/Supplemental/Arial.ttf', 'arial.ttf']
-    ff_path = next((p for p in ff_paths if os.path.exists(p)), 'arial.ttf')
+    # Detección de fuente más robusta
+    ff_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf" # Estándar en Ubuntu/GitHub
+    if not os.path.exists(ff_path): ff_path = "sans"
     ff = f":fontfile='{ff_path}'"
     
-    vf = "null"
-    for i, (title, verse, start, end) in enumerate(song_times):
-        vf += f",drawtext=text='{title.upper()}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{start},{end})'"
-        vf += f",drawtext=text='{verse.upper()}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{start},{end})'"
+    # Filtro base con Watermark Central
+    vf = f"drawtext=text='@MusiChris_Studio':x=(W-tw)/2:y=(H-th)/2:fontsize=50:fontcolor=white@0.12{ff}"
+    
+    # Añadir títulos de canciones
+    for title, verse, start, end in song_times:
+        clean_title = title.replace("'", "").upper()
+        clean_verse = verse.replace("'", "").upper()
+        vf += f",drawtext=text='{clean_title}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{start},{end})'"
+        vf += f",drawtext=text='{clean_verse}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{start},{end})'"
 
+    # Intro y Outro
     vf += f",drawtext=text='MÚSICA PARA':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'"
     vf += f",drawtext=text='{theme2.upper() if theme2 else theme1.upper()}':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'"
     
-    os_t, os_e = int(acc_time - 8), int(acc_time)
+    os_t, os_e = max(0, int(acc_time - 8)), int(acc_time)
     vf += f",drawtext=text='CAMINEMOS JUNTOS EN FE':{ff}:fontsize=44:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'"
     vf += f",drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO':{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'"
-    vf += f",fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2"
+    
+    # Fades finales
+    vf += f",fade=t=in:st=0:d=2,fade=t=out:st={max(0, int(acc_time)-2)}:d=2"
 
     final_video = os.path.join(RENDERS_DIR, f'{output_name}.mp4')
     cmd_final = [
@@ -334,9 +332,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         '-i', audio_master,
         '-filter_complex', f"[0:v]{vf}[v_out]",
         '-map', '[v_out]', '-map', '1:a',
-        '-c:v', 'libx264', '-preset', 'superfast', '-crf', '28', 
-        '-c:a', 'copy', # Copiamos el audio ya procesado para ahorrar CPU
-        '-threads', '2', '-t', str(acc_time - 0.5), final_video
+        '-c:v', 'libx264', '-preset', 'superfast', '-crf', '26', 
+        '-c:a', 'copy', '-threads', '2', '-t', str(acc_time - 0.5), final_video
     ]
     subprocess.run(cmd_final, check=True)
     
