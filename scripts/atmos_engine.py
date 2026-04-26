@@ -184,12 +184,12 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
     
     cmd = ['ffmpeg', '-y']
-    for p in local_songs: cmd += ['-i', p]
-    for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p]
-    cmd += ['-stream_loop', '-1', '-i', logo_path]
-    cmd += ['-i', hook_path]
-    cmd += ['-i', outro_path]
-    for p, s, e in song_overlays: cmd += ['-i', p]
+    for p in local_songs: cmd += ['-i', p] # 0..N-1
+    for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p] # N, N+1, N+2
+    cmd += ['-stream_loop', '-1', '-i', logo_path] # N+3
+    cmd += ['-loop', '1', '-i', hook_path] # N+4
+    cmd += ['-loop', '1', '-i', outro_path] # N+5
+    for p, s, e in song_overlays: cmd += ['-loop', '1', '-i', p] # N+6...
 
     n_songs = len(selected_songs)
     land_dur = (acc_time / 3) + 2
