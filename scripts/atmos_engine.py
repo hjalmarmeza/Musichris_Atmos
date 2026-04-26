@@ -195,29 +195,16 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
             'ffmpeg', '-y', '-stream_loop', '-1', '-i', src,
             '-t', str(land_dur),
             '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p',
-            '-an', '-c:v', 'libx264', '-preset', 'ultrafast', cut_path
+            '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', cut_path
         ], check=True)
         cut_lands.append(cut_path)
         print(f"   ✅ Paisaje {i+1} cortado.")
 
     # ══════════════════════════════════════════════
-    # PASO 1: Concatenación Pura de Paisajes
+    # PASO FINAL: Audio, Textos y Logo en un solo grafo
+    # Elimina archivos intermedios gigantes (Adiós Error 254 por Disco Lleno)
     # ══════════════════════════════════════════════
-    print(f"🎞️ [PASO 1/3] Concatenando Paisajes...")
-    subprocess.run([
-        'ffmpeg', '-y',
-        '-i', cut_lands[0], '-i', cut_lands[1], '-i', cut_lands[2],
-        '-filter_complex', '[0:v][1:v][2:v]concat=n=3:v=1:a=0[v_out]',
-        '-map', '[v_out]', '-c:v', 'libx264', '-preset', 'ultrafast',
-        '-t', str(acc_time), base_video
-    ], check=True)
-    print(f"✅ [PASO 1/3] Base concatenada.")
-
-    # ══════════════════════════════════════════════
-    # PASO 2: Audio, Textos y Logo (Un solo paso final)
-    # Sin PNGs ni stream_loop: máxima estabilidad de RAM
-    # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 2/2] Añadiendo Audio, Logo y Textos...")
+    print(f"🎵 [PASO FINAL] Ensamblando Video...")
     
     # Font (Ubuntu GitHub Actions)
     font_candidates = [
@@ -230,11 +217,12 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     def esc(t): return t.replace('\\','\\\\').replace("'","\\'").replace(':','\\:')
     
-    # Logo animado vía filtro 'movie' (evita -stream_loop y OOM)
+    # Concatenar paisajes y logo animado vía filtro 'movie'
     logo_esc = logo_path.replace('\\', '/').replace("'", "\\'")
     vf_parts = [
+        "[0:v][1:v][2:v]concat=n=3:v=1:a=0[base_v]",
         f"movie=filename='{logo_esc}':loop=0,setpts=N/FRAME_RATE/TB,scale=120:-1,format=yuv420p[logo]",
-        "[0:v][logo]overlay=x=40:y=40:shortest=1[v_logo]"
+        "[base_v][logo]overlay=x=40:y=40:shortest=1[v_logo]"
     ]
     
     # Construir cadena de textos
@@ -275,19 +263,20 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     vf_chain = ";".join(vf_parts)
     
-    cmd2 = ['ffmpeg', '-y', '-i', base_video]
-    for p in local_songs: cmd2 += ['-i', p]  # 1..N
+    cmd2 = ['ffmpeg', '-y']
+    for p in cut_lands: cmd2 += ['-i', p]    # Inputs 0, 1, 2
+    for p in local_songs: cmd2 += ['-i', p]  # Inputs 3..N+2
     
-    a_tags = "".join([f"[{i+1}:a]" for i in range(n_songs)])
+    a_tags = "".join([f"[{i+3}:a]" for i in range(n_songs)])
     af = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
     
     cmd2 += [
         '-filter_complex', f"{vf_chain};{af}",
         '-map', '[v_out]', '-map', '[a_out]',
-        '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video
+        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-shortest', final_video
     ]
     subprocess.run(cmd2, check=True)
-    print(f"✅ [PASO 2/2] Video final listo.")
+    print(f"✅ [PASO FINAL] Video final listo.")
 
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
