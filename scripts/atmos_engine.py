@@ -1,12 +1,14 @@
 import os
 import json
 import random
-import subprocess
 import time
+import subprocess
+import requests
 from PIL import Image, ImageDraw, ImageFont
 
-# Rutas Absolutas
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMP_DIR = os.path.join(BASE_DIR, "assets/temp_assets")
+os.makedirs(TEMP_DIR, exist_ok=True)
 
 # MAPEADO DE CRUCES
 CROSS_MAP = {
@@ -162,10 +164,28 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: landscapes = list(json.load(f).values())
     sel_lands = [random.choice(landscapes) for _ in range(3)]
     
-    # FFmpeg Command (Usar 'ffmpeg' genérico para CI/CD)
+    # 📥 DESCARGA DE ASSETS (Asset Shield)
+    print(f"📥 [SISTEMA] Descargando recursos para estabilidad total...")
+    local_songs = []
+    for i, s in enumerate(selected_songs):
+        path = os.path.join(TEMP_DIR, f"song_{i}.mp3")
+        print(f"   🎵 Descargando: {s['title']}...")
+        r = requests.get(s['audio_url'], timeout=30)
+        with open(path, 'wb') as f: f.write(r.content)
+        local_songs.append(path)
+
+    local_lands = []
+    for i, l in enumerate(sel_lands):
+        path = os.path.join(TEMP_DIR, f"land_{i}.mp4")
+        print(f"   🖼️ Descargando Paisaje {i+1}...")
+        r = requests.get(l, timeout=30)
+        with open(path, 'wb') as f: f.write(r.content)
+        local_lands.append(path)
+
+    # FFmpeg Command (Usar paths locales)
     cmd = ['ffmpeg', '-y', '-loop', '1', '-t', '5', '-i', intro_path]
-    for s in selected_songs: cmd += ['-i', s['audio_url']]
-    for l in sel_lands: cmd += ['-stream_loop', '-1', '-i', l]
+    for p in local_songs: cmd += ['-i', p]
+    for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p]
     cmd += ['-loop', '1', '-t', '5', '-i', outro_path]
     for p, s, e in song_overlays: cmd += ['-i', p]
 
