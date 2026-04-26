@@ -23,9 +23,9 @@ def get_authenticated_service():
     
     # 2. Si no hay credenciales válidas, intentar usar Secretos de Entorno (GitHub Actions)
     if not credentials or not credentials.valid:
-        refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN")
+        refresh_token = os.environ.get("YOUTUBE_TOKEN")
         client_id = os.environ.get("YOUTUBE_CLIENT_ID")
-        client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET")
+        client_secret = os.environ.get("YOUTUBE_CLIENT_SECRETS")
 
         if refresh_token and client_id and client_secret:
             from google.oauth2.credentials import Credentials
