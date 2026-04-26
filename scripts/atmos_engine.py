@@ -182,61 +182,69 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         local_lands.append(path)
 
     logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
-    
-    cmd = ['ffmpeg', '-y']
-    for p in local_songs: cmd += ['-i', p] # 0..N-1
-    for p in local_lands: cmd += ['-stream_loop', '-1', '-i', p] # N..N+2
-    cmd += ['-stream_loop', '-1', '-i', logo_path] # N+3
-    cmd += ['-loop', '1', '-i', hook_path] # N+4
-    cmd += ['-loop', '1', '-i', outro_path] # N+5
-    for p, s, e in song_overlays: cmd += ['-loop', '1', '-i', p] # N+6...
-
-    n_songs = len(selected_songs)
-    land_dur = (acc_time / 3) + 2
-    v_f = ""
-    
-    # 1. Procesar Paisajes (Normalización de Tiempo y Formato)
-    for i in range(3):
-        idx = n_songs + i
-        v_f += f"[{idx}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p,settb=AVTB,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
-    
-    # Concat base de paisajes
-    v_f += f"[vl0][vl1][vl2]concat=n=3:v=1:a=0[v_base_lands];"
-    
-    # 2. Logo Permanente
-    v_f += f"[{n_songs+3}:v]scale=120:-1,fps=30,format=rgba,settb=AVTB[logo_scaled];"
-    v_f += f"[v_base_lands][logo_scaled]overlay=x=40:y=40[v_base_w_logo];"
-    
-    # 3. Overlays en ORDEN CRONOLÓGICO
-    # HOOK
-    v_f += f"[{n_songs+4}:v]scale=1280:720,fps=30,format=rgba,settb=AVTB[hook_ov];"
-    v_f += f"[v_base_w_logo][hook_ov]overlay=enable='between(t,0,8)'[v_after_hook];"
-    
-    # CANCIONES
-    curr_v = "[v_after_hook]"
-    for i, (p, st, en) in enumerate(song_overlays):
-        ov_idx = n_songs + 6 + i
-        v_f += f"[{ov_idx}:v]scale=1280:720,fps=30,format=rgba,settb=AVTB[ov{i}];"
-        v_f += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[v_song{i}];"
-        curr_v = f"[v_song{i}]"
-    
-    # CIERRE
-    v_f += f"[{n_songs+5}:v]scale=1280:720,fps=30,format=rgba,settb=AVTB[outro_ov];"
-    v_f += f"{curr_v}[outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_after_outro];"
-
-    # 4. Global Fade In/Out
-    v_f += f"[v_after_outro]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final_faded];"
-
-    # 5. Audio con Resampling
-    a_resample = "".join([f"[{i}:a]aresample=44100,settb=AVTB[as{i}];" for i in range(n_songs)])
-    a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
-    a_f = f"{a_resample}{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_final]"
-    
+    base_video = os.path.join(TEMP_DIR, "base_video.mp4")
     final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
-    cmd += ['-filter_complex', f"{v_f}{a_f}", '-map', '[v_final_faded]', '-map', '[a_final]', '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
     
-    print(f"⚙️ [FFMPEG] Renderizado Diamante Cinematic Flow...")
-    subprocess.run(cmd, check=True)
+    n_songs = len(selected_songs)
+    land_dur = acc_time / 3
+
+    # ══════════════════════════════════════════════
+    # PASO 1: Base Cinemática (Paisajes + Logo + Hook/Cierre)
+    # RAM estimada: ~2-3GB - viable en GitHub Actions
+    # ══════════════════════════════════════════════
+    print(f"🎞️ [PASO 1/2] Renderizando Base Cinemática...")
+
+    cmd1 = ['ffmpeg', '-y']
+    for p in local_lands: cmd1 += ['-stream_loop', '-1', '-i', p] # 0,1,2
+    cmd1 += ['-stream_loop', '-1', '-i', logo_path]               # 3
+    cmd1 += ['-loop', '1', '-i', hook_path]                       # 4
+    cmd1 += ['-loop', '1', '-i', outro_path]                      # 5
+
+    vf1 = ""
+    for i in range(3):
+        vf1 += f"[{i}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
+    vf1 += "[vl0][vl1][vl2]concat=n=3:v=1:a=0[v_lands];"
+    vf1 += "[3:v]scale=120:-1,fps=30,format=rgba[logo_sc];"
+    vf1 += "[v_lands][logo_sc]overlay=x=40:y=40:shortest=1[v_logo];"
+    vf1 += "[4:v]scale=1280:720,fps=30,format=rgba[hook_ov];"
+    vf1 += f"[v_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
+    vf1 += "[5:v]scale=1280:720,fps=30,format=rgba[outro_ov];"
+    vf1 += f"[v_hooked][outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_base];"
+    vf1 += f"[v_base]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_out]"
+
+    cmd1 += ['-filter_complex', vf1, '-map', '[v_out]',
+             '-c:v', 'libx264', '-preset', 'ultrafast',
+             '-t', str(acc_time), base_video]
+    subprocess.run(cmd1, check=True)
+    print(f"✅ [PASO 1/2] Base guardada: {base_video}")
+
+    # ══════════════════════════════════════════════
+    # PASO 2: Audio + Overlays de Canciones
+    # RAM estimada: ~2-3GB - viable en GitHub Actions
+    # ══════════════════════════════════════════════
+    print(f"🎵 [PASO 2/2] Añadiendo Audio y Overlays de Canciones...")
+
+    cmd2 = ['ffmpeg', '-y', '-i', base_video]           # 0: base video
+    for p in local_songs: cmd2 += ['-i', p]             # 1..N
+    for p, s, e in song_overlays: cmd2 += ['-loop', '1', '-i', p]  # N+1..
+
+    vf2 = ""
+    curr_v = "[0:v]"
+    for i, (p, st, en) in enumerate(song_overlays):
+        ov_idx = 1 + n_songs + i
+        vf2 += f"[{ov_idx}:v]scale=1280:720,fps=30,format=rgba[ov{i}];"
+        vf2 += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[vs{i}];"
+        curr_v = f"[vs{i}]"
+
+    a_tags = "".join([f"[{i+1}:a]" for i in range(n_songs)])
+    af2 = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_out]"
+
+    cmd2 += ['-filter_complex', f"{vf2}{af2}",
+             '-map', curr_v, '-map', '[a_out]',
+             '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
+    subprocess.run(cmd2, check=True)
+    print(f"✅ [PASO 2/2] Video final: {final_video}")
+
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
     
