@@ -151,6 +151,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         selected_songs.append(s); acc_time += dur
 
     if not selected_songs: return print("❌ Sin canciones.")
+    n_songs = len(selected_songs)
 
     # Construir tiempos de overlay (sin PNGs)
     song_times = []
