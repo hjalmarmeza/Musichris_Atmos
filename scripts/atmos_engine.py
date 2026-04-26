@@ -82,28 +82,63 @@ def create_song_info_overlay(title, verse, output_path):
     draw.text((90, 650), text_v, font=font_v, fill="#F5F5DC")
     img.save(output_path)
 
+def wrap_text(text, font, max_width):
+    lines = []
+    words = text.split(' ')
+    current_line = []
+    for word in words:
+        test_line = ' '.join(current_line + [word])
+        w = ImageFont.FreeTypeFont.getbbox(font, test_line)[2]
+        if w <= max_width:
+            current_line.append(word)
+        else:
+            lines.append(' '.join(current_line))
+            current_line = [word]
+    lines.append(' '.join(current_line))
+    return lines
+
 def generate_thumbnail_intelligent(theme1, output_name, local_landscape_path, songs, theme2=None):
     print(f"🖼️ [THUMBNAIL] Generando Portada Diamond Premium...")
     thumb_path = os.path.join(RENDERS_DIR, f"{output_name.replace('.mp4', '')}_THUMB.jpg")
     temp_frame = os.path.join(TEMP_DIR, "temp_frame.jpg")
     
-    # Intentar sacar frame del video local para velocidad
+    # 1. Sacar el fondo
     subprocess.run(["ffmpeg", "-y", "-ss", "00:00:05", "-i", local_landscape_path, "-frames:v", "1", temp_frame], capture_output=True)
     
     img = Image.open(temp_frame).convert('RGBA') if os.path.exists(temp_frame) else Image.new('RGBA', (1280, 720), (20,20,20,255))
-    draw = ImageDraw.Draw(img, 'RGBA')
+    overlay = Image.new('RGBA', img.size, (0,0,0,0))
+    draw = ImageDraw.Draw(overlay)
+    
     phrase = SEO_PHRASES.get(theme1, f"Música para {theme1}")
     title_text = phrase.upper()
     
-    box_w = 900; box_h = 320; box_x = (1280 - box_w) / 2; box_y = (720 - box_h) / 2
+    # 2. Caja Central Semitransparente
+    box_w = 950; box_h = 350; box_x = (1280 - box_w) / 2; box_y = (720 - box_h) / 2
     draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=40, fill=(0,0,0,180), outline=(197,160,89,255), width=6)
     
-    font_main = get_font(60)
+    # 3. Texto con Wrapping (Doble línea)
+    font_main = get_font(65)
+    lines = wrap_text(title_text, font_main, box_w - 100)
+    
+    y_text = 360 - (len(lines)-1)*40 # Ajuste vertical según número de líneas
+    for line in lines:
+        draw.text((640, y_text), line, font=font_main, fill="#C5A059", anchor="mm")
+        y_text += 80
+    
+    # 4. Handle Instagram/YouTube
     font_sub = get_font(28)
-    draw.text((640, 360), title_text, font=font_main, fill="#C5A059", anchor="mm")
     draw.text((640, box_y + box_h - 40), "@MusiChris_Studio", font=font_sub, fill="#C5A059", anchor="mm")
     
-    img.convert('RGB').save(thumb_path, "JPEG", quality=95)
+    # 5. Logo Diamond (Sin recuadro negro)
+    logo_path = os.path.join(BASE_DIR, "assets/brand/logo_musichris.png")
+    if os.path.exists(logo_path):
+        logo = Image.open(logo_path).convert("RGBA")
+        logo.thumbnail((120, 120))
+        img.paste(logo, (50, 50), logo) # El tercer argumento 'logo' es la máscara para transparencia
+    
+    # Combinar y Guardar
+    out = Image.alpha_composite(img, overlay)
+    out.convert('RGB').save(thumb_path, "JPEG", quality=95)
     if os.path.exists(temp_frame): os.remove(temp_frame)
 
 def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=None):
