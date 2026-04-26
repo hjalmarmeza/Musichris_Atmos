@@ -82,25 +82,32 @@ def create_song_info_overlay(title, verse, output_path):
     draw.text((90, 650), text_v, font=font_v, fill="#F5F5DC")
     img.save(output_path)
 
-def generate_thumbnail_intelligent(theme1, output_name, landscape_url, songs, theme2=None):
+def generate_thumbnail_intelligent(theme1, output_name, local_landscape_path, songs, theme2=None):
     print(f"🖼️ [THUMBNAIL] Generando Portada Diamond Premium...")
-    thumb_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_THUMB.jpg")
-    temp_frame = os.path.join(BASE_DIR, "assets/temp_frame.jpg")
-    subprocess.run(["ffmpeg", "-y", "-ss", "00:00:05", "-i", landscape_url, "-frames:v", "1", temp_frame], capture_output=True)
-    img = Image.open(temp_frame).convert('RGBA') if os.path.exists(temp_frame) else Image.new('RGB', (1280, 720), (20,20,20))
+    thumb_path = os.path.join(RENDERS_DIR, f"{output_name.replace('.mp4', '')}_THUMB.jpg")
+    temp_frame = os.path.join(TEMP_DIR, "temp_frame.jpg")
+    
+    # Intentar sacar frame del video local para velocidad
+    subprocess.run(["ffmpeg", "-y", "-ss", "00:00:05", "-i", local_landscape_path, "-frames:v", "1", temp_frame], capture_output=True)
+    
+    img = Image.open(temp_frame).convert('RGBA') if os.path.exists(temp_frame) else Image.new('RGBA', (1280, 720), (20,20,20,255))
     draw = ImageDraw.Draw(img, 'RGBA')
     phrase = SEO_PHRASES.get(theme1, f"Música para {theme1}")
     title_text = phrase.upper()
     
     box_w = 900; box_h = 320; box_x = (1280 - box_w) / 2; box_y = (720 - box_h) / 2
     draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=40, fill=(0,0,0,180), outline=(197,160,89,255), width=6)
-    draw.text((640, 360), title_text, font=get_font(60), fill="#C5A059", anchor="mm")
-    draw.text((640, box_y + box_h - 40), "@MusiChris_Studio", font=get_font(28), fill="#C5A059", anchor="mm")
+    
+    font_main = get_font(60)
+    font_sub = get_font(28)
+    draw.text((640, 360), title_text, font=font_main, fill="#C5A059", anchor="mm")
+    draw.text((640, box_y + box_h - 40), "@MusiChris_Studio", font=font_sub, fill="#C5A059", anchor="mm")
+    
     img.convert('RGB').save(thumb_path, "JPEG", quality=95)
     if os.path.exists(temp_frame): os.remove(temp_frame)
 
 def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=None):
-    meta_path = os.path.join(BASE_DIR, f"renders/{output_name.replace('.mp4', '')}_META.txt")
+    meta_path = os.path.join(RENDERS_DIR, f"{output_name.replace('.mp4', '')}_META.txt")
     phrase = SEO_PHRASES.get(theme1, theme1.upper())
     with open(meta_path, 'w') as f:
         f.write(f"TITLE:\n💎 {phrase}: ADORACIÓN Y DESCANSO | Sesión Atmos Completa\n\n")
@@ -223,7 +230,11 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     # PASO 2/2: Añadir Audio y Textos
     # ══════════════════════════════════════════════
     print(f"🎵 [PASO 2/2] Aplicando Audio y Textos...")
-    ff = ":fontfile='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'"
+    
+    # Detección dinámica de fuente para FFmpeg (v12.9.42)
+    ff_paths = ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/System/Library/Fonts/Supplemental/Arial.ttf', 'arial.ttf']
+    ff_path = next((p for p in ff_paths if os.path.exists(p)), 'arial.ttf')
+    ff = f":fontfile='{ff_path}'"
     
     vf = "null"
     for i, (title, verse, start, end) in enumerate(song_times):
@@ -259,7 +270,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     try: os.remove(base_video)
     except: pass
     print(f"✅ [PASO FINAL] Video final listo.")
-    generate_thumbnail_intelligent(theme1, output_name, sel_land, selected_songs, theme2)
+    generate_thumbnail_intelligent(theme1, output_name, base_video if os.path.exists(base_video) else p_cut, selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
     
     try:
@@ -286,9 +297,9 @@ if __name__ == "__main__":
     print(f"📡 [UPLOAD] Iniciando despacho a YouTube Studio...")
     sys.path.append(os.path.join(BASE_DIR, 'scripts'))
     import youtube_uploader
-    v_path = os.path.join(BASE_DIR, f"renders/{out}.mp4")
-    t_path = os.path.join(BASE_DIR, f"renders/{out}_THUMB.jpg")
-    m_path = os.path.join(BASE_DIR, f"renders/{out}_META.txt")
+    v_path = os.path.join(RENDERS_DIR, f"{out}.mp4")
+    t_path = os.path.join(RENDERS_DIR, f"{out}_THUMB.jpg")
+    m_path = os.path.join(RENDERS_DIR, f"{out}_META.txt")
     
     if not os.path.exists(v_path):
         raise FileNotFoundError(f"❌ El video no se generó en: {v_path}")
