@@ -262,7 +262,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     for p in local_songs: cmd2 += ['-i', p]
     
     cmd2 += [
-        '-filter_complex', f"{vf}{af}",
+        '-filter_complex', f"{vf};{af}",
         '-map', '[v_out]', '-map', '[a_out]',
         '-c:v', 'libx264', '-preset', 'superfast', '-crf', '28', 
         '-threads', '2',
