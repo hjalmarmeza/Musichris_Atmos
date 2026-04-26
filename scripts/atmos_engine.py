@@ -145,7 +145,7 @@ def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=No
     meta_path = os.path.join(RENDERS_DIR, f"{output_name.replace('.mp4', '')}_META.txt")
     phrase = SEO_PHRASES.get(theme1, theme1.upper())
     with open(meta_path, 'w') as f:
-        f.write(f"TITLE:\n💎 {phrase}: ADORACIÓN Y DESCANSO | Sesión Atmos Completa\n\n")
+        f.write(f"TITLE:\n💎 {phrase}: ADORACIÓN Y DESCANSO\n\n")
         f.write(f"DESCRIPTION:\n✨ BIENVENIDO A MUSICHRIS STUDIO ✨\n\nCaminemos juntos en fe con esta sesión diseñada para tu alma.\n\n📍 CAPÍTULOS:\n")
         acc = 0
         for s in selected_songs:
@@ -153,7 +153,7 @@ def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=No
             v = s.get('context', {}).get('verse', 'Salmos 23')
             f.write(f"[{m:02d}:{s_:02d}] {s['title']} - {v}\n")
             acc += get_song_duration(s)
-        f.write(f"\n#MusiChris #Atmos #Worship #PazInterior #Fe #CaminemosJuntosEnFe\n")
+        f.write(f"\n#MusiChris #Worship #PazInterior #Fe #CaminemosJuntosEnFe\n")
 
 def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"🎬 [ATMOS ENGINE v12.3] Iniciando Producción Diamond Integridad...")

@@ -77,7 +77,7 @@ def upload_video(video_file, thumb_file, meta_file):
             'categoryId': '10' # Música
         },
         'status': {
-            'privacyStatus': 'public', # Cambiado a Public para visibilidad inmediata
+            'privacyStatus': 'unlisted',
             'selfDeclaredMadeForKids': False
         }
     }
