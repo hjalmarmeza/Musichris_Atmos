@@ -222,15 +222,13 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     # ══════════════════════════════════════════════
     print(f"🎵 [PASO FINAL] Ensamblando Video...")
     
-    font_candidates = [
-        '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
-        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+    ff = ":fontfile='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'"
+    
     # 1. Video Base (Concat Paisajes + Logo)
     vf = "[0:v][1:v][2:v]concat=n=3:v=1:a=0[base_v];"
     vf += "[base_v][3:v]overlay=x=40:y=40[v_logo];"
     
     curr_v = "[v_logo]"
-    ff = ":fontfile='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'"
     
     # 2. Hook (Música para...) con Caja integrada
     vf += f"{curr_v}drawtext=text='MÚSICA PARA':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'[v_h1];"
