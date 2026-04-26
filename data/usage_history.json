@@ -124,5 +124,47 @@
         "atmosphere": "Confianza",
         "date": "Sun Apr 26 01:15:29 2026",
         "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "LEV\u00c1NTATE",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "ABRE MIS LABIOS",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "SENDA ETERNA",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "SOBRE LAS AGUAS",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "MI ETERNA SALVACI\u00d3N",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "MIS MANOS PARA LA GUERRA v2",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "REGRESA LA VIDA",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:24:21 2026",
+        "render": "ATMOS_Descanso_20260426-2116"
     }
 ]
