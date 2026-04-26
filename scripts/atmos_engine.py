@@ -168,7 +168,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"📥 [SISTEMA] Descargando recursos para estabilidad total...")
     local_songs = []
     for i, s in enumerate(selected_songs):
-        path = os.path.join(TEMP_DIR, f"song_{i}.mp3")
+        ext = s['audio_url'].split('.')[-1].split('?')[0] or "mp3"
+        path = os.path.join(TEMP_DIR, f"song_{i}.{ext}")
         print(f"   🎵 Descargando: {s['title']}...")
         r = requests.get(s['audio_url'], timeout=30)
         with open(path, 'wb') as f: f.write(r.content)
@@ -176,7 +177,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     local_lands = []
     for i, l in enumerate(sel_lands):
-        path = os.path.join(TEMP_DIR, f"land_{i}.mp4")
+        ext = l.split('.')[-1].split('?')[0] or "mp4"
+        path = os.path.join(TEMP_DIR, f"land_{i}.{ext}")
         print(f"   🖼️ Descargando Paisaje {i+1}...")
         r = requests.get(l, timeout=30)
         with open(path, 'wb') as f: f.write(r.content)
@@ -216,9 +218,13 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     print(f"⚙️ [FFMPEG] Iniciando Renderizado de Video...")
     try:
-        subprocess.run(cmd, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"❌ [FFMPEG] Error Crítico durante el renderizado.")
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        if res.returncode != 0:
+            print(f"❌ [FFMPEG] Error Detectado:")
+            print(res.stderr)
+            raise subprocess.CalledProcessError(res.returncode, cmd)
+    except Exception as e:
+        print(f"❌ [SISTEMA] Fallo crítico de renderizado.")
         raise e
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
