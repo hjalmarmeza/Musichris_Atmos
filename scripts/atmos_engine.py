@@ -112,7 +112,7 @@ def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=No
         f.write(f"\n#MusiChris #Worship #PazInterior #Fe #CaminemosJuntosEnFe\n")
 
 def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
-    print(f"🎬 [ATMOS ENGINE v12.9.80] Auditoría de Integridad...")
+    print(f"🎬 [ATMOS ENGINE v12.9.85] Blindaje de Escala...")
     clean_assets()
     
     with open(os.path.join(BASE_DIR, 'data/musichris_master_catalog.json'), 'r') as f: catalog = json.load(f)
@@ -172,12 +172,14 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     audio_master = os.path.join(TEMP_DIR, "audio_master.mp3")
     subprocess.run(['ffmpeg', '-y', '-f', 'concat', '-safe', '0', '-i', list_path, '-c', 'copy', audio_master], check=True)
 
-    # 3. Logos
+    # 3. Logos (Corrección de Escala -2 para forzar paridad)
+    print(f"🖼️ [LOGOS] Normalizando logos animados...")
     logo_path = os.path.join(BASE_DIR, "assets", "Logo Hjalmar Animado.mp4")
     l_small = os.path.join(TEMP_DIR, "logo_small.mp4")
     l_large = os.path.join(TEMP_DIR, "logo_large.mp4")
-    subprocess.run(['ffmpeg', '-y', '-i', logo_path, '-vf', 'scale=120:-1,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', l_small], check=True)
-    subprocess.run(['ffmpeg', '-y', '-i', logo_path, '-vf', 'scale=450:-1,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', l_large], check=True)
+    # Usamos -2 en lugar de -1 para asegurar que la altura sea divisible por 2 (Requisito libx264)
+    subprocess.run(['ffmpeg', '-y', '-i', logo_path, '-vf', 'scale=120:-2,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', l_small], check=True)
+    subprocess.run(['ffmpeg', '-y', '-i', logo_path, '-vf', 'scale=450:-2,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', l_large], check=True)
 
     # 4. Video Base
     print(f"🎞️ [PASO 3/3] Mezclando estética visual...")
