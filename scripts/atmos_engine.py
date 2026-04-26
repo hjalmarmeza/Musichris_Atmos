@@ -220,13 +220,16 @@ if __name__ == "__main__":
     
     generate_atmos_video(dur, thm, out)
     
-    # Subir a YouTube (Opcional si estamos en local sin uploader listo)
-    try:
-        sys.path.append(os.path.join(BASE_DIR, 'scripts'))
-        import youtube_uploader
-        v_path = os.path.join(BASE_DIR, f"renders/{out}.mp4")
-        t_path = os.path.join(BASE_DIR, f"renders/{out}_THUMB.jpg")
-        m_path = os.path.join(BASE_DIR, f"renders/{out}_META.txt")
-        youtube_uploader.upload_video(v_path, t_path, m_path)
-    except Exception as e:
-        print(f"⚠️ Salto de subida automática: {e}")
+    # Subir a YouTube
+    print(f"📡 [UPLOAD] Iniciando despacho a YouTube Studio...")
+    sys.path.append(os.path.join(BASE_DIR, 'scripts'))
+    import youtube_uploader
+    v_path = os.path.join(BASE_DIR, f"renders/{out}.mp4")
+    t_path = os.path.join(BASE_DIR, f"renders/{out}_THUMB.jpg")
+    m_path = os.path.join(BASE_DIR, f"renders/{out}_META.txt")
+    
+    if not os.path.exists(v_path):
+        raise FileNotFoundError(f"❌ El video no se generó en: {v_path}")
+        
+    youtube_uploader.upload_video(v_path, t_path, m_path)
+    print(f"🚀 [SISTEMA] Producción finalizada y publicada con éxito.")

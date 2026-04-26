@@ -31,9 +31,15 @@ def get_authenticated_service():
             
             if not client_id and os.path.exists(secrets_path):
                 with open(secrets_path, 'r') as f:
-                    data = json.load(f)['installed']
+                    raw_data = json.load(f)
+                    data = raw_data.get('installed') or raw_data.get('web')
+                    if not data:
+                        raise ValueError("❌ Estructura de client_secrets.json inválida (falta 'installed' o 'web')")
                     client_id = data['client_id']
                     client_secret = data['client_secret']
+
+            if not client_id or not client_secret:
+                raise ValueError("❌ Faltan Client ID o Client Secret para la autenticación.")
 
             credentials = Credentials(
                 None,
@@ -43,6 +49,8 @@ def get_authenticated_service():
                 client_secret=client_secret,
                 scopes=SCOPES
             )
+            # Forzar actualización para verificar validez
+            credentials.refresh(Request())
         elif credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
