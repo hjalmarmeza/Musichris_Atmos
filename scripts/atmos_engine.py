@@ -100,19 +100,19 @@ def generate_thumbnail_intelligent(theme1, output_name, local_landscape_path, so
 def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=None):
     meta_path = os.path.join(RENDERS_DIR, f"{output_name.replace('.mp4', '')}_META.txt")
     phrase = SEO_PHRASES.get(theme1, theme1.upper())
-    with open(meta_path, 'w') as f:
+    with open(meta_path, 'w', encoding='utf-8') as f:
         f.write(f"TITLE:\n💎 {phrase}: ADORACIÓN Y DESCANSO\n\n")
         f.write(f"DESCRIPTION:\n✨ BIENVENIDO A MUSICHRIS STUDIO ✨\n\nCaminemos juntos en fe con esta sesión diseñada para tu alma.\n\n📍 CAPÍTULOS:\n")
         acc = 0
         for s in selected_songs:
             m = acc // 60; s_ = acc % 60
-            v = s.get('context', {}).get('verse', 'Salmos 23')
+            v = s.get('context', {}).get('verse', s.get('verse', 'Salmos 23'))
             f.write(f"[{m:02d}:{s_:02d}] {s['title']} - {v}\n")
             acc += get_song_duration(s)
         f.write(f"\n#MusiChris #Worship #PazInterior #Fe #CaminemosJuntosEnFe\n")
 
 def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
-    print(f"🎬 [ATMOS ENGINE v12.9.75] Restauración Diamond Completa...")
+    print(f"🎬 [ATMOS ENGINE v12.9.80] Auditoría de Integridad...")
     clean_assets()
     
     with open(os.path.join(BASE_DIR, 'data/musichris_master_catalog.json'), 'r') as f: catalog = json.load(f)
@@ -144,7 +144,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     song_times = []; curr_t = 0
     for s in selected_songs:
-        song_times.append((s['title'], s.get('context', {}).get('verse', 'Salmos 23'), curr_t + 2, curr_t + 15))
+        v = s.get('context', {}).get('verse', s.get('verse', 'Salmos 23'))
+        song_times.append((s['title'], v, curr_t + 2, curr_t + 15))
         curr_t += get_song_duration(s)
 
     # 1. Paisaje
@@ -152,19 +153,19 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         land_pool = list(json.load(f).values())
     sel_land = random.choice(land_pool)
     p_orig = os.path.join(TEMP_DIR, "land_orig.mp4")
-    with open(p_orig, 'wb') as f: f.write(requests.get(sel_land).content)
+    with open(p_orig, 'wb') as f: f.write(requests.get(sel_land, timeout=45).content)
     
     p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
     subprocess.run(['ffmpeg', '-y', '-stream_loop', '-1', '-i', p_orig, '-t', str(acc_time), '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', '-an', '-c:v', 'libx264', '-preset', 'ultrafast', p_cut], check=True)
 
-    # 2. Audio (El Corazón - Restaurado)
+    # 2. Audio
     print(f"🎵 [PASO 2/3] Procesando audio maestro...")
     local_songs = []
     list_path = os.path.join(TEMP_DIR, "audio_list.txt")
-    with open(list_path, 'w') as f:
+    with open(list_path, 'w', encoding='utf-8') as f:
         for i, s in enumerate(selected_songs):
             p = os.path.join(TEMP_DIR, f"song_{i}.mp3")
-            with open(p, 'wb') as f_song: f_song.write(requests.get(s['audio_url']).content)
+            with open(p, 'wb') as f_song: f_song.write(requests.get(s['audio_url'], timeout=45).content)
             f.write(f"file '{p}'\n")
             local_songs.append(p)
     
@@ -199,7 +200,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     ff = f":fontfile='{ff_path}'"
     vf = f"drawtext=text='@MusiChris_Studio':x=(W-tw)/2:y=(H-th)/2:fontsize=50:fontcolor=white@0.12{ff}:enable='lt(t,{os_t})'"
     for t, v, s, e in song_times:
-        clean_t = t.replace("'", "").upper(); clean_v = v.replace("'", "").upper()
+        clean_t = t.replace("'", "").replace(":", "\\:").upper()
+        clean_v = v.replace("'", "").replace(":", "\\:").upper()
         vf += f",drawtext=text='{clean_t}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{s},{e})'"
         vf += f",drawtext=text='{clean_v}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{s},{e})'"
     vf += f",drawtext=text='@MusiChris_Studio':{ff}:fontsize=60:fontcolor=white:x=(W-tw)/2:y=(H/2+200):enable='gt(t,{os_t})'"
@@ -218,7 +220,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         if os.path.exists(history_path):
             with open(history_path, 'r') as f: hist = json.load(f)
         for s in selected_songs: hist.append({"title": s['title'], "atmosphere": original_theme, "date": time.ctime(), "render": output_name})
-        with open(history_path, 'w') as f: json.dump(hist, f, indent=4)
+        with open(history_path, 'w', encoding='utf-8') as f: json.dump(hist, f, indent=4)
     except: pass
     print(f"✅ Completado: {output_name}")
 
