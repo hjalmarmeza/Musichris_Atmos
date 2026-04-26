@@ -218,57 +218,69 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"   ✅ Archivos normalizados.")
 
     # ══════════════════════════════════════════════
-    # PASO FINAL: Audio, Textos y Logo en un solo grafo
+    # PASO 1/2: Generar Video Base (Paisajes + Logo)
     # ══════════════════════════════════════════════
-    print(f"🎵 [PASO FINAL] Ensamblando Video...")
-    
+    print(f"🎞️ [PASO 1/2] Concatenando Paisajes y Logo...")
+    base_video = os.path.join(TEMP_DIR, "base_video_flat.mp4")
+    cmd_base = [
+        'ffmpeg', '-y',
+        '-i', cut_lands[0], '-i', cut_lands[1], '-i', cut_lands[2],
+        '-stream_loop', '-1', '-i', logo_small,
+        '-filter_complex', "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v];[v][3:v]overlay=x=40:y=40:shortest=1[out]",
+        '-map', '[out]', '-c:v', 'libx264', '-preset', 'superfast', '-crf', '24',
+        '-t', str(acc_time), base_video
+    ]
+    subprocess.run(cmd_base, check=True)
+
+    # LIBERAR RAM/DISCO: Borrar los cortes de paisajes
+    for p in cut_lands:
+        try: os.remove(p)
+        except: pass
+    print(f"   ✅ Base aplanada y memoria liberada.")
+
+    # ══════════════════════════════════════════════
+    # PASO 2/2: Añadir Audio y Textos
+    # ══════════════════════════════════════════════
+    print(f"🎵 [PASO 2/2] Aplicando Audio y Textos...")
     ff = ":fontfile='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'"
     
-    # 1. Video Base (Concat Paisajes + Logo)
-    vf = "[0:v][1:v][2:v]concat=n=3:v=1:a=0[base_v];"
-    vf += "[base_v][3:v]overlay=x=40:y=40[v_logo];"
-    
-    curr_v = "[v_logo]"
-    
-    # 2. Hook (Música para...) con Caja integrada
-    vf += f"{curr_v}drawtext=text='MÚSICA PARA':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'[v_h1];"
-    vf += f"[v_h1]drawtext=text='{theme2.upper() if theme2 else theme1.upper()}':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'[v_hook];"
-    curr_v = "[v_hook]"
-
-    # 3. Canciones con Caja integrada
+    # Grafo de video simplificado sobre la base plana
+    vf = "null" # Entrada base
     for i, (title, verse, start, end) in enumerate(song_times):
-        v_next = f"[v_t{i}2]"
-        vf += f"{curr_v}drawtext=text='{title.upper()}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{start},{end})'[v_t{i}1];"
-        vf += f"[v_t{i}1]drawtext=text='{verse.upper()}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{start},{end})'{v_next};"
-        curr_v = v_next
+        vf += f",drawtext=text='{title.upper()}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{start},{end})'"
+        vf += f",drawtext=text='{verse.upper()}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{start},{end})'"
 
-    # 4. Outro con Caja integrada
+    # Hook y Outro
+    vf += f",drawtext=text='MÚSICA PARA':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'"
+    vf += f",drawtext=text='{theme2.upper() if theme2 else theme1.upper()}':{ff}:fontsize=46:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,0,8)'"
+    
     os_t, os_e = int(acc_time - 8), int(acc_time)
-    vf += f"{curr_v}drawtext=text='CAMINEMOS JUNTOS EN FE':{ff}:fontsize=44:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'[v_o1];"
-    vf += f"[v_o1]drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO':{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'[v_o2];"
-    vf += f"[v_o2]fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2[v_out]"
+    vf += f",drawtext=text='CAMINEMOS JUNTOS EN FE':{ff}:fontsize=44:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2-60):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'"
+    vf += f",drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO':{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'"
+    vf += f",fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2"
 
-    # 5. Audio
+    # Audio
     af_parts = []
     for i in range(n_songs):
-        af_parts.append(f"[{i+4}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
-    
+        af_parts.append(f"[{i+1}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
     a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
     af = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
 
-    cmd2 = ['ffmpeg', '-y']
-    for p in cut_lands: cmd2 += ['-i', p]
-    cmd2 += ['-stream_loop', '-1', '-i', logo_small]
-    for p in local_songs: cmd2 += ['-i', p]
+    cmd_final = ['ffmpeg', '-y', '-i', base_video]
+    for p in local_songs: cmd_final += ['-i', p]
     
-    cmd2 += [
-        '-filter_complex', f"{vf};{af}",
+    cmd_final += [
+        '-filter_complex', f"[0:v]{vf}[v_out];{af}",
         '-map', '[v_out]', '-map', '[a_out]',
         '-c:v', 'libx264', '-preset', 'superfast', '-crf', '28', 
-        '-threads', '2',
-        '-t', str(acc_time - 0.5), final_video
+        '-threads', '2', '-t', str(acc_time - 0.5), final_video
     ]
-    subprocess.run(cmd2, check=True)
+    subprocess.run(cmd_final, check=True)
+    
+    # Limpiar base temporal
+    try: os.remove(base_video)
+    except: pass
+    print(f"✅ [PASO FINAL] Video final listo.")
     print(f"✅ [PASO FINAL] Video final listo.")
 
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
