@@ -194,7 +194,12 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
     cmd += ['-filter_complex', f"{v_f}{a_f}", '-map', curr_v, '-map', '[a_final]', '-c:v', 'libx264', '-preset', 'ultrafast', final_video]
     
-    subprocess.run(cmd)
+    print(f"⚙️ [FFMPEG] Iniciando Renderizado de Video...")
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"❌ [FFMPEG] Error Crítico durante el renderizado.")
+        raise e
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
     
