@@ -207,55 +207,63 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         print(f"   ✅ Paisaje {i+1} cortado a {land_dur:.0f}s")
 
     # ══════════════════════════════════════════════
-    # PASO 1: Base Cinemática (Concat + Logo + Hook/Cierre)
-    # Solo 6 entradas simples — RAM: ~2GB
+    # PASO 1: Concatenación Pura de Paisajes
+    # El comando más simple posible — error 254 imposible
     # ══════════════════════════════════════════════
-    print(f"🎞️ [PASO 1/2] Renderizando Base Cinemática...")
-
+    print(f"🎞️ [PASO 1/2] Concatenando Paisajes...")
+    
     cmd1 = ['ffmpeg', '-y']
-    for p in cut_lands: cmd1 += ['-i', p]             # 0, 1, 2
-    cmd1 += ['-stream_loop', '-1', '-i', logo_path]   # 3
-    cmd1 += ['-loop', '1', '-i', hook_path]            # 4
-    cmd1 += ['-loop', '1', '-i', outro_path]           # 5
-
-    vf1  = "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v_lands];"
-    vf1 += "[3:v]scale=120:-1,fps=30,format=yuv420p[logo_sc];"
-    vf1 += "[v_lands][logo_sc]overlay=x=40:y=40:shortest=1[v_logo];"
-    vf1 += "[4:v]scale=1280:720,fps=30,format=yuv420p[hook_ov];"
-    vf1 += f"[v_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
-    vf1 += "[5:v]scale=1280:720,fps=30,format=yuv420p[outro_ov];"
-    vf1 += f"[v_hooked][outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_base];"
-    vf1 += f"[v_base]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_out]"
-
-    cmd1 += ['-filter_complex', vf1,
-             '-map', '[v_out]',
-             '-c:v', 'libx264', '-preset', 'ultrafast',
-             '-t', str(acc_time), base_video]
+    for p in cut_lands: cmd1 += ['-i', p]  # 0, 1, 2
+    cmd1 += [
+        '-filter_complex', '[0:v][1:v][2:v]concat=n=3:v=1:a=0[v_out]',
+        '-map', '[v_out]',
+        '-c:v', 'libx264', '-preset', 'ultrafast',
+        '-t', str(acc_time), base_video
+    ]
     subprocess.run(cmd1, check=True)
-    print(f"✅ [PASO 1/2] Base guardada.")
+    print(f"✅ [PASO 1/2] Base concatenada.")
 
     # ══════════════════════════════════════════════
-    # PASO 2: Audio + Overlays de Canciones
+    # PASO 2: Audio + Logo + Hook + Cierre + Overlays
+    # Los overlays de imagen son muy ligeros vs. video
     # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 2/2] Añadiendo Audio y Overlays de Canciones...")
+    print(f"🎵 [PASO 2/2] Añadiendo Audio, Logo y Overlays...")
 
-    cmd2 = ['ffmpeg', '-y', '-i', base_video]
-    for p in local_songs: cmd2 += ['-i', p]                        # 1..N
-    for p, s, e in song_overlays: cmd2 += ['-loop', '1', '-i', p]  # N+1..
+    logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
 
-    vf2 = ""
-    curr_v = "[0:v]"
+    cmd2 = ['ffmpeg', '-y', '-i', base_video]            # 0: base
+    for p in local_songs: cmd2 += ['-i', p]              # 1..N
+    cmd2 += ['-stream_loop', '-1', '-i', logo_path]      # N+1
+    cmd2 += ['-loop', '1', '-i', hook_path]              # N+2
+    cmd2 += ['-loop', '1', '-i', outro_path]             # N+3
+    for p, s, e in song_overlays: cmd2 += ['-loop', '1', '-i', p]  # N+4..
+
+    logo_idx  = n_songs + 1
+    hook_idx  = n_songs + 2
+    outro_idx = n_songs + 3
+
+    vf2  = f"[{logo_idx}:v]scale=120:-1,fps=30,format=yuv420p[logo_sc];"
+    vf2 += f"[0:v][logo_sc]overlay=x=40:y=40:shortest=1[v_logo];"
+
+    vf2 += f"[{hook_idx}:v]scale=1280:720,fps=30,format=yuv420p[hook_ov];"
+    vf2 += f"[v_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
+
+    curr_v = "[v_hooked]"
     for i, (p, st, en) in enumerate(song_overlays):
-        ov_idx = 1 + n_songs + i
+        ov_idx = n_songs + 4 + i
         vf2 += f"[{ov_idx}:v]scale=1280:720,fps=30,format=yuv420p[ov{i}];"
         vf2 += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[vs{i}];"
         curr_v = f"[vs{i}]"
+
+    vf2 += f"[{outro_idx}:v]scale=1280:720,fps=30,format=yuv420p[outro_ov];"
+    vf2 += f"{curr_v}[outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_overlaid];"
+    vf2 += f"[v_overlaid]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final];"
 
     a_tags = "".join([f"[{i+1}:a]" for i in range(n_songs)])
     af2 = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_out]"
 
     cmd2 += ['-filter_complex', f"{vf2}{af2}",
-             '-map', curr_v, '-map', '[a_out]',
+             '-map', '[v_final]', '-map', '[a_out]',
              '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
     subprocess.run(cmd2, check=True)
     print(f"✅ [PASO 2/2] Video final listo.")
