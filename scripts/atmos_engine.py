@@ -195,32 +195,38 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     land_dur = (acc_time / 3) + 2
     v_f = ""
     
+    # 1. Procesar Paisajes con xfade (Normalización Total)
     for i in range(3):
         idx = n_songs + i
-        v_f += f"[{idx}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
+        v_f += f"[{idx}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
     
     v_f += f"[vl0][vl1]xfade=transition=fade:duration=2:offset={land_dur-2}[v01];"
     v_f += f"[v01][vl2]xfade=transition=fade:duration=2:offset={land_dur*2-4}[v_base_lands];"
     
-    v_f += f"[{n_songs+3}:v]scale=120:-1,format=rgba[logo_scaled];"
+    # 2. Logo y Hook/Outro
+    v_f += f"[{n_songs+3}:v]scale=120:-1,fps=30,format=rgba[logo_scaled];"
     v_f += f"[v_base_lands][logo_scaled]overlay=x=40:y=40[v_with_logo];"
     
-    v_f += f"[{n_songs+4}:v]scale=1280:720[hook_ov];"
-    v_f += f"[{n_songs+5}:v]scale=1280:720[outro_ov];"
+    v_f += f"[{n_songs+4}:v]scale=1280:720,fps=30[hook_ov];"
+    v_f += f"[{n_songs+5}:v]scale=1280:720,fps=30[outro_ov];"
     v_f += f"[v_with_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
     v_f += f"[v_hooked][outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_base_final];"
     
+    # 3. Overlays de Canciones
     curr_v = "[v_base_final]"
     for i, (p, st, en) in enumerate(song_overlays):
         ov_idx = n_songs + 6 + i
-        v_f += f"[{ov_idx}:v]scale=1280:720[ov{i}];"
+        v_f += f"[{ov_idx}:v]scale=1280:720,fps=30[ov{i}];"
         v_f += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[v{i+1}];"
         curr_v = f"[v{i+1}]"
 
+    # 4. Global Fade In/Out
     v_f += f"{curr_v}fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_final_faded];"
 
-    a_songs = "".join([f"[{i}:a]" for i in range(n_songs)])
-    a_f = f"{a_songs}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_final]"
+    # 5. Audio con Resampling y Fades
+    a_resample = "".join([f"[{i}:a]aresample=44100[as{i}];" for i in range(n_songs)])
+    a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
+    a_f = f"{a_resample}{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={acc_time-2}:d=2[a_final]"
     
     final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
     cmd += ['-filter_complex', f"{v_f}{a_f}", '-map', '[v_final_faded]', '-map', '[a_final]', '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
