@@ -189,50 +189,65 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     land_dur = acc_time / 3
 
     # ══════════════════════════════════════════════
-    # PASO 1: Base Cinemática (Paisajes + Logo + Hook/Cierre)
-    # RAM estimada: ~2-3GB - viable en GitHub Actions
+    # PRE-PASO: Normalizar cada paisaje a duración exacta
+    # (Elimina el conflicto stream_loop + trim)
+    # ══════════════════════════════════════════════
+    print(f"🎬 [PRE-PASO] Normalizando paisajes a {land_dur:.0f}s cada uno...")
+    cut_lands = []
+    for i, src in enumerate(local_lands):
+        cut_path = os.path.join(TEMP_DIR, f"land_{i}_cut.mp4")
+        subprocess.run([
+            'ffmpeg', '-y',
+            '-stream_loop', '-1', '-i', src,
+            '-t', str(land_dur),
+            '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p',
+            '-an', '-c:v', 'libx264', '-preset', 'ultrafast', cut_path
+        ], check=True)
+        cut_lands.append(cut_path)
+        print(f"   ✅ Paisaje {i+1} cortado a {land_dur:.0f}s")
+
+    # ══════════════════════════════════════════════
+    # PASO 1: Base Cinemática (Concat + Logo + Hook/Cierre)
+    # Solo 6 entradas simples — RAM: ~2GB
     # ══════════════════════════════════════════════
     print(f"🎞️ [PASO 1/2] Renderizando Base Cinemática...")
 
     cmd1 = ['ffmpeg', '-y']
-    for p in local_lands: cmd1 += ['-stream_loop', '-1', '-i', p] # 0,1,2
-    cmd1 += ['-stream_loop', '-1', '-i', logo_path]               # 3
-    cmd1 += ['-loop', '1', '-i', hook_path]                       # 4
-    cmd1 += ['-loop', '1', '-i', outro_path]                      # 5
+    for p in cut_lands: cmd1 += ['-i', p]             # 0, 1, 2
+    cmd1 += ['-stream_loop', '-1', '-i', logo_path]   # 3
+    cmd1 += ['-loop', '1', '-i', hook_path]            # 4
+    cmd1 += ['-loop', '1', '-i', outro_path]           # 5
 
-    vf1 = ""
-    for i in range(3):
-        vf1 += f"[{i}:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p,trim=duration={land_dur},setpts=PTS-STARTPTS[vl{i}];"
-    vf1 += "[vl0][vl1][vl2]concat=n=3:v=1:a=0[v_lands];"
-    vf1 += "[3:v]scale=120:-1,fps=30,format=rgba[logo_sc];"
+    vf1  = "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v_lands];"
+    vf1 += "[3:v]scale=120:-1,fps=30,format=yuv420p[logo_sc];"
     vf1 += "[v_lands][logo_sc]overlay=x=40:y=40:shortest=1[v_logo];"
-    vf1 += "[4:v]scale=1280:720,fps=30,format=rgba[hook_ov];"
+    vf1 += "[4:v]scale=1280:720,fps=30,format=yuv420p[hook_ov];"
     vf1 += f"[v_logo][hook_ov]overlay=enable='between(t,0,8)'[v_hooked];"
-    vf1 += "[5:v]scale=1280:720,fps=30,format=rgba[outro_ov];"
+    vf1 += "[5:v]scale=1280:720,fps=30,format=yuv420p[outro_ov];"
     vf1 += f"[v_hooked][outro_ov]overlay=enable='between(t,{acc_time-8},{acc_time})'[v_base];"
     vf1 += f"[v_base]fade=t=in:st=0:d=2,fade=t=out:st={acc_time-2}:d=2[v_out]"
 
-    cmd1 += ['-filter_complex', vf1, '-map', '[v_out]',
+    cmd1 += ['-filter_complex', vf1,
+             '-map', '[v_out]',
              '-c:v', 'libx264', '-preset', 'ultrafast',
              '-t', str(acc_time), base_video]
     subprocess.run(cmd1, check=True)
-    print(f"✅ [PASO 1/2] Base guardada: {base_video}")
+    print(f"✅ [PASO 1/2] Base guardada.")
 
     # ══════════════════════════════════════════════
     # PASO 2: Audio + Overlays de Canciones
-    # RAM estimada: ~2-3GB - viable en GitHub Actions
     # ══════════════════════════════════════════════
     print(f"🎵 [PASO 2/2] Añadiendo Audio y Overlays de Canciones...")
 
-    cmd2 = ['ffmpeg', '-y', '-i', base_video]           # 0: base video
-    for p in local_songs: cmd2 += ['-i', p]             # 1..N
+    cmd2 = ['ffmpeg', '-y', '-i', base_video]
+    for p in local_songs: cmd2 += ['-i', p]                        # 1..N
     for p, s, e in song_overlays: cmd2 += ['-loop', '1', '-i', p]  # N+1..
 
     vf2 = ""
     curr_v = "[0:v]"
     for i, (p, st, en) in enumerate(song_overlays):
         ov_idx = 1 + n_songs + i
-        vf2 += f"[{ov_idx}:v]scale=1280:720,fps=30,format=rgba[ov{i}];"
+        vf2 += f"[{ov_idx}:v]scale=1280:720,fps=30,format=yuv420p[ov{i}];"
         vf2 += f"{curr_v}[ov{i}]overlay=enable='between(t,{st},{en})'[vs{i}];"
         curr_v = f"[vs{i}]"
 
@@ -243,7 +258,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
              '-map', curr_v, '-map', '[a_out]',
              '-c:v', 'libx264', '-preset', 'ultrafast', '-shortest', final_video]
     subprocess.run(cmd2, check=True)
-    print(f"✅ [PASO 2/2] Video final: {final_video}")
+    print(f"✅ [PASO 2/2] Video final listo.")
 
     generate_thumbnail_intelligent(theme1, output_name, sel_lands[0], selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
