@@ -227,11 +227,28 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     except: pass
 
     # ══════════════════════════════════════════════
-    # PASO 2/2: Añadir Audio y Textos
+    # PASO 2/3: Crear Audio Maestro (Aplanado)
     # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 2/2] Aplicando Audio y Textos...")
+    print(f"🎵 [PASO 2/3] Aplanando pistas de audio...")
+    audio_master = os.path.join(TEMP_DIR, "audio_master.mp3")
     
-    # Detección dinámica de fuente para FFmpeg (v12.9.42)
+    af_parts = []
+    for i in range(n_songs):
+        af_parts.append(f"[{i}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
+    a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
+    af_filter = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2"
+    
+    cmd_audio = ['ffmpeg', '-y']
+    for p in local_songs: cmd_audio += ['-i', p]
+    cmd_audio += ['-filter_complex', af_filter, '-c:a', 'libmp3lame', '-q:a', '2', audio_master]
+    subprocess.run(cmd_audio, check=True)
+
+    # ══════════════════════════════════════════════
+    # PASO 3/3: Ensamblaje Final (Video + Audio + Textos)
+    # ══════════════════════════════════════════════
+    print(f"🎞️ [PASO 3/3] Ensamblaje final y capas de texto...")
+    
+    # Detección dinámica de fuente para FFmpeg
     ff_paths = ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/System/Library/Fonts/Supplemental/Arial.ttf', 'arial.ttf']
     ff_path = next((p for p in ff_paths if os.path.exists(p)), 'arial.ttf')
     ff = f":fontfile='{ff_path}'"
@@ -249,29 +266,28 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     vf += f",drawtext=text='SUSCRÍBETE @MUSICHRIS_STUDIO':{ff}:fontsize=32:fontcolor=0xF5F5DCFF:x=(W-tw)/2:y=(H/2+10):box=1:boxcolor=black@0.63:boxborderw=40:enable='between(t,{os_t},{os_e})'"
     vf += f",fade=t=in:st=0:d=2,fade=t=out:st={int(acc_time)-2}:d=2"
 
-    af_parts = []
-    for i in range(n_songs):
-        af_parts.append(f"[{i+1}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
-    a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
-    af = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
-
-    final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
-    cmd_final = ['ffmpeg', '-y', '-i', base_video]
-    for p in local_songs: cmd_final += ['-i', p]
-    
-    cmd_final += [
-        '-filter_complex', f"[0:v]{vf}[v_out];{af}",
-        '-map', '[v_out]', '-map', '[a_out]',
+    final_video = os.path.join(RENDERS_DIR, f'{output_name}.mp4')
+    cmd_final = [
+        'ffmpeg', '-y', 
+        '-i', base_video, 
+        '-i', audio_master,
+        '-filter_complex', f"[0:v]{vf}[v_out]",
+        '-map', '[v_out]', '-map', '1:a',
         '-c:v', 'libx264', '-preset', 'superfast', '-crf', '28', 
+        '-c:a', 'copy', # Copiamos el audio ya procesado para ahorrar CPU
         '-threads', '2', '-t', str(acc_time - 0.5), final_video
     ]
     subprocess.run(cmd_final, check=True)
     
-    try: os.remove(base_video)
-    except: pass
     print(f"✅ [PASO FINAL] Video final listo.")
-    generate_thumbnail_intelligent(theme1, output_name, base_video if os.path.exists(base_video) else p_cut, selected_songs, theme2)
+    generate_thumbnail_intelligent(theme1, output_name, final_video, selected_songs, theme2)
     generate_metadata_intelligent(theme1, output_name, selected_songs, theme2)
+    
+    # Limpieza Total Final
+    for f in [base_video, audio_master, p_cut, logo_small]:
+        try: 
+            if os.path.exists(f): os.remove(f)
+        except: pass
     
     try:
         hist = []
