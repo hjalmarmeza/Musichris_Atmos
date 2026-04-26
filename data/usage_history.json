@@ -82,5 +82,47 @@
         "atmosphere": "Refugio",
         "date": "Sun Apr 26 00:15:50 2026",
         "render": "ATMOS_Refugio_20260426-0015"
+    },
+    {
+        "title": "EL MANTO",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "NO FUE MI FUERZA",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "CASA DE PAZ",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "MI BIEN",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "CONSUMADO ES",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "ROCA Y ESCUDO v2",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
+    },
+    {
+        "title": "NO DORMIR\u00c1",
+        "atmosphere": "Confianza",
+        "date": "Sun Apr 26 01:15:29 2026",
+        "render": "ATMOS_Confianza_20260426-0111"
     }
 ]
