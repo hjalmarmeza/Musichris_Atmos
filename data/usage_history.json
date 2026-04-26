@@ -166,5 +166,47 @@
         "atmosphere": "Descanso",
         "date": "Sun Apr 26 21:24:21 2026",
         "render": "ATMOS_Descanso_20260426-2116"
+    },
+    {
+        "title": "TU BONDAD v2",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "DESDE SIEMPRE v2",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "LUGAR ESPACIOSO",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "HOGAR EN TU PRESENCIA v2",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "BONDAD INAGOTABLE",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "MI PASTOR Y MI REY",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
+    },
+    {
+        "title": "NO DORMIR\u00c1",
+        "atmosphere": "Descanso",
+        "date": "Sun Apr 26 21:59:40 2026",
+        "render": "ATMOS_Descanso_20260426-2146"
     }
 ]
