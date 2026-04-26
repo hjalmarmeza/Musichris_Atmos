@@ -176,7 +176,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         with open(path, 'wb') as f: f.write(r.content)
         local_lands.append(path)
 
-    logo_path = os.path.join(BASE_DIR, "assets/Logo Hjalmar Animado.mp4")
+    logo_path = os.path.join(BASE_DIR, "assets", "Logo Hjalmar Animado.mp4")
     base_video  = os.path.join(TEMP_DIR, "base_video.mp4")
     base_logo   = os.path.join(TEMP_DIR, "base_logo.mp4")
     final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
@@ -284,7 +284,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     af_parts = []
     for i in range(n_songs):
-        af_parts.append(f"[{i+4}:a]aresample=44100,settb=AVTB[as{i}]")
+        af_parts.append(f"[{i+4}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
     
     a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
     af = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
@@ -292,8 +292,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     cmd2 += [
         '-filter_complex', f"{vf_chain};{af}",
         '-map', '[v_out]', '-map', '[a_out]',
-        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', 
-        '-t', str(acc_time), final_video
+        '-c:v', 'libx264', '-preset', 'superfast', '-crf', '28', 
+        '-t', str(acc_time - 0.5), final_video
     ]
     subprocess.run(cmd2, check=True)
     print(f"✅ [PASO FINAL] Video final listo.")
