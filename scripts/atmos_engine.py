@@ -159,9 +159,11 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         song_times.append((s['title'], s.get('verse', 'Salmos 23'), curr_t + 2, curr_t + 12))
         curr_t += get_song_duration(s)
 
-    with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: landscapes = list(json.load(f).values())
-    sel_lands = [random.choice(landscapes) for _ in range(3)]
+    # 1. Cargar catálogo de paisajes
+    with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: 
+        land_pool = list(json.load(f).values())
     
+    # 2. Descargar canciones
     local_songs = []
     for i, s in enumerate(selected_songs):
         path = os.path.join(TEMP_DIR, f"song_{i}.mp3")
@@ -169,64 +171,34 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         with open(path, 'wb') as f: f.write(r.content)
         local_songs.append(path)
 
-    local_lands = []
-    for i, l in enumerate(sel_lands):
-        path = os.path.join(TEMP_DIR, f"land_{i}.mp4")
-        r = requests.get(l, timeout=30)
-        with open(path, 'wb') as f: f.write(r.content)
-        local_lands.append(path)
-
-    logo_path = os.path.join(BASE_DIR, "assets", "Logo Hjalmar Animado.mp4")
-    base_video  = os.path.join(TEMP_DIR, "base_video.mp4")
-    base_logo   = os.path.join(TEMP_DIR, "base_logo.mp4")
-    final_video = os.path.join(BASE_DIR, f'renders/{output_name}.mp4')
-    
-    n_songs = len(selected_songs)
-    land_dur = acc_time / 3
-
-    # ══════════════════════════════════════════════
-    # PRE-PASO: Normalizar cada paisaje a duración exacta
-    # ══════════════════════════════════════════════
-    print(f"🎬 [PRE-PASO] Normalizando paisajes a {land_dur:.0f}s cada uno...")
-    # PRE-PASO: Normalizar cada paisaje y logo
-    # ══════════════════════════════════════════════
-    print(f"🎬 [PRE-PASO] Normalizando archivos...")
-    cut_lands = []
-    for i, src in enumerate(local_lands):
-        cut_path = os.path.join(TEMP_DIR, f"land_{i}_cut.mp4")
-        subprocess.run([
-            'ffmpeg', '-y', '-stream_loop', '-1', '-i', src,
-            '-t', str(land_dur),
-            '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p',
-            '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', cut_path
-        ], check=True)
-        cut_lands.append(cut_path)
-    
-    # ══════════════════════════════════════════════
-    # PRE-PASO: Normalizar paisaje (1 solo en bucle)
-    # ══════════════════════════════════════════════
-    print(f"🎬 [PRE-PASO] Normalizando paisaje único...")
+    # 3. Descargar y procesar Paisaje Único (Zen)
+    print(f"🎬 [PRE-PASO] Preparando paisaje único...")
     sel_land = random.choice(land_pool)
     p_orig = os.path.join(TEMP_DIR, "land_orig.mp4")
     r = requests.get(sel_land, timeout=30)
     with open(p_orig, 'wb') as f: f.write(r.content)
-    p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
     
+    p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
     subprocess.run([
-        'ffmpeg', '-y', '-ss', '0', '-i', p_orig,
-        '-t', '560', '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-an', p_cut
+        'ffmpeg', '-y', '-i', p_orig,
+        '-t', '560', 
+        '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', 
+        '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', p_cut
     ], check=True)
     
     try: os.remove(p_orig)
     except: pass
-    
+
+    # 4. Preparar Logo
+    logo_path = os.path.join(BASE_DIR, "assets", "Logo Hjalmar Animado.mp4")
     logo_small = os.path.join(TEMP_DIR, "logo_small.mp4")
     subprocess.run([
         'ffmpeg', '-y', '-i', logo_path,
         '-vf', 'scale=120:-1,fps=30,format=yuv420p',
         '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', logo_small
     ], check=True)
-    print(f"   ✅ Paisaje y logo listos.")
+    
+    print(f"   ✅ Recursos normalizados.")
 
     # ══════════════════════════════════════════════
     # PASO 1/2: Generar Video Base (Bucle + Logo)
