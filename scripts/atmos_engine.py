@@ -185,14 +185,22 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     p_orig = os.path.join(TEMP_DIR, "land_orig.mp4")
     r = requests.get(sel_land, timeout=30)
     with open(p_orig, 'wb') as f: f.write(r.content)
-    
+    # Verificar si el archivo se descargó bien
+    if not os.path.exists(p_orig) or os.path.getsize(p_orig) < 1000:
+        raise ValueError(f"❌ El paisaje descargado es inválido o está vacío: {p_orig}")
+
+    # PASO 1/3: Preparar Landscape Base (Con Bucle Infinito)
+    print(f"🎞️ [PASO 1/3] Procesando fondo (Loop Infinito)...")
     p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
-    subprocess.run([
-        'ffmpeg', '-y', '-i', p_orig,
-        '-t', '560', 
-        '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', 
+    cmd_cut = [
+        'ffmpeg', '-y', 
+        '-stream_loop', '-1', # Bucle infinito para que nunca falte video
+        '-i', p_orig, 
+        '-t', str(acc_time), 
+        '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p',
         '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', p_cut
-    ], check=True)
+    ]
+    subprocess.run(cmd_cut, check=True)
     
     try: os.remove(p_orig)
     except: pass
