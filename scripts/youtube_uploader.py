@@ -16,35 +16,19 @@ def get_authenticated_service():
     token_path = os.path.join(BASE_DIR, 'scripts/token.pickle')
     secrets_path = os.path.join(BASE_DIR, 'scripts/client_secrets.json')
 
+    # 1. Intentar cargar desde pickle local (Mac)
     if os.path.exists(token_path):
         with open(token_path, 'rb') as token:
             credentials = pickle.load(token)
     
-    # Soporte para CI (usar secreto si no hay pickle)
+    # 2. Si no hay credenciales válidas, intentar usar Secretos de Entorno (GitHub Actions)
     if not credentials or not credentials.valid:
-        refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN") or os.environ.get("YOUTUBE_TOKEN")
-        if refresh_token:
+        refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN")
+        client_id = os.environ.get("YOUTUBE_CLIENT_ID")
+        client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET")
+
+        if refresh_token and client_id and client_secret:
             from google.oauth2.credentials import Credentials
-            # Intentar cargar client_secrets si existe
-            # Intentar cargar desde variables de entorno primero
-            client_id = os.environ.get("YOUTUBE_CLIENT_ID")
-            client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET")
-            
-            # Intentar cargar client_secrets si falta algo
-            if (not client_id or not client_secret) and os.path.exists(secrets_path):
-                with open(secrets_path, 'r') as f:
-                    try:
-                        raw_data = json.load(f)
-                        data = raw_data.get('installed') or raw_data.get('web')
-                        if data:
-                            if not client_id: client_id = data.get('client_id')
-                            if not client_secret: client_secret = data.get('client_secret')
-                    except Exception as e:
-                        print(f"⚠️ Error al leer client_secrets.json: {e}")
-
-            if not client_id or not client_secret:
-                raise ValueError("❌ Faltan Client ID o Client Secret para la autenticación (verificar ENVs o client_secrets.json).")
-
             credentials = Credentials(
                 None,
                 refresh_token=refresh_token,
@@ -53,20 +37,19 @@ def get_authenticated_service():
                 client_secret=client_secret,
                 scopes=SCOPES
             )
-            # Forzar actualización para verificar validez
             credentials.refresh(Request())
-        elif credentials and credentials.expired and credentials.refresh_token:
-            credentials.refresh(Request())
-        else:
-            if not os.path.exists(secrets_path):
-                print("⚠️ Error: Falta 'client_secrets.json' en scripts/")
-                return None
+            print("✅ [YOUTUBE] Autenticación exitosa mediante Secretos de Entorno.")
+        
+        # 3. Si fallan los secretos, intentar flujo local (Requiere client_secrets.json)
+        elif os.path.exists(secrets_path):
             flow = InstalledAppFlow.from_client_secrets_file(secrets_path, SCOPES)
             credentials = flow.run_local_server(port=0)
-        
-        if credentials:
             with open(token_path, 'wb') as token:
                 pickle.dump(credentials, token)
+            print("✅ [YOUTUBE] Autenticación exitosa mediante Flujo Local.")
+        else:
+            print("❌ [YOUTUBE] Error: No hay Secretos de Entorno ni 'client_secrets.json' disponible.")
+            return None
 
     return build('youtube', 'v3', credentials=credentials)
 
