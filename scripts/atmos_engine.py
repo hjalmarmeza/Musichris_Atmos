@@ -267,8 +267,12 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     for p in cut_lands: cmd2 += ['-i', p]    # Inputs 0, 1, 2
     for p in local_songs: cmd2 += ['-i', p]  # Inputs 3..N+2
     
-    a_tags = "".join([f"[{i+3}:a]" for i in range(n_songs)])
-    af = f"{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
+    af_parts = []
+    for i in range(n_songs):
+        af_parts.append(f"[{i+3}:a]aresample=44100,settb=AVTB[as{i}]")
+    
+    a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
+    af = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2[a_out]"
     
     cmd2 += [
         '-filter_complex', f"{vf_chain};{af}",
