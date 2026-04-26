@@ -188,6 +188,9 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     # PRE-PASO: Normalizar cada paisaje a duración exacta
     # ══════════════════════════════════════════════
     print(f"🎬 [PRE-PASO] Normalizando paisajes a {land_dur:.0f}s cada uno...")
+    # PRE-PASO: Normalizar cada paisaje y logo
+    # ══════════════════════════════════════════════
+    print(f"🎬 [PRE-PASO] Normalizando archivos...")
     cut_lands = []
     for i, src in enumerate(local_lands):
         cut_path = os.path.join(TEMP_DIR, f"land_{i}_cut.mp4")
@@ -198,15 +201,20 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
             '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', cut_path
         ], check=True)
         cut_lands.append(cut_path)
-        print(f"   ✅ Paisaje {i+1} cortado.")
+    
+    logo_small = os.path.join(TEMP_DIR, "logo_small.mp4")
+    subprocess.run([
+        'ffmpeg', '-y', '-i', logo_path,
+        '-vf', 'scale=120:-1,fps=30,format=yuv420p',
+        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', logo_small
+    ], check=True)
+    print(f"   ✅ Archivos normalizados.")
 
     # ══════════════════════════════════════════════
     # PASO FINAL: Audio, Textos y Logo en un solo grafo
-    # Elimina archivos intermedios gigantes (Adiós Error 254 por Disco Lleno)
     # ══════════════════════════════════════════════
     print(f"🎵 [PASO FINAL] Ensamblando Video...")
     
-    # Font (Ubuntu GitHub Actions)
     font_candidates = [
         '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
         '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
@@ -220,7 +228,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     # Concatenar paisajes y logo animado (vía -stream_loop en input)
     vf_parts = [
         "[0:v][1:v][2:v]concat=n=3:v=1:a=0[base_v]",
-        "[3:v]scale=120:-1,format=yuv420p[logo]",
+        "[3:v]null[logo]",
         "[base_v][logo]overlay=x=40:y=40:shortest=1[v_logo]"
     ]
     
@@ -264,7 +272,7 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     
     cmd2 = ['ffmpeg', '-y']
     for p in cut_lands: cmd2 += ['-i', p]             # Inputs 0, 1, 2
-    cmd2 += ['-stream_loop', '-1', '-i', logo_path]  # Input 3 (Looping)
+    cmd2 += ['-stream_loop', '-1', '-i', logo_small]  # Input 3 (Looping pre-escalado)
     for p in local_songs: cmd2 += ['-i', p]           # Inputs 4..N+3
     
     af_parts = []
@@ -277,7 +285,8 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     cmd2 += [
         '-filter_complex', f"{vf_chain};{af}",
         '-map', '[v_out]', '-map', '[a_out]',
-        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-shortest', final_video
+        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', 
+        '-t', str(acc_time), final_video
     ]
     subprocess.run(cmd2, check=True)
     print(f"✅ [PASO FINAL] Video final listo.")
