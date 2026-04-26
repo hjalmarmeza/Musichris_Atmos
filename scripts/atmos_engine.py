@@ -227,21 +227,39 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     except: pass
 
     # ══════════════════════════════════════════════
-    # PASO 2/3: Crear Audio Maestro (Aplanado)
+    # PASO 2/3: Crear Audio Maestro (Estrategia El Tanque)
     # ══════════════════════════════════════════════
-    print(f"🎵 [PASO 2/3] Aplanando pistas de audio...")
+    print(f"🎵 [PASO 2/3] Aplanando pistas de audio (The Tank v12.9.50)...")
+    
+    # 1. Normalizar cada pista individualmente (Bajo consumo)
+    norm_songs = []
+    for i, p in enumerate(local_songs):
+        n_path = os.path.join(TEMP_DIR, f"norm_{i}.mp3")
+        subprocess.run(['ffmpeg', '-y', '-i', p, '-ar', '44100', '-ac', '2', '-b:a', '192k', n_path], check=True)
+        norm_songs.append(n_path)
+    
+    # 2. Crear archivo de lista para concat demuxer
+    list_path = os.path.join(TEMP_DIR, "pistas.txt")
+    with open(list_path, 'w') as f:
+        for p in norm_songs:
+            # Importante: rutas relativas o absolutas sin caracteres extraños
+            f.write(f"file '{os.path.abspath(p)}'\n")
+    
+    # 3. Unir y aplicar fades
     audio_master = os.path.join(TEMP_DIR, "audio_master.mp3")
-    
-    af_parts = []
-    for i in range(n_songs):
-        af_parts.append(f"[{i}:a]aresample=44100:async=1,settb=AVTB[as{i}]")
-    a_tags = "".join([f"[as{i}]" for i in range(n_songs)])
-    af_filter = ";".join(af_parts) + f";{a_tags}concat=n={n_songs}:v=0:a=1,afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2"
-    
-    cmd_audio = ['ffmpeg', '-y']
-    for p in local_songs: cmd_audio += ['-i', p]
-    cmd_audio += ['-filter_complex', af_filter, '-c:a', 'libmp3lame', '-q:a', '2', audio_master]
+    cmd_audio = [
+        'ffmpeg', '-y', '-f', 'concat', '-safe', '0', '-i', list_path,
+        '-af', f"afade=t=in:st=0:d=2,afade=t=out:st={int(acc_time)-2}:d=2",
+        '-c:a', 'libmp3lame', '-q:a', '2', audio_master
+    ]
     subprocess.run(cmd_audio, check=True)
+    
+    # Limpiar pistas normalizadas
+    for p in norm_songs: 
+        try: os.remove(p)
+        except: pass
+    try: os.remove(list_path)
+    except: pass
 
     # ══════════════════════════════════════════════
     # PASO 3/3: Ensamblaje Final (Video + Audio + Textos)
