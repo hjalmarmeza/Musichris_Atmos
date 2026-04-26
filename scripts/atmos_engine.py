@@ -168,7 +168,11 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
     print(f"📥 [SISTEMA] Descargando recursos para estabilidad total...")
     local_songs = []
     for i, s in enumerate(selected_songs):
-        ext = s['audio_url'].split('.')[-1].split('?')[0] or "mp3"
+        # Limpieza de extensión para evitar rutas inválidas (Skill Flow v12.9.16)
+        parts = s['audio_url'].split('.')
+        ext = parts[-1].split('?')[0].lower() if len(parts) > 1 else "mp3"
+        if len(ext) > 4 or "/" in ext: ext = "mp3"
+        
         path = os.path.join(TEMP_DIR, f"song_{i}.{ext}")
         print(f"   🎵 Descargando: {s['title']}...")
         r = requests.get(s['audio_url'], timeout=30)
@@ -177,7 +181,10 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     local_lands = []
     for i, l in enumerate(sel_lands):
-        ext = l.split('.')[-1].split('?')[0] or "mp4"
+        parts = l.split('.')
+        ext = parts[-1].split('?')[0].lower() if len(parts) > 1 else "mp4"
+        if len(ext) > 4 or "/" in ext: ext = "mp4"
+        
         path = os.path.join(TEMP_DIR, f"land_{i}.{ext}")
         print(f"   🖼️ Descargando Paisaje {i+1}...")
         r = requests.get(l, timeout=30)
