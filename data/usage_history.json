@@ -262,5 +262,53 @@
         "atmosphere": "Descanso",
         "date": "Sun Apr 26 23:47:29 2026",
         "render": "ATMOS_Descanso_20260426-2343"
+    },
+    {
+        "title": "REFUGIO SANTO v2",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "LUGAR ESPACIOSO v2",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "C\u00c1NTICO NUEVO",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "GRAN REUNI\u00d3N v2",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "ENCONTR\u00c9 MI HOGAR",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "OPORTUNO SOCORRO",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "DICHOSO EL PUEBLO",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
+    },
+    {
+        "title": "EL CAMINO",
+        "atmosphere": "Descanso",
+        "date": "Mon Apr 27 00:17:16 2026",
+        "render": "ATMOS_Descanso_20260427-0001"
     }
 ]
