@@ -46,5 +46,53 @@
         "atmosphere": "Intimidad",
         "date": "Mon Apr 27 22:16:40 2026",
         "render": "ATMOS_Intimidad_20260427-2201"
+    },
+    {
+        "title": "SOLO EN DIOS",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "ROCA Y ESCUDO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "LUGAR SEGURO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "ROCA Y ESCUDO v2",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "MIL A TU LADO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "SANTUARIO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "REFUGIO SANTO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
+    },
+    {
+        "title": "MI BIEN",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Thu Apr 30 10:43:15 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260430-1032"
     }
 ]
