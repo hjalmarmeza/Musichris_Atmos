@@ -53,6 +53,43 @@ def get_font(size):
         if os.path.exists(p): return ImageFont.truetype(p, size)
     return ImageFont.load_default()
 
+def download_gdrive_file(url, destination):
+    """Descarga robusta de Google Drive manejando el aviso de virus para archivos grandes"""
+    def get_confirm_token(response):
+        for key, value in response.cookies.items():
+            if key.startswith('download_warning'):
+                return value
+        return None
+
+    session = requests.Session()
+    try:
+        response = session.get(url, stream=True, timeout=45)
+        token = get_confirm_token(response)
+        if token:
+            params = {'confirm': token}
+            response = session.get(url, params=params, stream=True, timeout=45)
+        
+        with open(destination, "wb") as f:
+            for chunk in response.iter_content(32768):
+                if chunk: f.write(chunk)
+        return True
+    except Exception as e:
+        print(f"❌ Error en download_gdrive_file: {e}")
+        return False
+
+def is_valid_video(path):
+    """Verifica si el archivo es un video válido (mínimo tamaño y no es HTML)"""
+    if not os.path.exists(path) or os.path.getsize(path) < 10000:
+        return False
+    try:
+        with open(path, 'rb') as f:
+            head = f.read(1024)
+            if b'<!DOCTYPE html>' in head or b'<html>' in head or b'<HTML>' in head:
+                return False
+        return True
+    except:
+        return False
+
 def get_real_duration(file_path):
     """Sonda FFprobe para obtener duración exacta del archivo"""
     cmd = ['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', file_path]
@@ -170,9 +207,20 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
 
     # 3. Paisaje y Logos
     with open(os.path.join(BASE_DIR, 'data/landscapes_remote.json'), 'r') as f: land_pool = list(json.load(f).values())
-    sel_land = random.choice(land_pool)
+    
     p_orig = os.path.join(TEMP_DIR, "land_orig.mp4")
-    with open(p_orig, 'wb') as f: f.write(requests.get(sel_land, timeout=45).content)
+    land_success = False
+    for attempt in range(5):
+        sel_land = random.choice(land_pool)
+        print(f"🌍 [PAISAJE] Intentando descargar landscape ({attempt+1}/5)...")
+        if download_gdrive_file(sel_land, p_orig) and is_valid_video(p_orig):
+            land_success = True
+            break
+        print(f"⚠️ [PAISAJE] Fallo en descarga o video corrupto. Reintentando...")
+        time.sleep(2)
+    
+    if not land_success:
+        return print("❌ Error crítico: No se pudo obtener un paisaje válido tras 5 intentos.")
     
     p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
     subprocess.run(['ffmpeg', '-y', '-stream_loop', '-1', '-i', p_orig, '-t', str(real_acc), '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', '-an', '-c:v', 'libx264', '-preset', 'ultrafast', p_cut], check=True)
