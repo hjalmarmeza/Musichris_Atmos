@@ -4,6 +4,7 @@ import random
 import time
 import subprocess
 import requests
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -199,7 +200,9 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
                 local_songs.append(p)
             except: continue
 
-    if not selected_songs: return print("❌ Error en descarga.")
+    if not selected_songs:
+        print("❌ Error en descarga.")
+        sys.exit(1)
     
     # 2. Audio Maestro
     audio_master = os.path.join(TEMP_DIR, "audio_master.mp3")
@@ -220,36 +223,24 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         time.sleep(2)
     
     if not land_success:
-        return print("❌ Error crítico: No se pudo obtener un paisaje válido tras 5 intentos.")
+        print("❌ Error crítico: No se pudo obtener un paisaje válido tras 5 intentos.")
+        sys.exit(1)
     
-    p_cut = os.path.join(TEMP_DIR, "land_main_cut.mp4")
-    subprocess.run(['ffmpeg', '-y', '-stream_loop', '-1', '-i', p_orig, '-t', str(real_acc), '-vf', 'scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p', '-an', '-c:v', 'libx264', '-preset', 'ultrafast', p_cut], check=True)
-
     logo_path = os.path.join(BASE_DIR, "assets", "Logo Hjalmar Animado.mp4")
     l_small = os.path.join(TEMP_DIR, "logo_small.mp4")
     l_large = os.path.join(TEMP_DIR, "logo_large.mp4")
     subprocess.run(['ffmpeg', '-y', '-i', logo_path, '-vf', 'scale=120:-2,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', l_small], check=True)
     subprocess.run(['ffmpeg', '-y', '-i', logo_path, '-vf', 'scale=450:-2,format=yuv420p', '-c:v', 'libx264', '-preset', 'ultrafast', l_large], check=True)
 
-    # 4. Mezcla Visual y Cierre
-    print(f"🎞️ [PASO 3/3] Mezclando estética visual...")
-    base_video = os.path.join(TEMP_DIR, "base_video_flat.mp4")
+    # 4. Mezcla Visual y Cierre (SINGLE PASS MASTER FLOW)
+    print(f"🎞️ [PASO 3/3] Ejecutando Single-Pass Master Flow (Estética y Audio)...")
     os_t = max(0, int(real_acc - 10))
-    cmd_base = [
-        'ffmpeg', '-y', '-stream_loop', '-1', '-i', p_cut,
-        '-stream_loop', '-1', '-i', l_small,
-        '-stream_loop', '-1', '-i', l_large,
-        '-filter_complex', 
-        f"[1:v]colorkey=0x000000:0.1:0.1[ls]; [2:v]colorkey=0x000000:0.1:0.1[ll]; "
-        f"[0:v][ls]overlay=x=40:y=40:enable='lt(t,{os_t})'[v1]; [v1][ll]overlay=x=(W-w)/2:y=(H-h)/2-60:enable='gt(t,{os_t})'[out]",
-        '-map', '[out]', '-c:v', 'libx264', '-preset', 'superfast', '-crf', '24', '-t', str(real_acc), base_video
-    ]
-    subprocess.run(cmd_base, check=True)
-
-    # 5. Capas y Títulos (Opacidad corregida a 0.22)
+    
     ff_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
     if not os.path.exists(ff_path): ff_path = "sans"
     ff = f":fontfile='{ff_path}'"
+    
+    # Textos Base
     vf = f"drawtext=text='@MusiChris_Studio':x=(W-tw)/2:y=(H-th)/2:fontsize=50:fontcolor=white@0.22{ff}:enable='lt(t,{os_t})'"
     for t, v, s, e in song_times:
         clean_t = t.replace("'", "").replace(":", "\\:").upper()
@@ -257,13 +248,30 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
         vf += f",drawtext=text='{clean_t}':{ff}:fontsize=32:fontcolor=0xC5A059FF:x=90:y=612:box=1:boxcolor=black@0.63:boxborderw=20:enable='between(t,{s},{e})'"
         vf += f",drawtext=text='{clean_v}':{ff}:fontsize=22:fontcolor=0xF5F5DCFF:x=90:y=652:box=1:boxcolor=black@0.63:boxborderw=10:enable='between(t,{s},{e})'"
     
-    # Outro Textos (Grandes y centrados debajo del logo de 450px)
+    # Outro Textos
     vf += f",drawtext=text='@MusiChris_Studio':{ff}:fontsize=60:fontcolor=white:x=(W-tw)/2:y=(H/2+210):enable='gt(t,{os_t})'"
     vf += f",drawtext=text='¡CAMINEMOS JUNTOS EN FE!':{ff}:fontsize=35:fontcolor=0xC5A059FF:x=(W-tw)/2:y=(H/2+290):enable='gt(t,{os_t})'"
     vf += f",fade=t=in:st=0:d=2,fade=t=out:st={max(0, int(real_acc)-2)}:d=2"
 
     final_v = os.path.join(RENDERS_DIR, f'{output_name}.mp4')
-    subprocess.run(['ffmpeg', '-y', '-i', base_video, '-i', audio_master, '-filter_complex', f"[0:v]{vf}[v_out]", '-map', '[v_out]', '-map', '1:a', '-c:v', 'libx264', '-preset', 'superfast', '-crf', '26', '-c:a', 'copy', '-t', str(real_acc), final_v], check=True)
+    
+    cmd_master = [
+        'ffmpeg', '-y', 
+        '-stream_loop', '-1', '-i', p_orig,
+        '-stream_loop', '-1', '-i', l_small,
+        '-stream_loop', '-1', '-i', l_large,
+        '-i', audio_master,
+        '-filter_complex', 
+        f"[0:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1/1,fps=30,format=yuv420p[v_bg]; "
+        f"[1:v]colorkey=0x000000:0.1:0.1[ls]; [2:v]colorkey=0x000000:0.1:0.1[ll]; "
+        f"[v_bg][ls]overlay=x=40:y=40:enable='lt(t,{os_t})'[v1]; "
+        f"[v1][ll]overlay=x=(W-w)/2:y=(H-h)/2-60:enable='gt(t,{os_t})'[v2]; "
+        f"[v2]{vf}[v_out]",
+        '-map', '[v_out]', '-map', '3:a', 
+        '-c:v', 'libx264', '-preset', 'superfast', '-crf', '26', 
+        '-c:a', 'copy', '-t', str(real_acc), final_v
+    ]
+    subprocess.run(cmd_master, check=True)
     
     generate_thumbnail_intelligent(theme1, output_name, final_v, selected_songs, theme2)
     # Generar Meta con tiempos reales
