@@ -36,6 +36,21 @@ const MASTER_ATMOSPHERES = [
 ];
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // 🚀 SERVICE WORKER REGISTRATION (Auto-Update Engine)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+            reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        console.log("✨ Nueva actualización detectada. Reiniciando...");
+                        window.location.reload();
+                    }
+                };
+            };
+        }).catch(err => console.log("SW error:", err));
+    }
+
     // 🛡️ MODAL LOGIC (Integrity First)
     const btnSettings = document.getElementById('btn-settings');
     const modalSettings = document.getElementById('modal-settings');
