@@ -148,8 +148,28 @@ def generate_metadata_intelligent(theme1, output_name, selected_songs, theme2=No
         # Aquí usaremos las duraciones reales que se calculen en el motor
         pass # Se llena dinámicamente en el motor
 
+# CONFIGURACIÓN DE BÚSQUEDA INTELIGENTE
+TAG_KEYWORDS = {
+    "Refugio": ["Refugio", "Seguridad", "Protección", "Amparo"],
+    "Confianza": ["Confianza", "Fe", "Certeza", "Fidelidad"],
+    "Descanso": ["Descanso", "Reposo", "Paz", "Quietud", "Calma"],
+    "Paz Interior": ["Paz Interior", "Serenidad", "Tranquilidad"],
+    "Intimidad": ["Intimidad", "Santuario", "Presencia", "Comunión", "Orar"],
+    "Poder": ["Poder", "Autoridad", "Majestad", "Dominio", "Soberanía"],
+    "Restauración": ["Restauración", "Sanidad", "Perdón", "Gracia", "Misericordia"],
+    "Avivamiento": ["Avivamiento", "Fuego", "Renovación", "Despertar"],
+    "Guerra Espiritual": ["Guerra", "Batalla", "Vencer", "Armadura"],
+    "Victoria & Gozo": ["Victoria", "Gozo", "Triunfo", "Alegría", "Celebración"]
+}
+
+def matches_atmosphere(song, theme):
+    if not theme or theme == "none": return False
+    moments = " ".join(song.get('moments', [])).lower()
+    keywords = TAG_KEYWORDS.get(theme, [theme])
+    return any(k.lower() in moments for k in keywords)
+
 def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
-    print(f"🎬 [ATMOS ENGINE v12.9.90] Master Integrity Flow...")
+    print(f"🎬 [ATMOS ENGINE v12.9.95] Master Integrity Flow...")
     clean_assets()
     
     with open(os.path.join(BASE_DIR, 'data/musichris_master_catalog.json'), 'r') as f: catalog = json.load(f)
@@ -160,16 +180,24 @@ def generate_atmos_video(duration_secs, theme1, output_name, theme2=None):
             with open(history_path, 'r') as f: history_data = json.load(f)
         except: pass
     
-    used_titles = [item['title'] for item in history_data if item.get('atmosphere') == theme1]
+    used_titles = [item['title'] for item in history_data]
     is_cross = theme1 in CROSS_MAP
     original_theme = theme1
-    if is_cross:
-        theme2 = CROSS_MAP[theme1][1]
-        theme1 = CROSS_MAP[theme1][0]
     
-    rel_1 = [s for s in catalog if theme1 in s.get('moments', [])]
-    rel_2 = [s for s in catalog if theme2 in s.get('moments', [])] if theme2 and theme2 != "none" else []
-    source_pool = [s for s in (rel_1 + rel_2) if s['title'] not in used_titles] or (rel_1 + rel_2)
+    if is_cross:
+        t1 = CROSS_MAP[theme1][0]
+        t2 = CROSS_MAP[theme1][1]
+        rel_1 = [s for s in catalog if matches_atmosphere(s, t1)]
+        rel_2 = [s for s in catalog if matches_atmosphere(s, t2)]
+    else:
+        rel_1 = [s for s in catalog if matches_atmosphere(s, theme1)]
+        rel_2 = [s for s in catalog if matches_atmosphere(s, theme2)] if theme2 and theme2 != "none" else []
+    
+    source_pool = [s for s in (rel_1 + rel_2) if s['title'] not in used_titles]
+    if not source_pool:
+        print(f"⚠️ Sin canciones nuevas para {original_theme}. Usando catálogo completo de la categoría.")
+        source_pool = (rel_1 + rel_2)
+    
     random.shuffle(source_pool)
     
     # Pre-selección de canciones (Estimada)

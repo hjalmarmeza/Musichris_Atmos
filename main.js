@@ -18,16 +18,16 @@ let isLocalAvailable = false;
 
 // LISTA MAESTRA DE ATMÓSFERAS (10 Puras + 5 Cruces)
 const MASTER_ATMOSPHERES = [
-    { id: "Refugio", name: "🛡️ Refugio", type: "pura", phrase: "Música para buscar Refugio y Paz" },
-    { id: "Confianza", name: "⚓ Confianza", type: "pura", phrase: "Música para fortalecer tu Fe y Confianza" },
-    { id: "Descanso", name: "🌿 Descanso", type: "pura", phrase: "Música para un Descanso Profundo" },
-    { id: "Paz Interior", name: "🌙 Paz Interior", type: "pura", phrase: "Música para alcanzar Paz Interior" },
-    { id: "Intimidad", name: "🕊️ Intimidad", type: "pura", phrase: "Música para orar en Intimidad con Dios" },
-    { id: "Poder", name: "👑 Poder", type: "pura", phrase: "Música de Adoración y Poder Celestial" },
-    { id: "Restauración", name: "🩹 Restauración", type: "pura", phrase: "Música para Sanar y Restaurar tu Alma" },
-    { id: "Avivamiento", name: "🔥 Avivamiento", type: "pura", phrase: "Música para Despertar el Avivamiento" },
-    { id: "Guerra Espiritual", name: "⚔️ Guerra Espiritual", type: "pura", phrase: "Música para Vencer en la Batalla" },
-    { id: "Victoria & Gozo", name: "🎉 Victoria & Gozo", type: "pura", phrase: "Música de Victoria y Gozo Eterno" },
+    { id: "Refugio", name: "🛡️ Refugio", type: "pura", phrase: "Música para buscar Refugio y Paz", keywords: ["Refugio", "Seguridad", "Protección", "Amparo"] },
+    { id: "Confianza", name: "⚓ Confianza", type: "pura", phrase: "Música para fortalecer tu Fe y Confianza", keywords: ["Confianza", "Fe", "Certeza", "Fidelidad"] },
+    { id: "Descanso", name: "🌿 Descanso", type: "pura", phrase: "Música para un Descanso Profundo", keywords: ["Descanso", "Reposo", "Paz", "Quietud", "Calma"] },
+    { id: "Paz Interior", name: "🌙 Paz Interior", type: "pura", phrase: "Música para alcanzar Paz Interior", keywords: ["Paz Interior", "Serenidad", "Tranquilidad"] },
+    { id: "Intimidad", name: "🕊️ Intimidad", type: "pura", phrase: "Música para orar en Intimidad con Dios", keywords: ["Intimidad", "Santuario", "Presencia", "Comunión", "Orar"] },
+    { id: "Poder", name: "👑 Poder", type: "pura", phrase: "Música de Adoración y Poder Celestial", keywords: ["Poder", "Autoridad", "Majestad", "Dominio", "Soberanía"] },
+    { id: "Restauración", name: "🩹 Restauración", type: "pura", phrase: "Música para Sanar y Restaurar tu Alma", keywords: ["Restauración", "Sanidad", "Perdón", "Gracia", "Misericordia"] },
+    { id: "Avivamiento", name: "🔥 Avivamiento", type: "pura", phrase: "Música para Despertar el Avivamiento", keywords: ["Avivamiento", "Fuego", "Renovación", "Despertar"] },
+    { id: "Guerra Espiritual", name: "⚔️ Guerra Espiritual", type: "pura", phrase: "Música para Vencer en la Batalla", keywords: ["Guerra", "Batalla", "Vencer", "Armadura"] },
+    { id: "Victoria & Gozo", name: "🎉 Victoria & Gozo", type: "pura", phrase: "Música de Victoria y Gozo Eterno", keywords: ["Victoria", "Gozo", "Triunfo", "Alegría", "Celebración"] },
     { id: "Serenidad Profunda", name: "🌊 Serenidad Profunda", type: "cruce", parts: ["Paz Interior", "Descanso"], phrase: "Música para una Serenidad Profunda" },
     { id: "Roca de Salvación", name: "⚓ Roca de Salvación", type: "cruce", parts: ["Refugio", "Confianza"], phrase: "Música para tu Roca de Salvación" },
     { id: "Presencia Sagrada", name: "✨ Presencia Sagrada", type: "cruce", parts: ["Intimidad", "Avivamiento"], phrase: "Música para entrar en su Presencia Sagrada" },
@@ -101,6 +101,21 @@ async function loadCatalog() {
     }
 }
 
+function matchesAtmosphere(song, atm) {
+    if (!atm || !song.moments) return false;
+    const songMoments = song.moments.join(' ').toLowerCase();
+    
+    if (atm.type === "pura") {
+        return (atm.keywords || []).some(k => songMoments.includes(k.toLowerCase()));
+    } else if (atm.type === "cruce") {
+        return (atm.parts || []).some(partId => {
+            const part = MASTER_ATMOSPHERES.find(a => a.id === partId);
+            return matchesAtmosphere(song, part);
+        });
+    }
+    return false;
+}
+
 async function setupAtmosphereSelectors(catalog) {
     let usageHistory = [];
     try {
@@ -109,13 +124,12 @@ async function setupAtmosphereSelectors(catalog) {
     } catch(e) {}
 
     const stats = {};
-    catalog.forEach(s => {
-        const moments = s.moments || [];
-        moments.forEach(m => {
-            if (!stats[m]) stats[m] = { total: 0, used: 0 };
-            stats[m].total++;
-            if (usageHistory.some(h => h.title === s.title)) stats[m].used++;
-        });
+    MASTER_ATMOSPHERES.forEach(atm => {
+        if (atm.type === "pura") {
+            const pool = catalog.filter(s => matchesAtmosphere(s, atm));
+            const usedCount = pool.filter(s => usageHistory.some(h => h.title === s.title)).length;
+            stats[atm.id] = { total: pool.length, used: usedCount };
+        }
     });
 
     if (prodTheme) {
@@ -127,16 +141,16 @@ async function setupAtmosphereSelectors(catalog) {
                 const rem = total - used;
                 label += ` (${rem} nuevas / ${total} total)`;
             } else if (atm.type === "cruce") {
-                // Obtener pool único para el cruce
-                const pool = masterCatalog.filter(s => (s.moments || []).some(m => (atm.parts || []).includes(m)));
-                label += ` (${pool.length} disponibles)`;
+                const pool = catalog.filter(s => matchesAtmosphere(s, atm));
+                const usedCount = pool.filter(s => usageHistory.some(h => h.title === s.title)).length;
+                const rem = pool.length - usedCount;
+                label += ` (${rem} nuevas / ${pool.length} total)`;
             }
             return `<option value="${atm.id}">${label}</option>`;
         }).join('');
 
-        // Listener para actualizar Preview dinámico
         prodTheme.addEventListener('change', updatePreview);
-        updatePreview(); // Inicial
+        updatePreview();
     }
 
     if (catalogFilter) {
@@ -175,7 +189,8 @@ function renderCatalog(songs) {
 
 function filterCatalog() {
     const val = catalogFilter.value;
-    const filtered = val === 'all' ? masterCatalog : masterCatalog.filter(s => (s.moments || []).includes(val));
+    const atm = MASTER_ATMOSPHERES.find(a => a.id === val);
+    const filtered = val === 'all' ? masterCatalog : masterCatalog.filter(s => matchesAtmosphere(s, atm));
     renderCatalog(filtered);
 }
 
