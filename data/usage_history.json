@@ -238,5 +238,53 @@
         "atmosphere": "Gracia Renovadora",
         "date": "Thu May  7 21:02:56 2026",
         "render": "ATMOS_Gracia_Renovadora_20260507-2049"
+    },
+    {
+        "title": "VICTORIA FINAL",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "LABIOS DE J\u00daBILO",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "VIVA EL SE\u00d1OR",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "ESPERANZA VIVA v2",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "TRONO FIRME",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "PUERTAS DE SI\u00d3N",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "OYE PUEBLO",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
+    },
+    {
+        "title": "VICTORIA FINAL v2",
+        "atmosphere": "Victoria & Gozo",
+        "date": "Mon May 11 13:11:34 2026",
+        "render": "ATMOS_Victoria_&_Gozo_20260511-1304"
     }
 ]
