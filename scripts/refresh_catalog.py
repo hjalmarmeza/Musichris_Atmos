@@ -3,8 +3,8 @@ import csv
 import os
 
 # CONFIGURACIÓN
-MASTER_CSV = '/Users/hjalmarmeza/Downloads/Antigravity/Musichris_Atmos/data/master_sheet.csv'
-CATALOG_JSON = '/Users/hjalmarmeza/Downloads/Antigravity/Musichris_Atmos/data/musichris_master_catalog.json'
+MASTER_CSV = '/Users/hjalmarmeza/Downloads/Antigravity/PROYECTOS_FINALIZADOS/Musichris_Atmos/data/master_sheet.csv'
+CATALOG_JSON = '/Users/hjalmarmeza/Downloads/Antigravity/PROYECTOS_FINALIZADOS/Musichris_Atmos/data/musichris_master_catalog.json'
 
 ATMOSPHERE_MAP = {
     "Refugio": ["refugio", "castillo", "amparo", "abrigo", "esconder", "escondedero", "guardián", "protección", "escudo", "ampara"],

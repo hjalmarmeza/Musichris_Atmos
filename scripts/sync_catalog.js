@@ -108,7 +108,7 @@ async function buildCatalog() {
         const unused = Object.keys(urlMap).filter(k => !usedUrls.has(k));
         console.log(`📡 URLs no utilizadas (${unused.length}): ${unused.slice(0, 15).join(', ')}...`);
 
-        fs.writeFileSync('/Users/hjalmarmeza/Downloads/Antigravity/Musichris_Atmos/data/musichris_master_catalog.json', JSON.stringify(catalog, null, 2));
+        fs.writeFileSync('/Users/hjalmarmeza/Downloads/Antigravity/PROYECTOS_FINALIZADOS/Musichris_Atmos/data/musichris_master_catalog.json', JSON.stringify(catalog, null, 2));
         console.log(`✅ ¡Misión Cumplida! ${catalog.length} canciones sincronizadas.`);
     } catch (e) {
         console.error("❌ Error en la triangulación:", e);
