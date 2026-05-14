@@ -23,22 +23,50 @@ def get_authenticated_service():
     
     # 2. Si no hay credenciales válidas, intentar usar Secretos de Entorno (GitHub Actions)
     if not credentials or not credentials.valid:
-        refresh_token = os.environ.get("YOUTUBE_TOKEN")
-        client_id = os.environ.get("YOUTUBE_CLIENT_ID")
-        client_secret = os.environ.get("YOUTUBE_CLIENT_SECRETS")
+        raw_token = os.environ.get("YOUTUBE_TOKEN")
+        raw_client_id = os.environ.get("YOUTUBE_CLIENT_ID")
+        raw_client_secret = os.environ.get("YOUTUBE_CLIENT_SECRETS")
 
-        if refresh_token and client_id and client_secret:
-            from google.oauth2.credentials import Credentials
-            credentials = Credentials(
-                None,
-                refresh_token=refresh_token,
-                token_uri="https://oauth2.googleapis.com/token",
-                client_id=client_id,
-                client_secret=client_secret,
-                scopes=SCOPES
-            )
-            credentials.refresh(Request())
-            print("✅ [YOUTUBE] Autenticación exitosa mediante Secretos de Entorno.")
+        if raw_token and raw_client_secret:
+            try:
+                # 1. Extraer Refresh Token (del JSON o del texto)
+                refresh_token = raw_token
+                if raw_token.startswith('{'):
+                    try:
+                        token_data = json.loads(raw_token)
+                        refresh_token = token_data.get('refresh_token', raw_token)
+                    except: pass
+                
+                # 2. Extraer Client ID y Secret (del JSON o de los campos individuales)
+                client_id = raw_client_id
+                client_secret = raw_client_secret
+                
+                if raw_client_secret.startswith('{'):
+                    try:
+                        creds_data = json.loads(raw_client_secret)
+                        # Buscar en los niveles típicos de Google (installed o web)
+                        inner = creds_data.get('installed', creds_data.get('web', creds_data))
+                        client_id = inner.get('client_id', client_id)
+                        client_secret = inner.get('client_secret', client_secret)
+                    except: pass
+
+                # 3. Validar que no estemos mandando un JSON entero como secreto
+                if client_secret and client_secret.startswith('{'):
+                    print("⚠️ [YOUTUBE] Alerta: El secreto extraído sigue pareciendo un JSON. Verificando...")
+
+                from google.oauth2.credentials import Credentials
+                credentials = Credentials(
+                    None,
+                    refresh_token=refresh_token,
+                    token_uri="https://oauth2.googleapis.com/token",
+                    client_id=client_id,
+                    client_secret=client_secret,
+                    scopes=SCOPES
+                )
+                credentials.refresh(Request())
+                print("✅ [YOUTUBE] Autenticación exitosa (Motor de Extracción v2).")
+            except Exception as e:
+                print(f"⚠️ [YOUTUBE] Error en autenticación: {e}")
         
         # 3. Si fallan los secretos, intentar flujo local (Requiere client_secrets.json)
         elif os.path.exists(secrets_path):
