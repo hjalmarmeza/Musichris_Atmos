@@ -328,5 +328,53 @@
         "atmosphere": "Gracia Renovadora",
         "date": "Thu May 14 13:04:19 2026",
         "render": "ATMOS_Gracia_Renovadora_20260514-1257"
+    },
+    {
+        "title": "SIETE VUELTAS",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "PUERTA DE ESCAPE",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "TUS ALAS",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "SENDA ETERNA",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "BAJO TUS ALAS",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "GETSEMAN\u00cd",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "CASA DE PAZ",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "TU DIESTRA",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 18:46:44 2026",
+        "render": "ATMOS_Confianza_20260520-1837"
     }
 ]
