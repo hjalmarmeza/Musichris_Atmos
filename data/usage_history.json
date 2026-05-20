@@ -376,5 +376,53 @@
         "atmosphere": "Confianza",
         "date": "Wed May 20 18:46:44 2026",
         "render": "ATMOS_Confianza_20260520-1837"
+    },
+    {
+        "title": "SILENCIO EN LA ROCA",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "EL MANTO",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "TRONO FIRME v2",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "HISTORIA VIVA",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "AGUA DE VIDA",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "MARANATHA",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "PRONTO AUXILIO",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "MI ROCA FIRME",
+        "atmosphere": "Confianza",
+        "date": "Wed May 20 19:21:38 2026",
+        "render": "ATMOS_Confianza_20260520-1913"
     }
 ]
