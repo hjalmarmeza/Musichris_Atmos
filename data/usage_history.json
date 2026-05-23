@@ -424,5 +424,53 @@
         "atmosphere": "Confianza",
         "date": "Wed May 20 19:21:38 2026",
         "render": "ATMOS_Confianza_20260520-1913"
+    },
+    {
+        "title": "EL ESCONDITE",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "ORO Y MIEL",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "ETERNIDAD",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "FIEL ESCUDO v2",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "ALTO REFUGIO v2",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "GUARDI\u00c1N",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "INQUEBRANTABLE",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "ROCA",
+        "atmosphere": "Refugio",
+        "date": "Sat May 23 09:33:56 2026",
+        "render": "ATMOS_Refugio_20260523-0929"
     }
 ]
