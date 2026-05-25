@@ -472,5 +472,53 @@
         "atmosphere": "Refugio",
         "date": "Sat May 23 09:33:56 2026",
         "render": "ATMOS_Refugio_20260523-0929"
+    },
+    {
+        "title": "KADOSH",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "CUMBRE DE MAJESTAD",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "REFUGIO SANTO v2",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "CUMBRE DE MAJESTAD v2",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "LA PIEDRA ROD\u00d3",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "SOPLO DE VIDA",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "MARAVILLAS",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "REY DE CADA MA\u00d1ANA",
+        "atmosphere": "Poder",
+        "date": "Mon May 25 23:16:54 2026",
+        "render": "ATMOS_Poder_20260525-2312"
     }
 ]
