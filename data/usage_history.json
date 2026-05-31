@@ -520,5 +520,53 @@
         "atmosphere": "Poder",
         "date": "Mon May 25 23:16:54 2026",
         "render": "ATMOS_Poder_20260525-2312"
+    },
+    {
+        "title": "CONSUMADO ES",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "EL VIENTO Y LA NADA",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "OPORTUNO SOCORRO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "REFUGIO ETERNO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "REFUGIO ETERNO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "ALTO REFUGIO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "FIEL ESCUDO",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "QUIETUD",
+        "atmosphere": "Roca de Salvaci\u00f3n",
+        "date": "Sun May 31 19:53:24 2026",
+        "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
     }
 ]
