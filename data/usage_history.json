@@ -568,5 +568,53 @@
         "atmosphere": "Roca de Salvaci\u00f3n",
         "date": "Sun May 31 19:53:24 2026",
         "render": "ATMOS_Roca_de_Salvaci\u00f3n_20260531-1943"
+    },
+    {
+        "title": "ECO DE VICTORIA",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "PELEA POR M\u00cd.",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "ESPERANZA VIVA",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "MAR ABIERTO",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "ROCA VIVA",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "GRAN REUNI\u00d3N",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "CORAZ\u00d3N NUEVO",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
+    },
+    {
+        "title": "NO TEMER\u00c9",
+        "atmosphere": "Triunfo Espiritual",
+        "date": "Tue Jun  2 21:34:37 2026",
+        "render": "ATMOS_Triunfo_Espiritual_20260602-2130"
     }
 ]
