@@ -712,5 +712,47 @@
         "atmosphere": "Gracia Renovadora",
         "date": "Sun Jun 14 10:34:26 2026",
         "render": "ATMOS_Gracia_Renovadora_20260614-1026"
+    },
+    {
+        "title": "MAESTRO DE VIDA v2",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "ESPEJO DE FUEGO",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "PASOS DE FUEGO",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "LEV\u00c1NTATE v2",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "REGRESA LA VIDA",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "MAESTRO DE VIDA",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "VIDA PLENA",
+        "atmosphere": "Avivamiento",
+        "date": "Tue Jun 16 22:10:16 2026",
+        "render": "ATMOS_Avivamiento_20260616-2200"
     }
 ]
