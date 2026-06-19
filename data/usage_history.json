@@ -754,5 +754,53 @@
         "atmosphere": "Avivamiento",
         "date": "Tue Jun 16 22:10:16 2026",
         "render": "ATMOS_Avivamiento_20260616-2200"
+    },
+    {
+        "title": "LEV\u00c1NTATE",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "PIES EN LAS ALTURAS",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "ENCONTR\u00c9 MI HOGAR",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "PIES EN LAS ALTURAS v2",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "INVISIBLE",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "HERENCIA",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "CERCA EST\u00c1S v2",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
+    },
+    {
+        "title": "HOGAR EN TU PRESENCIA v2",
+        "atmosphere": "Presencia Sagrada",
+        "date": "Fri Jun 19 08:35:58 2026",
+        "render": "ATMOS_Presencia_Sagrada_20260619-0823"
     }
 ]
