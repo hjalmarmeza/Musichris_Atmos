@@ -850,5 +850,53 @@
         "atmosphere": "Serenidad Profunda",
         "date": "Tue Jun 23 07:22:54 2026",
         "render": "ATMOS_Serenidad_Profunda_20260623-0713"
+    },
+    {
+        "title": "EN T\u00cd CONF\u00cdO",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "VALE M\u00c1S",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "TENGO SED v1",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "LUGAR ESPACIOSO",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "NADA ME APARTAR\u00c1",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "REINOS DE LA TIERRA v2",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "CIELO CLARO v1",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
+    },
+    {
+        "title": "ETERNIDAD v2",
+        "atmosphere": "Descanso",
+        "date": "Mon Jun 29 21:10:19 2026",
+        "render": "ATMOS_Descanso_20260629-2103"
     }
 ]
